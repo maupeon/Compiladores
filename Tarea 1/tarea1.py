@@ -87,6 +87,8 @@ class Automata():
         self.NFA=[]
         # For the number of nodes in the NFA
         self.N=0
+        # For the alphabet
+        self.alphabet=set()
 
     # Read the file and store the Regular expression
     def readFile(self,filename):
@@ -116,6 +118,7 @@ class Automata():
         return transition[TOKEN]
 
     def symbolEvaluation(self, token):
+        self.alphabet.add(token)
         startNode = self.N
         finalNode = self.N+1
         self.stack.append([startNode, finalNode, token])
@@ -123,8 +126,8 @@ class Automata():
         self.N = self.N+2
 
     def unionEvaluation(self):
-        A = self.stack[len(self.stack)-2]
-        B = self.stack[len(self.stack)-1]
+        A = self.stack.pop(len(self.stack)-2)
+        B = self.stack.pop(len(self.stack)-1)
         if self.transitionToken(A) == '|':
             startNode = self.startNodeTransition(A)
             finalNode = self.finalNodeTransition(A)
@@ -141,7 +144,7 @@ class Automata():
         self.stack.append([startNode, finalNode, '|'])
 
     def kleeneStarEvaluation(self):
-        A = self.stack[len(self.stack)-1]
+        A = self.stack.pop(len(self.stack)-1)
         startNode = self.N
         finalNode = startNode+1
         self.NFA.append([startNode, self.startNodeTransition(A),'e'])
@@ -152,8 +155,8 @@ class Automata():
         self.stack.append([startNode, finalNode, '*'])
     
     def concatenationEvaluation(self):
-        A = self.stack[len(self.stack)-2]
-        B = self.stack[len(self.stack)-1]
+        A = self.stack.pop(len(self.stack)-2)
+        B = self.stack.pop(len(self.stack)-1)
         startNode = self.startNodeTransition(A)
         finalNode = self.finalNodeTransition(B)
         self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),'e'])
@@ -195,10 +198,39 @@ class Automata():
         print()
         print("The stack is:",self.stack)
 
+    def writeToFile(self, filename, automataType):
+        f = open(filename,"w+")
+        aux=self.stack.pop()
+        #listToStr = '\n'.join([[' '.join([str(elem) for elem in s]) ]' '.join(str(elem)) for elem in self.NFA]) 
+        
+        if automataType == "NFA":
+            '''
+            Writing the quintuple of the NFA, where:
+            alphabet
+            number set of states (0,1,2,...,n-1)
+            final states
+            start state
+            transition function
+            '''
+            f.write(" ".join(self.alphabet))
+            f.write("\n"+str(self.N))
+            f.write("\n"+str(self.finalNodeTransition(aux)))
+            f.write("\n"+str(self.startNodeTransition(aux)))
+            for transition in self.NFA:
+                element = ' '.join([str(elem) for elem in transition]) 
+                f.write("\n"+element)
+        elif automataType == "DFA":
+            pass
+        else:
+            print("ERROR writing to file, type not matched")
+
+        f.close() 
 if __name__ == "__main__":
     automata = Automata()
     automata.readFile("RE.txt")
     automata.convertREToPostfix()
     automata.convertREToNFA()
+    automata.writeToFile("NFA.txt","NFA")
+
 
 
