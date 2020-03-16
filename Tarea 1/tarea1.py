@@ -5,9 +5,17 @@ Andrés Campos Tams
 28 Feb 2020
 Tarea 1: RE -> NFA -> DFA By reading a file containing the RE and the alphabet
 
+<<<<<<< HEAD
 pip3 install pysimpleautomata
 sudo apt install python-pydot python-pydot-ng graphviz 
 
+=======
+REQUIREMENTS:
+    graphviz
+    PySimpleAutomata
+    pydot
+    pydot-ng
+>>>>>>> 81a91e37ad2c2c9ef1302ca0352de775996fef3f
 '''
 
 from PySimpleAutomata import DFA, automata_IO,NFA
@@ -159,7 +167,7 @@ class Automata():
         startNode = self.startNodeTransition(A)
         finalNode = self.finalNodeTransition(B)-1
         
-        if self.transitionToken(B) == '*' or self.transitionToken(B) == '+' or self.transitionToken(B) == '?':
+        if self.transitionToken(B) == '*' or self.transitionToken(B) == '+' or self.transitionToken(B) == '?' or self.transitionToken(B) == '|':
             print("POPO")
             self.stack.append([startNode, finalNode+1, '.'])
             self.N = self.N
