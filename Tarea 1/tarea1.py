@@ -18,7 +18,7 @@ class Conversion:
         # The stack  
         self.stack = [] 
         # Precedence setting 
-        self.operatorsPrecedence = {'|':1, '.':2, '*':3, '+':3}
+        self.operatorsPrecedence = {'|':1, '.':2, '*':3, '+':3, '?':3}
         # Output    
         self.postfix = [] 
   
@@ -30,16 +30,6 @@ class Conversion:
             return True if a <= b else False
         except KeyError:  
             return False
-    
-    def isOperand(self, token):
-        try:
-            if token.isalpha() or isinstance(int(token), int):
-                return True
-            else:
-                False
-        except:
-            False
-        
 
     # The main function that converts given infix expression to postfix expression 
     def infixToPostfix(self, infix, alphabet): 
@@ -161,9 +151,9 @@ class Automata():
         startNode = self.startNodeTransition(A)
         finalNode = self.finalNodeTransition(B)-1
         
-        if self.transitionToken(B) == '*':
+        if self.transitionToken(B) == '*' or self.transitionToken(B) == '+' or self.transitionToken(B) == '?':
+            print("POPO")
             self.stack.append([startNode, finalNode+1, '.'])
-            
             self.N = self.N
         else:
             new=self.NFA.pop()
@@ -174,14 +164,23 @@ class Automata():
             self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),self.transitionToken(B)])
         else:
             self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),"e"])
-       
-        '''
-        if self.transitionToken(A) == '.':
-            pass
-        else:
-            self.stack.append([startNode, finalNode, '.'])
-        self.N = self.N-1
-        '''
+
+    def plusEvaluation(self):
+        A = self.stack.pop(len(self.stack)-1)
+        startNode = self.startNodeTransition(A)
+        finalNode = self.finalNodeTransition(A)
+        self.NFA.append([finalNode, startNode,'e'])
+        self.stack.append([startNode, finalNode, '+'])
+
+    def zeroOrOneEvaluation(self):
+        A = self.stack.pop(len(self.stack)-1)
+        startNode = self.N
+        finalNode = startNode+1
+        self.NFA.append([startNode, self.startNodeTransition(A),'e'])
+        self.NFA.append([self.finalNodeTransition(A), finalNode,'e'])
+        self.NFA.append([startNode, finalNode,'e'])
+        self.stack.append([startNode, finalNode, '?'])
+        self.N = self.N+2
 
     # Function to convert the regular expression into a NFA
     def convertREToNFA(self):
@@ -201,9 +200,13 @@ class Automata():
                 # Call a kleene star function
                 self.kleeneStarEvaluation()
             elif token == '+':
-                pass
                 #A = self.stack.pop()
                 # Call a one or more function
+                self.plusEvaluation()
+            elif token == '?':
+                #A = self.stack.pop()
+                # Call a zero or more function
+                self.zeroOrOneEvaluation()
             else:
                 #evaluate the current symbol
                 self.symbolEvaluation(token)
