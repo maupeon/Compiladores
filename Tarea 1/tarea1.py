@@ -3,7 +3,7 @@ Mauricio Peón García                    A01024162
 Alexandro Francisco Marcelo González    A0102183
 Andrés Campos Tams                      
 28 Feb 2020
-Tarea 1: RE -> NFA -> DFA
+Tarea 1: RE -> NFA -> DFA By reading a file containing the RE and the alphabet
 '''
 
 from PySimpleAutomata import DFA, automata_IO,NFA
@@ -23,7 +23,7 @@ class Conversion:
         # The stack  
         self.stack = [] 
         # Precedence setting 
-        self.operatorsPrecedence = {'|':1, '.':2, '*':3, '+':3}
+        self.operatorsPrecedence = {'|':1, '.':2, '*':3, '+':3, '?':3}
         # Output    
         self.postfix = [] 
   
@@ -35,24 +35,14 @@ class Conversion:
             return True if a <= b else False
         except KeyError:  
             return False
-    
-    def isOperand(self, token):
-        try:
-            if token.isalpha() or isinstance(int(token), int):
-                return True
-            else:
-                False
-        except:
-            False
-        
 
     # The main function that converts given infix expression to postfix expression 
-    def infixToPostfix(self, infix): 
+    def infixToPostfix(self, infix, alphabet): 
         currentExpression=[]
         # Iterate over the expression for conversion 
         for token in infix: 
             # If the token is an operand, add it to output
-            if self.isOperand(token):
+            if token in alphabet:
                 self.postfix.append(token) 
               
             # If the token is an '(', push it to stack 
@@ -92,6 +82,8 @@ class Automata():
         self.NFA=[]
         # For the number of nodes in the NFA
         self.N=0
+        # For the alphabet
+        self.alphabet=set()
 
     # Read the file and store the Regular expression
     def readFile(self,filename):
@@ -99,7 +91,9 @@ class Automata():
             f = open(filename,"r")
             if f.mode == 'r':
                 self.RE=f.readline()
-                print(self.RE)
+                self.alphabet=[line.rstrip('\n') for line in f]
+                print("ALPHABET:",self.alphabet)
+                print("REGULAR EXPRESION:",self.RE)
             else:
                 print("ERROR reading file")
             f.close() 
@@ -109,7 +103,7 @@ class Automata():
     # Call the Conversion class which going to convert from infix to postfix the RE
     def convertREToPostfix(self):
         conversion = Conversion()
-        self.REPostfix = conversion.infixToPostfix(self.RE)
+        self.REPostfix = conversion.infixToPostfix(self.RE, self.alphabet)
         print(self.REPostfix)
 
     # Auxiliar functions to make a cleaner code to retrieve information of the transition table
@@ -128,8 +122,8 @@ class Automata():
         self.N = self.N+2
 
     def unionEvaluation(self):
-        A = self.stack[len(self.stack)-2]
-        B = self.stack[len(self.stack)-1]
+        A = self.stack.pop(len(self.stack)-2)
+        B = self.stack.pop(len(self.stack)-1)
         if self.transitionToken(A) == '|':
             startNode = self.startNodeTransition(A)
             finalNode = self.finalNodeTransition(A)
@@ -146,7 +140,7 @@ class Automata():
         self.stack.append([startNode, finalNode, '|'])
 
     def kleeneStarEvaluation(self):
-        A = self.stack[len(self.stack)-1]
+        A = self.stack.pop(len(self.stack)-1)
         startNode = self.N
         finalNode = startNode+1
         self.NFA.append([startNode, self.startNodeTransition(A),'e'])
@@ -157,19 +151,41 @@ class Automata():
         self.stack.append([startNode, finalNode, '*'])
     
     def concatenationEvaluation(self):
-        A = self.stack[len(self.stack)-2]
-        B = self.stack[len(self.stack)-1]
+        A = self.stack.pop(len(self.stack)-2)
+        B = self.stack.pop(len(self.stack)-1)
         startNode = self.startNodeTransition(A)
-        finalNode = self.finalNodeTransition(B)
-        self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),'e'])
-        self.stack.append([startNode, finalNode, '.'])
-        '''
-        if self.transitionToken(A) == '.':
-            pass
+        finalNode = self.finalNodeTransition(B)-1
+        
+        if self.transitionToken(B) == '*' or self.transitionToken(B) == '+' or self.transitionToken(B) == '?':
+            print("POPO")
+            self.stack.append([startNode, finalNode+1, '.'])
+            self.N = self.N
         else:
+            new=self.NFA.pop()
             self.stack.append([startNode, finalNode, '.'])
-        self.N = self.N-1
-        '''
+            self.N = self.N-1
+        #self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),self.transitionToken(B)])
+        if self.transitionToken(B) in self.alphabet:
+            self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),self.transitionToken(B)])
+        else:
+            self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),"e"])
+
+    def plusEvaluation(self):
+        A = self.stack.pop(len(self.stack)-1)
+        startNode = self.startNodeTransition(A)
+        finalNode = self.finalNodeTransition(A)
+        self.NFA.append([finalNode, startNode,'e'])
+        self.stack.append([startNode, finalNode, '+'])
+
+    def zeroOrOneEvaluation(self):
+        A = self.stack.pop(len(self.stack)-1)
+        startNode = self.N
+        finalNode = startNode+1
+        self.NFA.append([startNode, self.startNodeTransition(A),'e'])
+        self.NFA.append([self.finalNodeTransition(A), finalNode,'e'])
+        self.NFA.append([startNode, finalNode,'e'])
+        self.stack.append([startNode, finalNode, '?'])
+        self.N = self.N+2
 
     # Function to convert the regular expression into a NFA
     def convertREToNFA(self):
@@ -189,15 +205,21 @@ class Automata():
                 # Call a kleene star function
                 self.kleeneStarEvaluation()
             elif token == '+':
-                pass
                 #A = self.stack.pop()
                 # Call a one or more function
+                self.plusEvaluation()
+            elif token == '?':
+                #A = self.stack.pop()
+                # Call a zero or more function
+                self.zeroOrOneEvaluation()
             else:
                 #evaluate the current symbol
                 self.symbolEvaluation(token)
+        
         print()
         print("The transition table of the NFA is:",self.NFA)
         print()
+        self.stack
         print("The stack is:",self.stack)
     
     def createOutputFile(self):
@@ -219,8 +241,43 @@ class Automata():
         
 
 
+    def writeToFile(self, filename, automataType):
+        f = open(filename,"w+")
+        aux=self.stack.pop()
+        #listToStr = '\n'.join([[' '.join([str(elem) for elem in s]) ]' '.join(str(elem)) for elem in self.NFA]) 
+        
+        if automataType == "NFA":
+            '''
+            Writing the quintuple of the NFA, where:
+            alphabet
+            number set of states (0,1,2,...,n-1)
+            final states
+            start state
+            transition function
+            '''
+            f.write(" ".join(self.alphabet))
+            f.write("\n"+str(self.N))
+            f.write("\n"+str(self.finalNodeTransition(aux)))
+            f.write("\n"+str(self.startNodeTransition(aux)))
+            for transition in self.NFA:
+                element = ' '.join([str(elem) for elem in transition]) 
+                f.write("\n"+element)
+        elif automataType == "DFA":
+            pass
+        else:
+            print("ERROR writing to file, type not matched")
+
+        f.close() 
 if __name__ == "__main__":
     automata = Automata()
+    '''
+    In order to run this program you must to create a file called, i.e., "RE.txt" which has to contain the 
+    Regular expresion and the alphabet, such as:
+    0*.1.0*.1.0*.1.0*
+    0
+    1
+    Where the first line is the RE and the next ones are the alphabet
+    '''
     automata.readFile("RE.txt")
     automata.convertREToPostfix()
     automata.convertREToNFA()
@@ -231,6 +288,8 @@ if __name__ == "__main__":
 
 
     nfa_example = automata_IO.nfa_json_importer('in.json')
+    automata.writeToFile("NFA.txt","NFA")
+
 
     automata_IO.nfa_to_dot(nfa_example, 'output', './')
 
