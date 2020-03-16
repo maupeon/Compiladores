@@ -151,7 +151,7 @@ class Automata():
         startNode = self.startNodeTransition(A)
         finalNode = self.finalNodeTransition(B)-1
         
-        if self.transitionToken(B) == '*' or self.transitionToken(B) == '+' or self.transitionToken(B) == '?':
+        if self.transitionToken(B) == '*' or self.transitionToken(B) == '+' or self.transitionToken(B) == '?' or self.transitionToken(B) == '|':
             print("POPO")
             self.stack.append([startNode, finalNode+1, '.'])
             self.N = self.N
