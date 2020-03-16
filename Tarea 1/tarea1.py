@@ -3,7 +3,7 @@ Mauricio Peon Garcia
 Alexandro Francisco Marcelo Gonzalez A0102183
 Andres Campos Tams
 28 Feb 2020
-Tarea 1: RE -> NFA -> DFA
+Tarea 1: RE -> NFA -> DFA By reading a file containing the RE and the alphabet
 '''
 
 # Declaration of global constants
@@ -42,12 +42,12 @@ class Conversion:
         
 
     # The main function that converts given infix expression to postfix expression 
-    def infixToPostfix(self, infix): 
+    def infixToPostfix(self, infix, alphabet): 
         currentExpression=[]
         # Iterate over the expression for conversion 
         for token in infix: 
             # If the token is an operand, add it to output
-            if self.isOperand(token):
+            if token in alphabet:
                 self.postfix.append(token) 
               
             # If the token is an '(', push it to stack 
@@ -96,7 +96,9 @@ class Automata():
             f = open(filename,"r")
             if f.mode == 'r':
                 self.RE=f.readline()
-                print(self.RE)
+                self.alphabet=[line.rstrip('\n') for line in f]
+                print("ALPHABET:",self.alphabet)
+                print("REGULAR EXPRESION:",self.RE)
             else:
                 print("ERROR reading file")
             f.close() 
@@ -106,7 +108,7 @@ class Automata():
     # Call the Conversion class which going to convert from infix to postfix the RE
     def convertREToPostfix(self):
         conversion = Conversion()
-        self.REPostfix = conversion.infixToPostfix(self.RE)
+        self.REPostfix = conversion.infixToPostfix(self.RE, self.alphabet)
         print(self.REPostfix)
 
     # Auxiliar functions to make a cleaner code to retrieve information of the transition table
@@ -118,7 +120,6 @@ class Automata():
         return transition[TOKEN]
 
     def symbolEvaluation(self, token):
-        self.alphabet.add(token)
         startNode = self.N
         finalNode = self.N+1
         self.stack.append([startNode, finalNode, token])
@@ -242,6 +243,14 @@ class Automata():
         f.close() 
 if __name__ == "__main__":
     automata = Automata()
+    '''
+    In order to run this program you must to create a file called, i.e., "RE.txt" which has to contain the 
+    Regular expresion and the alphabet, such as:
+    0*.1.0*.1.0*.1.0*
+    0
+    1
+    Where the first line is the RE and the next ones are the alphabet
+    '''
     automata.readFile("RE.txt")
     automata.convertREToPostfix()
     automata.convertREToNFA()
