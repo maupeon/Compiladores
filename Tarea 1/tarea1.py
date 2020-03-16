@@ -10,6 +10,8 @@ REQUIREMENTS:
     PySimpleAutomata
     pydot
     pydot-ng
+    pip3 install pysimpleautomata
+    sudo apt install python-pydot python-pydot-ng graphviz 
 '''
 
 from PySimpleAutomata import DFA, automata_IO,NFA
@@ -19,7 +21,6 @@ import json
 STARTNODE=0
 FINALNODE=1
 TOKEN=2
-
 
 
 # Class to convert the regular expression in infix to postfix
@@ -227,21 +228,22 @@ class Automata():
         self.stack
         print("The stack is:",self.stack)
     
-    def createOutputFile(self):
+    def createOutputFile(self,starNode,finalNode):
         output_file ={}
+        print("NFA",self.NFA)
         output_file['alphabet'] = list(set([i[-1] for i in self.NFA]))
         output_file['states'] = [str(i) for i in range(self.N)]
-        output_file['initial_states'] = [str(self.startNodeTransition(self.stack[-1]))]
-        output_file['accepting_states'] = [str(self.finalNodeTransition(self.stack[-1]))]
+        output_file['initial_states'] = [starNode]
+        output_file['accepting_states'] = [finalNode]
 
         for element in self.NFA:
             element[1], element[2] = element[2], element[1]
 
         output_file['transitions'] = [[str(j) for j in i] for i in self.NFA]
 
-        with open('in.json', 'w') as json_file:
+        with open('input_test.json', 'w') as json_file:
             json.dump(output_file, json_file)
-        #print(output_file)
+
         return output_file
         
 
@@ -267,6 +269,10 @@ class Automata():
             for transition in self.NFA:
                 element = ' '.join([str(elem) for elem in transition]) 
                 f.write("\n"+element)
+                
+            self.createOutputFile(str(self.startNodeTransition(aux)), str(self.finalNodeTransition(aux)))
+
+          
         elif automataType == "DFA":
             pass
         else:
@@ -286,14 +292,11 @@ if __name__ == "__main__":
     automata.readFile("RE.txt")
     automata.convertREToPostfix()
     automata.convertREToNFA()
-    output_file = automata.createOutputFile()
-    print(output_file)
-    #json_test = json.dumps(output_file)
-    #print("JSON = " ,type(output_file))
-
-
-    nfa_example = automata_IO.nfa_json_importer('in.json')
     automata.writeToFile("NFA.txt","NFA")
+
+
+    nfa_example = automata_IO.nfa_json_importer('input_test.json')
+   
 
 
     automata_IO.nfa_to_dot(nfa_example, 'output', './')
