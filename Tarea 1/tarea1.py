@@ -163,7 +163,6 @@ class Automata():
         finalNode = self.finalNodeTransition(B)-1
         
         if self.transitionToken(B) == '*' or self.transitionToken(B) == '+' or self.transitionToken(B) == '?' or self.transitionToken(B) == '|':
-            print("POPO")
             self.stack.append([startNode, finalNode+1, '.'])
             self.N = self.N
         else:
@@ -232,8 +231,8 @@ class Automata():
         output_file ={}
         output_file['alphabet'] = list(set([i[-1] for i in self.NFA]))
         output_file['states'] = [str(i) for i in range(self.N)]
-        output_file['initial_states'] = [str(STARTNODE)]
-        output_file['accepting_states'] = [str(self.N - 1)]
+        output_file['initial_states'] = [str(self.startNodeTransition(self.stack[-1]))]
+        output_file['accepting_states'] = [str(self.finalNodeTransition(self.stack[-1]))]
 
         for element in self.NFA:
             element[1], element[2] = element[2], element[1]
