@@ -1,15 +1,26 @@
 '''
-Mauricio Peon Garcia
-Alexandro Francisco Marcelo Gonzalez A0102183
-Andres Campos Tams
+Mauricio Peón García                    A01024162
+Alexandro Francisco Marcelo González    A0102183
+Andrés Campos Tams                      
 28 Feb 2020
 Tarea 1: RE -> NFA -> DFA By reading a file containing the RE and the alphabet
+
+REQUIREMENTS:
+    graphviz
+    PySimpleAutomata
+    pydot
+    pydot-ng
 '''
+
+from PySimpleAutomata import DFA, automata_IO,NFA
+import json
 
 # Declaration of global constants
 STARTNODE=0
 FINALNODE=1
 TOKEN=2
+
+
 
 # Class to convert the regular expression in infix to postfix
 class Conversion: 
@@ -216,6 +227,25 @@ class Automata():
         print()
         self.stack
         print("The stack is:",self.stack)
+    
+    def createOutputFile(self):
+        output_file ={}
+        output_file['alphabet'] = list(set([i[-1] for i in self.NFA]))
+        output_file['states'] = [str(i) for i in range(self.N)]
+        output_file['initial_states'] = [str(STARTNODE)]
+        output_file['accepting_states'] = [str(self.N - 1)]
+
+        for element in self.NFA:
+            element[1], element[2] = element[2], element[1]
+
+        output_file['transitions'] = [[str(j) for j in i] for i in self.NFA]
+
+        with open('in.json', 'w') as json_file:
+            json.dump(output_file, json_file)
+        #print(output_file)
+        return output_file
+        
+
 
     def writeToFile(self, filename, automataType):
         f = open(filename,"w+")
@@ -257,7 +287,15 @@ if __name__ == "__main__":
     automata.readFile("RE.txt")
     automata.convertREToPostfix()
     automata.convertREToNFA()
+    output_file = automata.createOutputFile()
+    print(output_file)
+    #json_test = json.dumps(output_file)
+    #print("JSON = " ,type(output_file))
+
+
+    nfa_example = automata_IO.nfa_json_importer('in.json')
     automata.writeToFile("NFA.txt","NFA")
 
 
+    automata_IO.nfa_to_dot(nfa_example, 'output', './')
 
