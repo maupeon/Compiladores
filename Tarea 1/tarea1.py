@@ -158,9 +158,22 @@ class Automata():
         A = self.stack.pop(len(self.stack)-2)
         B = self.stack.pop(len(self.stack)-1)
         startNode = self.startNodeTransition(A)
-        finalNode = self.finalNodeTransition(B)
-        self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),'e'])
-        self.stack.append([startNode, finalNode, '.'])
+        finalNode = self.finalNodeTransition(B)-1
+        
+        if self.transitionToken(B) == '*':
+            self.stack.append([startNode, finalNode+1, '.'])
+            
+            self.N = self.N
+        else:
+            new=self.NFA.pop()
+            self.stack.append([startNode, finalNode, '.'])
+            self.N = self.N-1
+        #self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),self.transitionToken(B)])
+        if self.transitionToken(B) in self.alphabet:
+            self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),self.transitionToken(B)])
+        else:
+            self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),"e"])
+       
         '''
         if self.transitionToken(A) == '.':
             pass
@@ -193,9 +206,11 @@ class Automata():
             else:
                 #evaluate the current symbol
                 self.symbolEvaluation(token)
+        
         print()
         print("The transition table of the NFA is:",self.NFA)
         print()
+        self.stack
         print("The stack is:",self.stack)
 
     def writeToFile(self, filename, automataType):
