@@ -334,7 +334,7 @@ class Automata():
         for state in DFA_states:
             # Restore the path
             path = {}
-            
+            # Check which node in the state goes to another one with a symbol in the alphabet-
             for element in state:
                 NFA_states[element] = 1
                 for i in self.graph[element]:
@@ -347,7 +347,7 @@ class Automata():
                 if self.epsilon_closure(DFA_path[iterator][e]) not in DFA_states:
                     DFA_states.append(self.epsilon_closure(DFA_path[iterator][e]))
             iterator+=1
-        
+        # Generate the transition matrix.
         for index, element in enumerate(DFA_states):
             for char in DFA_path[index]:
                 transition = []
@@ -355,25 +355,21 @@ class Automata():
                 transition.append(char)
                 transition.append(str(DFA_states.index(self.epsilon_closure(DFA_path[index][char]))))
                 transitions.append(transition)
-        
         DFA_final_states = [0 for i in range(len(DFA_states))] 
-
+        #Check which state is an accepting one.
         for index,state in enumerate(DFA_states):
             if final_state in state:
                 DFA_final_states[index]=1
-
+        # Generate de new dictionary of quintuple.
         self.DFA_file['alphabet'] = alphabet
         self.DFA_file['states'] = [str(i) for i in range(len(DFA_states))]
         self.DFA_file['initial_state'] ='0'
         self.DFA_file['accepting_states'] = [str(i) for i,e in enumerate(DFA_final_states) if e == 1 ]
         self.DFA_file['transitions'] = transitions
-
+        # Write de quintuple in a json
         with open('quintuple_DFA.json', 'w') as json_file:
             json.dump(self.DFA_file, json_file)
-
-        print(json.dumps(self.DFA_file,indent=2))
-            
-        
+        print(json.dumps(self.DFA_file,indent=2))      
 
 if __name__ == "__main__":
     automata = Automata()
@@ -388,38 +384,16 @@ if __name__ == "__main__":
     automata.readFile("RE.txt")
     automata.convertREToPostfix()
     automata.convertREToNFA()
-
     automata.createTransitionMatrix()
 
-    automata_IO.nfa_to_dot(nfa_example, 'output_NFA', './')
-    textLines = [
-    "Mauricio Peón",
-    "Alexandro Marcelo",
-    "Andrés Campos"
-    ]
     nfa_example = automata_IO.nfa_json_importer('quintuple_NFA.json')
     automata_IO.nfa_to_dot(nfa_example, 'graphic_NFA', './')
     
-    
     automata.NFA_to_DFA()
+
     dfa_example = automata_IO.dfa_json_importer('quintuple_DFA.json')
     automata_IO.dfa_to_dot(dfa_example, 'graphic_DFA', './')
 
-    pdf = canvas.Canvas("Reporte.pdf")
-    pdf.setTitle("Tarea 1")
 
-    pdf.drawCentredString(270,770,"Tarea 1: Compiladores")
-    text = pdf.beginText(400,820)
-
-    for line in textLines:     
-        text.textLine(line)
-
-    pdf.drawText(text)
-    drawing = svg2rlg("output_DFA.dot.svg")
-    drawing.scale(0.5,0.5)
-    renderPDF.draw(drawing, pdf, 100, 300)
-    
-
-    pdf.save()
 
 
