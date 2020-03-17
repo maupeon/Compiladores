@@ -17,6 +17,12 @@ REQUIREMENTS:
 from PySimpleAutomata import DFA, automata_IO,NFA
 import json
 import pprint
+from reportlab.pdfgen import canvas
+from reportlab.graphics import renderPDF
+from reportlab.pdfgen import canvas
+from svglib.svglib import svg2rlg
+
+
 
 # Declaration of global constants
 STARTNODE=0
@@ -389,11 +395,31 @@ if __name__ == "__main__":
 
     nfa_example = automata_IO.nfa_json_importer('input_NFA.json')
     automata_IO.nfa_to_dot(nfa_example, 'output_NFA', './')
-    
+    textLines = [
+    "Mauricio Peón",
+    "Alexandro Marcelo",
+    "Andrés Campos"
+    ]
     
     automata.NFA_to_DFA()
     dfa_example = automata_IO.dfa_json_importer('input_DFA.json')
     automata_IO.dfa_to_dot(dfa_example, 'output_DFA', './')
 
+    pdf = canvas.Canvas("Reporte.pdf")
+    pdf.setTitle("Tarea 1")
+
+    pdf.drawCentredString(270,770,"Tarea 1: Compiladores")
+    text = pdf.beginText(400,820)
+
+    for line in textLines:     
+        text.textLine(line)
+
+    pdf.drawText(text)
+    drawing = svg2rlg("output_DFA.dot.svg")
+    drawing.scale(0.5,0.5)
+    renderPDF.draw(drawing, pdf, 100, 300)
+    
+
+    pdf.save()
 
 
