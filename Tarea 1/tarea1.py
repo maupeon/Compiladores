@@ -1,23 +1,21 @@
 '''
 Mauricio Peón García                    A01024162
 Alexandro Francisco Marcelo González    A0102183
-Andrés Campos Tams                      A01024385
+Andrés Campos Tams                      
 28 Feb 2020
 Tarea 1: RE -> NFA -> DFA By reading a file containing the RE and the alphabet
-
-pip3 install pysimpleautomata
-sudo apt install python-pydot python-pydot-ng graphviz 
 
 REQUIREMENTS:
     graphviz
     PySimpleAutomata
     pydot
     pydot-ng
+    pip3 install pysimpleautomata
+    sudo apt install python-pydot python-pydot-ng graphviz 
 '''
 
 from PySimpleAutomata import DFA, automata_IO,NFA
 import json
-import numpy as np
 import pprint
 
 # Declaration of global constants
@@ -77,7 +75,7 @@ class Conversion:
         while self.stack: 
             self.postfix.append(self.stack.pop()) 
   
-        #print("RE to Postfix:","".join(self.postfix))
+        print("RE to Postfix:","".join(self.postfix))
         return self.postfix
 
 class Automata():
@@ -107,8 +105,8 @@ class Automata():
             if f.mode == 'r':
                 self.RE=f.readline()
                 self.alphabet=[line.rstrip('\n') for line in f]
-                #print("ALPHABET:",self.alphabet)
-                #print("REGULAR EXPRESION:",self.RE)
+                print("ALPHABET:",self.alphabet)
+                print("REGULAR EXPRESION:",self.RE)
             else:
                 print("ERROR reading file")
             f.close() 
@@ -119,7 +117,7 @@ class Automata():
     def convertREToPostfix(self):
         conversion = Conversion()
         self.REPostfix = conversion.infixToPostfix(self.RE, self.alphabet)
-        #print(self.REPostfix)
+        print(self.REPostfix)
 
     # Auxiliar functions to make a cleaner code to retrieve information of the transition table
     def startNodeTransition(self, transition):
@@ -175,6 +173,7 @@ class Automata():
             self.stack.append([startNode, finalNode+1, '.'])
             self.N = self.N
         else:
+            self.NFA.pop()
             self.stack.append([startNode, finalNode, '.'])
             self.N = self.N-1
         #self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),self.transitionToken(B)])
@@ -229,12 +228,13 @@ class Automata():
                 #evaluate the current symbol
                 self.symbolEvaluation(token)
         
-        #print()
-        #print("The transition table of the NFA is:",self.NFA)
-        #print()
+        print()
+        print("The transition table of the NFA is:",self.NFA)
+        print()
         self.stack
-        #print("The stack is:",self.stack)
+        print("The stack is:",self.stack)
     
+   
     def createOutputFile(self,starNode,finalNode):
         
         #print("NFA",self.NFA)
@@ -284,7 +284,8 @@ class Automata():
         else:
             print("ERROR writing to file, type not matched")
 
-        f.close() 
+        f.close()
+
 
     def epsilon_closure(self, states):
         set_of_states = []
@@ -310,8 +311,8 @@ class Automata():
             print(transition)
             self.transition_matrix[transition[0]][transition[2]] = transition[1]
             self.graph.setdefault(transition[0], []).append(transition[2]) 
-        self.graph.setdefault(self.N , [])
-        
+        self.graph.setdefault(self.N-1, [])
+        pprint.pprint(self.graph)
 
     def NFA_to_DFA(self):
         iterator = 0
@@ -383,6 +384,7 @@ if __name__ == "__main__":
     automata.convertREToNFA()
     automata.writeToFile("NFA.txt","NFA")
 
+
     automata.createTransitionMatrix()
 
     nfa_example = automata_IO.nfa_json_importer('input_NFA.json')
@@ -392,5 +394,6 @@ if __name__ == "__main__":
     automata.NFA_to_DFA()
     dfa_example = automata_IO.dfa_json_importer('input_DFA.json')
     automata_IO.dfa_to_dot(dfa_example, 'output_DFA', './')
+
 
 
