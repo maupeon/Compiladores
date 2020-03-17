@@ -27,7 +27,7 @@ Orientaciones para correr el programa que va desde una expresión regular a un A
 
 ## 4. NFA.
 * El programa genera el NFA en formato .svg llamado: `output_NFA.dot.svg` 
-![alt text](./Tarea\ 1/output_NFA.dot.svg)
+![alt text](./output_NFA.dot.svg)
 
 ## 5. Detenga y elimine el contenedor.
 * `docker stop neo4j`
