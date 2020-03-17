@@ -1,4 +1,5 @@
-# Compiladores
+# Compiladores Tarea 1
+## REGEX -> NFA -> DFA
 
 Orientaciones para correr el programa que va desde una expresión regular a un Autómata Finito No Determinista (NFA), y que a su vez, se transforma a un  Autómata Finito Determinista (DFA)
 
@@ -11,6 +12,12 @@ Orientaciones para correr el programa que va desde una expresión regular a un A
 
 ## 2. Introducir la Expresión Regular 
 * En el archivo RE.txt
+* Definición de símbolos:
+  - '.' Concatenación
+  - '|' Unión
+  - '*' Estrella Kleene
+  - '+' Uno o más elementos 
+  - '?' 0 o 1 elemento
 * En la primera línea va la expresión regular, ejemplo: `(0|1|2|3)*.a.b.c`
 * De la segunda en adelante, los símbolos presentes en el alfabeto, ejemplo:
   - 0
