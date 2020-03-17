@@ -98,10 +98,13 @@ class Automata():
         self.N=0
         # For the alphabet
         self.alphabet=set()
+        # For the outputfile
         self.output_file = {}
+        # for the transition table of the DFA
         self.transition_matrix = []
+        # For the DFA
         self.graph = {}
-
+        # For the output of the DFA
         self.DFA_file ={}
 
     # Read the file and store the Regular expression
@@ -123,7 +126,7 @@ class Automata():
     def convertREToPostfix(self):
         conversion = Conversion()
         self.REPostfix = conversion.infixToPostfix(self.RE, self.alphabet)
-        print(self.REPostfix)
+        #print(self.REPostfix)
 
     # Auxiliar functions to make a cleaner code to retrieve information of the transition table
     def startNodeTransition(self, transition):
@@ -133,48 +136,71 @@ class Automata():
     def transitionToken(self, transition):
         return transition[TOKEN]
 
+    # Evaluate a symbol from the alphabet
     def symbolEvaluation(self, token):
+        # Get the start and the final node for the transition
         startNode = self.N
         finalNode = self.N+1
+        # Storing in the stack the evaluation and in the NFA the transition table
         self.stack.append([startNode, finalNode, token])
         self.NFA.append([startNode, finalNode, token])
+        # Adding 2 because of 2 nodes added
         self.N = self.N+2
 
+    # Evaluate the union of two nodes
     def unionEvaluation(self):
+        # Get the start and the final node for the transition
         A = self.stack.pop(len(self.stack)-2)
         B = self.stack.pop(len(self.stack)-1)
+        # If the first evaluation has an union, then the union has to be with it, otherwise there is a new union 
         if self.transitionToken(A) == '|':
+            # Get the start and the final node for the transition
             startNode = self.startNodeTransition(A)
             finalNode = self.finalNodeTransition(A)
+            # Storing the following transitions in the NFA table
             self.NFA.append([startNode, self.startNodeTransition(B),'e'])
             self.NFA.append([self.finalNodeTransition(B), finalNode,'e'])
         else:
+            # Get the start and the final node for the transition
             startNode = self.N
             finalNode = startNode+1
+            # Storing the following transitions in the NFA table
             self.NFA.append([startNode, self.startNodeTransition(A),'e'])
             self.NFA.append([startNode, self.startNodeTransition(B),'e'])
             self.NFA.append([self.finalNodeTransition(A), finalNode,'e'])
             self.NFA.append([self.finalNodeTransition(B), finalNode,'e'])
+            # Adding 2 because of 2 nodes added
             self.N = self.N+2
+        # Storing in the stack the evaluation    
         self.stack.append([startNode, finalNode, '|'])
 
+    # Evaluation of the kleen star
     def kleeneStarEvaluation(self):
+        # Get the previous evaluation
         A = self.stack.pop(len(self.stack)-1)
+        # Get the start and the final node for the transition
         startNode = self.N
         finalNode = startNode+1
+        # Storing the following transitions in the NFA table
         self.NFA.append([startNode, self.startNodeTransition(A),'e'])
         self.NFA.append([self.finalNodeTransition(A), finalNode,'e'])
         self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(A),'e'])
         self.NFA.append([startNode, finalNode,'e'])
+        # Adding 2 because of 2 nodes added
         self.N = self.N+2
+        # Storing in the stack the evaluation
         self.stack.append([startNode, finalNode, '*'])
     
+    # Evaluation of the concatenation
     def concatenationEvaluation(self):
+         # Get the start and the final node for the transition
         A = self.stack.pop(len(self.stack)-2)
         B = self.stack.pop(len(self.stack)-1)
+        # Get the start and the final node for the transition
         startNode = self.startNodeTransition(A)
         finalNode = self.finalNodeTransition(B)-1
         
+        # If the B evaluation has a *,|,?,+ for the token, then we create a diferents nodes which is concatenated, otherwise, pop the top of the NFA table and concatenate with the previous evaluation 
         if self.transitionToken(B) == '*' or self.transitionToken(B) == '+' or self.transitionToken(B) == '?' or self.transitionToken(B) == '|':
             self.stack.append([startNode, finalNode+1, '.'])
             self.N = self.N
@@ -188,46 +214,47 @@ class Automata():
         else:
             self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),"e"])
 
+    # Evaluation of +
     def plusEvaluation(self):
+         # Get the previous evaluation
         A = self.stack.pop(len(self.stack)-1)
+        # Get the start and the final node for the transition
         startNode = self.startNodeTransition(A)
         finalNode = self.finalNodeTransition(A)
+        # Storing in the stack the evaluation and in the NFA the transition table
         self.NFA.append([finalNode, startNode,'e'])
         self.stack.append([startNode, finalNode, '+'])
 
+    # Evaluation of ?
     def zeroOrOneEvaluation(self):
+         # Get the previous evaluation
         A = self.stack.pop(len(self.stack)-1)
+        # Get the start and the final node for the transition
         startNode = self.N
         finalNode = startNode+1
+        # Storing in the stack the evaluation and in the NFA the transition table
         self.NFA.append([startNode, self.startNodeTransition(A),'e'])
         self.NFA.append([self.finalNodeTransition(A), finalNode,'e'])
         self.NFA.append([startNode, finalNode,'e'])
         self.stack.append([startNode, finalNode, '?'])
         self.N = self.N+2
 
-    # Function to convert the regular expression into a NFA
+    # Main function to convert the regular expression into a NFA
     def convertREToNFA(self):
         for token in self.REPostfix:
             if token == '.':
-                #A = self.stack.pop()
-                #B = self.stack.pop()
                 # Call a concatenation function
                 self.concatenationEvaluation()
             elif token == '|':
-                #A = self.stack.pop()
-                #B = self.stack.pop()
                 # Call a union function
                 self.unionEvaluation()
             elif token == '*':
-                #A = self.stack.pop()
                 # Call a kleene star function
                 self.kleeneStarEvaluation()
             elif token == '+':
-                #A = self.stack.pop()
                 # Call a one or more function
                 self.plusEvaluation()
             elif token == '?':
-                #A = self.stack.pop()
                 # Call a zero or more function
                 self.zeroOrOneEvaluation()
             else:
@@ -237,13 +264,13 @@ class Automata():
         print()
         print("The transition table of the NFA is:",self.NFA)
         print()
-        self.stack
-        print("The stack is:",self.stack)
-    
-   
+        #print("The stack is:",self.stack)
+        aux=self.stack.pop()
+        self.createOutputFile(str(self.startNodeTransition(aux)), str(self.finalNodeTransition(aux)))
+
+    # Creating the output which contains the quintuple of the NFA for graphic
     def createOutputFile(self,starNode,finalNode):
-        
-        #print("NFA",self.NFA)
+        # Storing the quintuple of the NFA
         self.output_file['alphabet'] = list(set([i[-1] for i in self.NFA]))
         self.output_file['states'] = [str(i) for i in range(self.N)]
         self.output_file['initial_states'] = [starNode]
@@ -254,73 +281,44 @@ class Automata():
 
         self.output_file['transitions'] = [[str(j) for j in i] for i in self.NFA]
 
-        
-        with open('input_NFA.json', 'w') as json_file:
+        with open('quintuple_NFA.json', 'w') as json_file:
             json.dump(self.output_file, json_file)
 
-
-
-    def writeToFile(self, filename, automataType):
-        f = open(filename,"w+")
-        aux=self.stack.pop()
-        #listToStr = '\n'.join([[' '.join([str(elem) for elem in s]) ]' '.join(str(elem)) for elem in self.NFA]) 
-        
-        if automataType == "NFA":
-            '''
-            Writing the quintuple of the NFA, where:
-            alphabet
-            number set of states (0,1,2,...,n-1)
-            final states
-            start state
-            transition function
-            '''
-            f.write(" ".join(self.alphabet))
-            f.write("\n"+str(self.N))
-            f.write("\n"+str(self.finalNodeTransition(aux)))
-            f.write("\n"+str(self.startNodeTransition(aux)))
-            for transition in self.NFA:
-                element = ' '.join([str(elem) for elem in transition]) 
-                f.write("\n"+element)
-                
-            self.createOutputFile(str(self.startNodeTransition(aux)), str(self.finalNodeTransition(aux)))
-
-          
-        elif automataType == "DFA":
-            pass
-        else:
-            print("ERROR writing to file, type not matched")
-
-        f.close()
-
-
+    # For evaluate each transition for the epsilon closure for a certain state
     def epsilon_closure(self, states):
+        # Declaring the variables, to return the set of states and the stack which helps to store new nodes with also epsilon moves
         set_of_states = []
         stack = []
-        
+        # For each state in the states for the epsilon movements evaluates if it has more epsilon movements
         for element in states:
             stack.append(element)
+            # While is not empty, has no more epsilon moves
             while stack:
                 node = stack.pop()
                 set_of_states.append(node)
+                # Check if has epsilon moves append to the stack to evaluate for more epsilon moves
                 for i in self.graph[node]:
                     if self.transition_matrix[node][i] == 'e':
                         stack.append(i)
         #print("set_", set(set_of_states))
         return set(set_of_states)
 
+    # For creating the transition table for the DFA
     def createTransitionMatrix(self):
-        w, h = self.N, self.N
-       
-        self.transition_matrix = [['' for x in range(w)] for y in range(h)] 
-        pprint.pprint(self.transition_matrix )
+        # Create the transition matrix to make it simple when evaluating
+        self.transition_matrix = [['' for x in range(self.N)] for y in range(self.N)] 
+        #pprint.pprint(self.transition_matrix )
+        # For each transition of the NFA store in the DFA table the transition values of the NFA
         for transition in self.NFA:
-            print(transition)
+            #print(transition)
             self.transition_matrix[transition[0]][transition[2]] = transition[1]
             self.graph.setdefault(transition[0], []).append(transition[2]) 
         self.graph.setdefault(self.N-1, [])
-        pprint.pprint(self.graph)
+        #pprint.pprint(self.graph)
 
+    # The main function for the transformation from NFA to DFA
     def NFA_to_DFA(self):
+        # Declaring some variables
         iterator = 0
         transitions = []
         NFA_states = [1 for i in range(self.N)] 
@@ -332,8 +330,11 @@ class Automata():
         DFA_path = {}
         DFA_states.append(self.epsilon_closure([initial_state]))
         NFA_states[initial_state] = 1
+        # Iterate from each state of the DFA, starting from the initial state of the NFA for evaluate the dfa transition
         for state in DFA_states:
+            # Restore the path
             path = {}
+            
             for element in state:
                 NFA_states[element] = 1
                 for i in self.graph[element]:
@@ -367,13 +368,12 @@ class Automata():
         self.DFA_file['accepting_states'] = [str(i) for i,e in enumerate(DFA_final_states) if e == 1 ]
         self.DFA_file['transitions'] = transitions
 
-        with open('input_DFA.json', 'w') as json_file:
+        with open('quintuple_DFA.json', 'w') as json_file:
             json.dump(self.DFA_file, json_file)
 
         print(json.dumps(self.DFA_file,indent=2))
             
         
-
 
 if __name__ == "__main__":
     automata = Automata()
@@ -388,22 +388,22 @@ if __name__ == "__main__":
     automata.readFile("RE.txt")
     automata.convertREToPostfix()
     automata.convertREToNFA()
-    automata.writeToFile("NFA.txt","NFA")
-
 
     automata.createTransitionMatrix()
 
-    nfa_example = automata_IO.nfa_json_importer('input_NFA.json')
     automata_IO.nfa_to_dot(nfa_example, 'output_NFA', './')
     textLines = [
     "Mauricio Peón",
     "Alexandro Marcelo",
     "Andrés Campos"
     ]
+    nfa_example = automata_IO.nfa_json_importer('quintuple_NFA.json')
+    automata_IO.nfa_to_dot(nfa_example, 'graphic_NFA', './')
+    
     
     automata.NFA_to_DFA()
-    dfa_example = automata_IO.dfa_json_importer('input_DFA.json')
-    automata_IO.dfa_to_dot(dfa_example, 'output_DFA', './')
+    dfa_example = automata_IO.dfa_json_importer('quintuple_DFA.json')
+    automata_IO.dfa_to_dot(dfa_example, 'graphic_DFA', './')
 
     pdf = canvas.Canvas("Reporte.pdf")
     pdf.setTitle("Tarea 1")
