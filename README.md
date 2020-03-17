@@ -6,6 +6,7 @@ Orientaciones para correr el programa que va desde una expresión regular a un A
 ## 0. Pre-requisitos
 * Poder correr programas de Python3.
 * Clonar este repositorio.
+* Moverse a la carpeta de "Tarea 1" ` cd Tarea\ 1/`
 
 ## 1. Instalar las dependencias
 `pip3 install -r requirements.txt`
