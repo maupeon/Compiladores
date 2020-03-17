@@ -303,11 +303,14 @@ class Automata():
 
     def createTransitionMatrix(self):
         w, h = self.N, self.N
+       
         self.transition_matrix = [['' for x in range(w)] for y in range(h)] 
+        pprint.pprint(self.transition_matrix )
         for transition in self.NFA:
+            print(transition)
             self.transition_matrix[transition[0]][transition[2]] = transition[1]
             self.graph.setdefault(transition[0], []).append(transition[2]) 
-        self.graph.setdefault(self.N - 1, [])
+        self.graph.setdefault(self.N , [])
         
 
     def NFA_to_DFA(self):
@@ -379,10 +382,13 @@ if __name__ == "__main__":
     automata.convertREToPostfix()
     automata.convertREToNFA()
     automata.writeToFile("NFA.txt","NFA")
+
+    automata.createTransitionMatrix()
+
     nfa_example = automata_IO.nfa_json_importer('input_NFA.json')
     automata_IO.nfa_to_dot(nfa_example, 'output_NFA', './')
     
-    automata.createTransitionMatrix()
+    
     automata.NFA_to_DFA()
     dfa_example = automata_IO.dfa_json_importer('input_DFA.json')
     automata_IO.dfa_to_dot(dfa_example, 'output_DFA', './')
