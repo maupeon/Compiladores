@@ -1,25 +1,24 @@
 '''
 Mauricio Peón García                    A01024162
 Alexandro Francisco Marcelo González    A0102183
-Andrés Campos Tams                      
+Andrés Campos Tams                      A01024385
 28 Feb 2020
 Tarea 1: RE -> NFA -> DFA By reading a file containing the RE and the alphabet
 
-<<<<<<< HEAD
 pip3 install pysimpleautomata
 sudo apt install python-pydot python-pydot-ng graphviz 
 
-=======
 REQUIREMENTS:
     graphviz
     PySimpleAutomata
     pydot
     pydot-ng
->>>>>>> 81a91e37ad2c2c9ef1302ca0352de775996fef3f
 '''
 
 from PySimpleAutomata import DFA, automata_IO,NFA
 import json
+import numpy as np
+import pprint
 
 # Declaration of global constants
 STARTNODE=0
@@ -78,7 +77,7 @@ class Conversion:
         while self.stack: 
             self.postfix.append(self.stack.pop()) 
   
-        print("RE to Postfix:","".join(self.postfix))
+        #print("RE to Postfix:","".join(self.postfix))
         return self.postfix
 
 class Automata():
@@ -95,6 +94,11 @@ class Automata():
         self.N=0
         # For the alphabet
         self.alphabet=set()
+        self.output_file = {}
+        self.transition_matrix = []
+        self.graph = {}
+
+        self.DFA_file ={}
 
     # Read the file and store the Regular expression
     def readFile(self,filename):
@@ -103,8 +107,8 @@ class Automata():
             if f.mode == 'r':
                 self.RE=f.readline()
                 self.alphabet=[line.rstrip('\n') for line in f]
-                print("ALPHABET:",self.alphabet)
-                print("REGULAR EXPRESION:",self.RE)
+                #print("ALPHABET:",self.alphabet)
+                #print("REGULAR EXPRESION:",self.RE)
             else:
                 print("ERROR reading file")
             f.close() 
@@ -115,7 +119,7 @@ class Automata():
     def convertREToPostfix(self):
         conversion = Conversion()
         self.REPostfix = conversion.infixToPostfix(self.RE, self.alphabet)
-        print(self.REPostfix)
+        #print(self.REPostfix)
 
     # Auxiliar functions to make a cleaner code to retrieve information of the transition table
     def startNodeTransition(self, transition):
@@ -168,11 +172,9 @@ class Automata():
         finalNode = self.finalNodeTransition(B)-1
         
         if self.transitionToken(B) == '*' or self.transitionToken(B) == '+' or self.transitionToken(B) == '?' or self.transitionToken(B) == '|':
-            print("POPO")
             self.stack.append([startNode, finalNode+1, '.'])
             self.N = self.N
         else:
-            new=self.NFA.pop()
             self.stack.append([startNode, finalNode, '.'])
             self.N = self.N-1
         #self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),self.transitionToken(B)])
@@ -227,30 +229,29 @@ class Automata():
                 #evaluate the current symbol
                 self.symbolEvaluation(token)
         
-        print()
-        print("The transition table of the NFA is:",self.NFA)
-        print()
+        #print()
+        #print("The transition table of the NFA is:",self.NFA)
+        #print()
         self.stack
-        print("The stack is:",self.stack)
+        #print("The stack is:",self.stack)
     
     def createOutputFile(self,starNode,finalNode):
-        output_file ={}
-        print("NFA",self.NFA)
-        output_file['alphabet'] = list(set([i[-1] for i in self.NFA]))
-        output_file['states'] = [str(i) for i in range(self.N)]
-        output_file['initial_states'] = [starNode]
-        output_file['accepting_states'] = [finalNode]
+        
+        #print("NFA",self.NFA)
+        self.output_file['alphabet'] = list(set([i[-1] for i in self.NFA]))
+        self.output_file['states'] = [str(i) for i in range(self.N)]
+        self.output_file['initial_states'] = [starNode]
+        self.output_file['accepting_states'] = [finalNode]
 
         for element in self.NFA:
             element[1], element[2] = element[2], element[1]
 
-        output_file['transitions'] = [[str(j) for j in i] for i in self.NFA]
+        self.output_file['transitions'] = [[str(j) for j in i] for i in self.NFA]
 
-        with open('input_test.json', 'w') as json_file:
-            json.dump(output_file, json_file)
-
-        return output_file
         
+        with open('input_NFA.json', 'w') as json_file:
+            json.dump(self.output_file, json_file)
+
 
 
     def writeToFile(self, filename, automataType):
@@ -284,6 +285,86 @@ class Automata():
             print("ERROR writing to file, type not matched")
 
         f.close() 
+
+    def epsilon_closure(self, states):
+        set_of_states = []
+        stack = []
+        
+        for element in states:
+            stack.append(element)
+            while stack:
+                node = stack.pop()
+                set_of_states.append(node)
+                for i in self.graph[node]:
+                    if self.transition_matrix[node][i] == 'e':
+                        stack.append(i)
+        #print("set_", set(set_of_states))
+        return set(set_of_states)
+
+    def createTransitionMatrix(self):
+        w, h = self.N, self.N
+        self.transition_matrix = [['' for x in range(w)] for y in range(h)] 
+        for transition in self.NFA:
+            self.transition_matrix[transition[0]][transition[2]] = transition[1]
+            self.graph.setdefault(transition[0], []).append(transition[2]) 
+        self.graph.setdefault(self.N - 1, [])
+        
+
+    def NFA_to_DFA(self):
+        iterator = 0
+        transitions = []
+        NFA_states = [1 for i in range(self.N)] 
+        initial_state = int(self.output_file["initial_states"][0])
+        final_state = int(self.output_file["accepting_states"][0])
+        alphabet = self.alphabet
+        DFA_states = []
+        path = {}
+        DFA_path = {}
+        DFA_states.append(self.epsilon_closure([initial_state]))
+        NFA_states[initial_state] = 1
+        for state in DFA_states:
+            path = {}
+            for element in state:
+                NFA_states[element] = 1
+                for i in self.graph[element]:
+                        if self.transition_matrix[element][i] != 'e':
+                            for char in alphabet:
+                                if self.transition_matrix[element][i] == char:
+                                    path.setdefault(char,[]).append(i)
+            DFA_path[iterator] = path
+            for e in DFA_path[iterator]:
+                if self.epsilon_closure(DFA_path[iterator][e]) not in DFA_states:
+                    DFA_states.append(self.epsilon_closure(DFA_path[iterator][e]))
+            iterator+=1
+        
+        for index, element in enumerate(DFA_states):
+            for char in DFA_path[index]:
+                transition = []
+                transition.append(str(index))
+                transition.append(char)
+                transition.append(str(DFA_states.index(self.epsilon_closure(DFA_path[index][char]))))
+                transitions.append(transition)
+        
+        DFA_final_states = [0 for i in range(len(DFA_states))] 
+
+        for index,state in enumerate(DFA_states):
+            if final_state in state:
+                DFA_final_states[index]=1
+
+        self.DFA_file['alphabet'] = alphabet
+        self.DFA_file['states'] = [str(i) for i in range(len(DFA_states))]
+        self.DFA_file['initial_state'] ='0'
+        self.DFA_file['accepting_states'] = [str(i) for i,e in enumerate(DFA_final_states) if e == 1 ]
+        self.DFA_file['transitions'] = transitions
+
+        with open('input_DFA.json', 'w') as json_file:
+            json.dump(self.DFA_file, json_file)
+
+        print(json.dumps(self.DFA_file,indent=2))
+            
+        
+
+
 if __name__ == "__main__":
     automata = Automata()
     '''
@@ -298,11 +379,12 @@ if __name__ == "__main__":
     automata.convertREToPostfix()
     automata.convertREToNFA()
     automata.writeToFile("NFA.txt","NFA")
+    nfa_example = automata_IO.nfa_json_importer('input_NFA.json')
+    automata_IO.nfa_to_dot(nfa_example, 'output_NFA', './')
+    
+    automata.createTransitionMatrix()
+    automata.NFA_to_DFA()
+    dfa_example = automata_IO.dfa_json_importer('input_DFA.json')
+    automata_IO.dfa_to_dot(dfa_example, 'output_DFA', './')
 
-
-    nfa_example = automata_IO.nfa_json_importer('input_test.json')
-   
-
-
-    automata_IO.nfa_to_dot(nfa_example, 'output', './')
 
