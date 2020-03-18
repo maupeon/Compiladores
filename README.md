@@ -34,7 +34,7 @@ Orientaciones para correr el programa que va desde una expresión regular a un A
   - a
   - b
   - c  
-* NOTA: la expresión regular (RE) ingresada anteriormente, debe contener '.' para decir que es una concatenación, por lo que no se puede usar para decir que es un símbolo del alfabeto de la RE. Así mismo, no se puede decir que '+' es un símbolo del alfabeto, puesto que indica que es uno o más elementos. En conclusión no puedes definir un símbolo del alfabeto que esté en la definición de símbolos de la RE. 
+* NOTA: la expresión regular (RE) ingresada anteriormente, debe contener '.' para decir que es una concatenación, por lo que no se puede usar para decir que es un símbolo del alfabeto de la RE. Así mismo, no se puede decir que '+' es un símbolo del alfabeto, puesto que indica que es uno o más elementos. En conclusión no puedes definir un símbolo del alfabeto que esté en la definición de símbolos de la RE. El símbolo 'e' representa a epsilon o nulo
 
 ## 3. Ejecutar en la consola
 `python3 tarea1.py`
