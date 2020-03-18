@@ -1,27 +1,27 @@
 digraph {
 	fake0 [style=invisible]
-	8
-	2
-	3
-	10 [root=true]
-	12
 	13
-	14 [shape=doublecircle]
 	0
-	7
 	6
-	5
-	4
-	9
-	11
 	1
+	10 [root=true]
+	14 [shape=doublecircle]
+	5
+	8
+	9
+	12
+	3
+	2
+	4
+	7
+	11
 	fake0 -> 10 [style=bold]
 	0 -> 1 [label=0]
 	2 -> 3 [label=1]
-	4 -> 8 [label=e]
 	4 -> 2 [label=e]
 	4 -> 0 [label=e]
 	4 -> 6 [label=e]
+	4 -> 8 [label=e]
 	1 -> 5 [label=e]
 	3 -> 5 [label=e]
 	6 -> 7 [label=2]

@@ -1,7 +1,7 @@
 '''
 Mauricio Peón García                    A01024162
-Alexandro Francisco Marcelo González    A0102183
-Andrés Campos Tams                      
+Alexandro Francisco Marcelo González    A01021383
+Andrés Campos Tams                      A01024385
 28 Feb 2020
 Tarea 1: RE -> NFA -> DFA By reading a file containing the RE and the alphabet
 
