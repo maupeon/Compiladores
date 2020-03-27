@@ -1,7 +1,7 @@
 '''
 Mauricio Peón García                    A01024162
-Alexandro Francisco Marcelo González    A0102183
-Andrés Campos Tams                      
+Alexandro Francisco Marcelo González    A01021383
+Andrés Campos Tams                      A01024385
 28 Feb 2020
 Tarea 1: RE -> NFA -> DFA By reading a file containing the RE and the alphabet
 
@@ -17,12 +17,6 @@ REQUIREMENTS:
 from PySimpleAutomata import DFA, automata_IO,NFA
 import json
 import pprint
-from reportlab.pdfgen import canvas
-from reportlab.graphics import renderPDF
-from reportlab.pdfgen import canvas
-from svglib.svglib import svg2rlg
-
-
 
 # Declaration of global constants
 STARTNODE=0
@@ -81,7 +75,7 @@ class Conversion:
         while self.stack: 
             self.postfix.append(self.stack.pop()) 
   
-        print("RE to Postfix:","".join(self.postfix))
+        #print("RE to Postfix:","".join(self.postfix))
         return self.postfix
 
 class Automata():
@@ -106,12 +100,22 @@ class Automata():
         self.graph = {}
         # For the output of the DFA
         self.DFA_file ={}
+        # For the strings to be evaluated
+        self.strings=[]
 
     # Read the file and store the Regular expression
     def readFile(self,filename):
         try:
             f = open(filename,"r")
             if f.mode == 'r':
+                
+                numStrings=0
+                numStrings=int(f.readline())
+                for i in range(numStrings):
+                    string=f.readline()
+                    self.strings.append(string.rstrip('\n'))
+                print("STRINGS TO BE EVALUATED:",self.strings)
+                
                 self.RE=f.readline()
                 self.alphabet=[line.rstrip('\n') for line in f]
                 print("ALPHABET:",self.alphabet)
@@ -120,7 +124,7 @@ class Automata():
                 print("ERROR reading file")
             f.close() 
         except:
-            print("ERROR file not found")
+            print("ERROR verify that the file which contains the RE has the correct format")
     
     # Call the Conversion class which going to convert from infix to postfix the RE
     def convertREToPostfix(self):
@@ -261,9 +265,9 @@ class Automata():
                 #evaluate the current symbol
                 self.symbolEvaluation(token)
         
-        print()
-        print("The transition table of the NFA is:",self.NFA)
-        print()
+        #print()
+        #print("The transition table of the NFA is:",self.NFA)
+        #print()
         #print("The stack is:",self.stack)
         aux=self.stack.pop()
         self.createOutputFile(str(self.startNodeTransition(aux)), str(self.finalNodeTransition(aux)))
@@ -369,7 +373,48 @@ class Automata():
         # Write de quintuple in a json
         with open('quintuple_DFA.json', 'w') as json_file:
             json.dump(self.DFA_file, json_file)
-        print(json.dumps(self.DFA_file,indent=2))      
+        #print("The quintuple of the DFA is: ")
+        #print(json.dumps(self.DFA_file,indent=2))   
+
+    # Function to validate if the given string is in the RE using the transition matrix
+    def isValidString(self,string):
+        transitions = self.DFA_file['transitions']
+        final_states = self.DFA_file['accepting_states']
+        flag = 0
+        state = 0
+        states = {}
+
+        # Evaluate with the NFA transition table
+        if string == 'e':
+            states = self.epsilon_closure([int(self.output_file['initial_states'][0])])
+            if int(self.output_file['accepting_states'][0]) in states:
+                return True
+            else:
+                return False
+            
+        # Evaluate with the DFA transition table
+        for transition in transitions: 
+            if transition[0] == self.DFA_file['initial_state'] and transition[1] == string[0]:
+                state = transition[2]
+                flag = 1
+        if flag ==1:
+            for index,character in enumerate(string[1:]):
+                for  transition in transitions:
+                    if character == transition[1] and state == transition[0]:
+                        state = transition[2]
+                        break
+            if state in final_states:
+                return True
+            else:
+                return False
+        else:
+            return False
+        return True
+
+    # Function to validate if the given string is in the RE using the transition matrix
+    def validateStrings(self):
+        for string in self.strings:
+            print("THE STRING:",string,"IS:",self.isValidString(string))
 
 if __name__ == "__main__":
     automata = Automata()
@@ -394,6 +439,6 @@ if __name__ == "__main__":
     dfa_example = automata_IO.dfa_json_importer('quintuple_DFA.json')
     automata_IO.dfa_to_dot(dfa_example, 'graphic_DFA', './')
 
-
-
-
+    automata.validateStrings()
+    print("The quintuple for the NFA is in 'quintuple_NFA.json', the graphic is in 'graphic_NFA.dot.svg'")
+    print("The quintuple for the DFA is in 'quintuple_DFA.json', the graphic is in 'graphic_DFA.dot.svg'")
