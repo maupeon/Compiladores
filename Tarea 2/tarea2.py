@@ -15,7 +15,7 @@ class Lexer(object):
         i = 0
 
         while i < len(source_code):
-
+            
             word = source_code[i]
 
             #print("word: ",word)
@@ -30,9 +30,7 @@ class Lexer(object):
             elif re.match(r'\d+(\.\d*)?',word):
 
                 if word[len(word) - 1] == ";":
-
                     number = float( word[0:len(word) - 1]) if '.' in  word[0:len(word) - 1] else int( word[0:len(word) - 1])
-
                     check_int = isinstance(number, int)
 
                     if check_int:
@@ -41,9 +39,7 @@ class Lexer(object):
                         tokens.append(['FLOAT', word[0:len(word) - 1]])
                     
                 else:
-
                     number = float( word[0:len(word) - 1]) if '.' in  word[0:len(word) - 1] else int( word[0:len(word) - 1])
-
                     check_int = isinstance(number, int)
 
                     if check_int:
@@ -60,7 +56,6 @@ class Lexer(object):
 
             # Check if the word is an operator
             elif word in "=/*=-+<>":
-               
                tokens.append(['OPERATOR', word])
             
             # Check if the word is a semicollon
@@ -77,12 +72,10 @@ class Lexer(object):
 
 if __name__ == "__main__":
     
-   
     content = ""
 
-    with open('test.txt','r') as file:
+    with open('code.txt','r') as file:
         content = file.read()
-
 
     #print("content: ",content)
     lexer = Lexer(content)
