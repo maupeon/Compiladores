@@ -1,15 +1,5 @@
 digraph {
 	fake [style=invisible]
-<<<<<<< HEAD
-	4
-	1
-	3
-	0 [root=true]
-	2
-	5
-	7 [shape=doublecircle]
-	6
-=======
 	0 [root=true]
 	6
 	1
@@ -18,7 +8,6 @@ digraph {
 	2
 	4
 	7 [shape=doublecircle]
->>>>>>> f7e8cca16f887c40875a84d40cfc130c4ab2ecd6
 	fake -> 0 [style=bold]
 	0 -> 1 [label=0]
 	0 -> 2 [label=1]
