@@ -36,7 +36,10 @@ class Lexer(object):
                     if check_int:
                         tokens.append(['INT', word[0:len(word) - 1]])
                     else:
-                        tokens.append(['FLOAT', word[0:len(word) - 1]])
+                        if 'e+' or 'e-' in word :
+                            tokens.append(['SCI-NOT', word[0:len(word) - 1]])
+                        else:
+                            tokens.append(['FLOAT', word[0:len(word) - 1]])
                     
                 else:
                     number = float( word[0:len(word) - 1]) if '.' in  word[0:len(word) - 1] else int( word[0:len(word) - 1])
@@ -45,7 +48,10 @@ class Lexer(object):
                     if check_int:
                         tokens.append(['INT', word[0:len(word) - 1]])
                     else:
-                        tokens.append(['FLOAT', word[0:len(word) - 1]])
+                        if 'e+' or 'e-' in word:
+                            tokens.append(['SCI-NOT', word[0:len(word) - 1]])
+                        else:
+                            tokens.append(['FLOAT', word[0:len(word) - 1]])
             
             # Check if the word is an identifier
             elif re.match('[a-z]',word) or re.match('[A-Z]',word):

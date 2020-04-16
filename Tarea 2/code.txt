@@ -2,3 +2,9 @@ ent age = 17;
 print age;
 
 dec mau = 17.999842;
+
+dec masdjf = 10.0e-38;
+
+
+
+dec masdjf = 10.0e+38;
