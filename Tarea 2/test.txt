@@ -1,0 +1,4 @@
+var age = 17;
+print age;
+
+float mau = 17.999842;
