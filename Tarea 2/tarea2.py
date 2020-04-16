@@ -11,23 +11,25 @@ class Lexer(object):
 
         source_code = self.source_code.split()
 
-        print("source_code",source_code)
-        source_index = 0
+        #print("source_code",source_code)
+        i = 0
 
-        while source_index < len(source_code):
+        while i < len(source_code):
 
-            word = source_code[source_index]
+            word = source_code[i]
 
-            print("word: ",word)
+            #print("word: ",word)
 
-            if word == "var":
+            # 'cad' is the same as string
+            # 'ent' is the same as integer
+            # 'dec' is the same as float
+            if word == "cad" or word == "ent" or word == "dec":
                 tokens.append(["VAR_DECLARATION", word])
 
-            
+            # Check if the word is a number
             elif re.match(r'\d+(\.\d*)?',word):
 
                 if word[len(word) - 1] == ";":
-                    #tokens.append(['FLOAT', word[0:len(word) - 1]])
 
                     number = float( word[0:len(word) - 1]) if '.' in  word[0:len(word) - 1] else int( word[0:len(word) - 1])
 
@@ -38,39 +40,34 @@ class Lexer(object):
                     else:
                         tokens.append(['FLOAT', word[0:len(word) - 1]])
                     
-                    #print(check_int)
                 else:
 
                     number = float( word[0:len(word) - 1]) if '.' in  word[0:len(word) - 1] else int( word[0:len(word) - 1])
 
                     check_int = isinstance(number, int)
+
                     if check_int:
                         tokens.append(['INT', word[0:len(word) - 1]])
                     else:
                         tokens.append(['FLOAT', word[0:len(word) - 1]])
-
-                    #tokens.append(['FLOAT', word])
-
-            elif re.match('[0-9]',word):
-                if word[len(word) - 1] == ";":
-                    tokens.append(['INTEGER', word[0:len(word) - 1]])
-                else:
-                    tokens.append(['INTEGER', word])
-
+            
+            # Check if the word is an identifier
             elif re.match('[a-z]',word) or re.match('[A-Z]',word):
                 if word[len(word) - 1] == ";":
                     tokens.append(['IDENTIFIER', word[0:len(word) - 1]])
                 else:
                     tokens.append(['IDENTIFIER', word])
 
+            # Check if the word is an operator
             elif word in "=/*=-+<>":
                
                tokens.append(['OPERATOR', word])
-
+            
+            # Check if the word is a semicollon
             if word[len(word) - 1] == ";":
                     tokens.append(['STATEMENT_END', ';'])
 
-            source_index += 1
+            i += 1
 
         print(tokens)
 
@@ -87,7 +84,7 @@ if __name__ == "__main__":
         content = file.read()
 
 
-    print("content: ",content)
+    #print("content: ",content)
     lexer = Lexer(content)
 
     tokens = lexer.tokenize()

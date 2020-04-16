@@ -1,4 +1,4 @@
-var age = 17;
+ent age = 17;
 print age;
 
-float mau = 17.999842;
+dec mau = 17.999842;
