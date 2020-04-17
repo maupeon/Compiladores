@@ -122,6 +122,7 @@ class Automata():
                     REs[RE]=alphabet
 
                 print("REGULAR EXPRESIONS:",REs)
+                f.close() 
                 return REs
             else:
                 print("ERROR reading file")
@@ -165,17 +166,17 @@ class Automata():
             startNode = self.startNodeTransition(A)
             finalNode = self.finalNodeTransition(A)
             # Storing the following transitions in the NFA table
-            self.NFA.append([startNode, self.startNodeTransition(B),'e'])
-            self.NFA.append([self.finalNodeTransition(B), finalNode,'e'])
+            self.NFA.append([startNode, self.startNodeTransition(B),'$'])
+            self.NFA.append([self.finalNodeTransition(B), finalNode,'$'])
         else:
             # Get the start and the final node for the transition
             startNode = self.N
             finalNode = startNode+1
             # Storing the following transitions in the NFA table
-            self.NFA.append([startNode, self.startNodeTransition(A),'e'])
-            self.NFA.append([startNode, self.startNodeTransition(B),'e'])
-            self.NFA.append([self.finalNodeTransition(A), finalNode,'e'])
-            self.NFA.append([self.finalNodeTransition(B), finalNode,'e'])
+            self.NFA.append([startNode, self.startNodeTransition(A),'$'])
+            self.NFA.append([startNode, self.startNodeTransition(B),'$'])
+            self.NFA.append([self.finalNodeTransition(A), finalNode,'$'])
+            self.NFA.append([self.finalNodeTransition(B), finalNode,'$'])
             # Adding 2 because of 2 nodes added
             self.N = self.N+2
         # Storing in the stack the evaluation    
@@ -189,10 +190,10 @@ class Automata():
         startNode = self.N
         finalNode = startNode+1
         # Storing the following transitions in the NFA table
-        self.NFA.append([startNode, self.startNodeTransition(A),'e'])
-        self.NFA.append([self.finalNodeTransition(A), finalNode,'e'])
-        self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(A),'e'])
-        self.NFA.append([startNode, finalNode,'e'])
+        self.NFA.append([startNode, self.startNodeTransition(A),'$'])
+        self.NFA.append([self.finalNodeTransition(A), finalNode,'$'])
+        self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(A),'$'])
+        self.NFA.append([startNode, finalNode,'$'])
         # Adding 2 because of 2 nodes added
         self.N = self.N+2
         # Storing in the stack the evaluation
@@ -229,7 +230,7 @@ class Automata():
         startNode = self.startNodeTransition(A)
         finalNode = self.finalNodeTransition(A)
         # Storing in the stack the evaluation and in the NFA the transition table
-        self.NFA.append([finalNode, startNode,'e'])
+        self.NFA.append([finalNode, startNode,'$'])
         self.stack.append([startNode, finalNode, '#'])
 
     # Evaluation of ?
@@ -240,15 +241,24 @@ class Automata():
         startNode = self.N
         finalNode = startNode+1
         # Storing in the stack the evaluation and in the NFA the transition table
-        self.NFA.append([startNode, self.startNodeTransition(A),'e'])
-        self.NFA.append([self.finalNodeTransition(A), finalNode,'e'])
-        self.NFA.append([startNode, finalNode,'e'])
+        self.NFA.append([startNode, self.startNodeTransition(A),'$'])
+        self.NFA.append([self.finalNodeTransition(A), finalNode,'$'])
+        self.NFA.append([startNode, finalNode,'$'])
         self.stack.append([startNode, finalNode, '?'])
         self.N = self.N+2
 
     # Main function to convert the regular expression into a NFA
-    def convertREToNFA(self):
-        for token in self.REPostfix:
+    def convertREToNFA(self, REPostfix, alphabet):
+        self.stack=[]
+        self.NFA=[]
+        self.N=0
+        self.output_file = {}
+        self.transition_matrix = []
+        self.graph = {}
+        self.DFA_file ={}
+        self.strings=[]
+        self.alphabet = alphabet
+        for token in REPostfix:
             if token == '&':
                 # Call a concatenation function
                 self.concatenationEvaluation()
@@ -273,12 +283,12 @@ class Automata():
         #print()
         #print("The stack is:",self.stack)
         aux=self.stack.pop()
-        self.createOutputFile(str(self.startNodeTransition(aux)), str(self.finalNodeTransition(aux)))
+        self.createOutputFile(str(self.startNodeTransition(aux)), str(self.finalNodeTransition(aux)), alphabet)
 
     # Creating the output which contains the quintuple of the NFA for graphic
-    def createOutputFile(self,starNode,finalNode):
+    def createOutputFile(self,starNode,finalNode, alphabet):
         # Storing the quintuple of the NFA
-        self.output_file['alphabet'] = list(set([i[-1] for i in self.NFA]))
+        self.output_file['alphabet'] = alphabet
         self.output_file['states'] = [str(i) for i in range(self.N)]
         self.output_file['initial_states'] = [starNode]
         self.output_file['accepting_states'] = [finalNode]
@@ -287,9 +297,10 @@ class Automata():
             element[1], element[2] = element[2], element[1]
 
         self.output_file['transitions'] = [[str(j) for j in i] for i in self.NFA]
-
-        with open('quintuple_NFA.json', 'w') as json_file:
+        with open('quintuple_NFA.json', 'a') as json_file:
             json.dump(self.output_file, json_file)
+            json_file.write('\n')
+
 
     # For evaluate each transition for the epsilon closure for a certain state
     def epsilon_closure(self, states):
@@ -304,9 +315,10 @@ class Automata():
                 node = stack.pop()
                 set_of_states.append(node)
                 # Check if has epsilon moves append to the stack to evaluate for more epsilon moves
-                for i in self.graph[node]:
-                    if self.transition_matrix[node][i] == 'e':
-                        stack.append(i)
+                if node in self.graph:
+                    for i in self.graph[node]:
+                        if self.transition_matrix[node][i] == '$':
+                            stack.append(i)
         #print("set_", set(set_of_states))
         return set(set_of_states)
 
@@ -344,16 +356,18 @@ class Automata():
             # Check which node in the state goes to another one with a symbol in the alphabet-
             for element in state:
                 NFA_states[element] = 1
-                for i in self.graph[element]:
-                        if self.transition_matrix[element][i] != 'e':
-                            for char in alphabet:
-                                if self.transition_matrix[element][i] == char:
-                                    path.setdefault(char,[]).append(i)
+                if element in self.graph:
+                    for i in self.graph[element]:
+                            if self.transition_matrix[element][i] != '$':
+                                for char in alphabet:
+                                    if self.transition_matrix[element][i] == char:
+                                        path.setdefault(char,[]).append(i)
             DFA_path[iterator] = path
             for e in DFA_path[iterator]:
                 if self.epsilon_closure(DFA_path[iterator][e]) not in DFA_states:
                     DFA_states.append(self.epsilon_closure(DFA_path[iterator][e]))
             iterator+=1
+        #print("DFA_STATES", DFA_states)
         # Generate the transition matrix.
         for index, element in enumerate(DFA_states):
             for char in DFA_path[index]:
@@ -370,39 +384,77 @@ class Automata():
         # Generate de new dictionary of quintuple.
         self.DFA_file['alphabet'] = alphabet
         self.DFA_file['states'] = [str(i) for i in range(len(DFA_states))]
-        self.DFA_file['initial_state'] ='0'
+        self.DFA_file['initial_states'] =['0']
         self.DFA_file['accepting_states'] = [str(i) for i,e in enumerate(DFA_final_states) if e == 1 ]
         self.DFA_file['transitions'] = transitions
         # Write de quintuple in a json
-        with open('quintuple_DFA.json', 'w') as json_file:
+        with open('quintuple_DFA.json', 'a') as json_file:
             json.dump(self.DFA_file, json_file)
+            json_file.write('\n')
         #print("The quintuple of the DFA is: ")
         #print(json.dumps(self.DFA_file,indent=2))   
 
+class Lexer():
+    def __init__(self):
+        # For the tokens to be evaluated
+        self.tokens=[]
+
+    # Read the file and store the tokens
+    def readFileTokens(self,filename):
+        try:
+            f = open(filename,"r")
+            if f.mode == 'r':
+                content = f.read()
+                self.tokens = content.split()
+                f.close() 
+                return(self.tokens)
+            else:
+                print("ERROR reading file")
+            f.close() 
+        except:
+            print("ERROR verify that the file which contains the RE has the correct format")
+    
+    # Read the file and store the DFAs
+    def readFileDFAs(self,filename):
+            f = open(filename,"r")
+            if f.mode == 'r':
+                DFAs = []
+                while True:
+                    content = f.readline()
+                    print(content)
+                    if not content or content == '\n': break
+                    #print(content)
+                    DFA = json.loads(content)
+                    print(DFA)
+                    DFAs.append(DFA)
+                f.close()
+                return DFAs
+            else:
+                print("ERROR reading file")
+            f.close() 
+        
     # Function to validate if the given string is in the RE using the transition matrix
-    def isValidString(self,string):
-        transitions = self.DFA_file['transitions']
-        final_states = self.DFA_file['accepting_states']
+    def evalauteTokens(self, DFAs, tokens):
+        for token in tokens:
+            for DFA in DFAs:
+                print("THE TOKEN:",token,"IS:",self.isValidToken(token, DFA))
+            
+    # Function to validate if the given string is in the RE using the transition matrix
+    def isValidToken(self,token,DFA):
+        transitions = DFA['transitions']
+        final_states = DFA['accepting_states']
         flag = 0
         state = 0
         states = {}
-
-        # Evaluate with the NFA transition table
-        if string == 'e':
-            states = self.epsilon_closure([int(self.output_file['initial_states'][0])])
-            if int(self.output_file['accepting_states'][0]) in states:
-                return True
-            else:
-                return False
-            
+        #print("AKSDNAKSJNDLKASJDNLAKJDNKASNDJKASN",token,DFA)
         # Evaluate with the DFA transition table
         for transition in transitions: 
-            if transition[0] == self.DFA_file['initial_state'] and transition[1] == string[0]:
+            if transition[0] == DFA['initial_states'][0] and transition[1] == token[0]:
                 state = transition[2]
                 flag = 1
         if flag ==1:
-            for index,character in enumerate(string[1:]):
-                for  transition in transitions:
+            for index,character in enumerate(token[1:]):
+                for transition in transitions:
                     if character == transition[1] and state == transition[0]:
                         state = transition[2]
                         break
@@ -413,11 +465,6 @@ class Automata():
         else:
             return False
         return True
-
-    # Function to validate if the given string is in the RE using the transition matrix
-    def validateStrings(self):
-        for string in self.strings:
-            print("THE STRING:",string,"IS:",self.isValidString(string))
 
 if __name__ == "__main__":
     automata = Automata()
@@ -430,23 +477,21 @@ if __name__ == "__main__":
     Where the first line is the RE and the next ones are the alphabet
     '''
     regular_expressions = automata.readFile("RE.txt")
-
+    with open('quintuple_NFA.json', 'w') as file:
+        file.write("")
+    with open('quintuple_DFA.json', 'w') as file:
+        file.write("")
     for regular_expression in regular_expressions:
         #print(regular_expression)
-        print(automata.convertREToPostfix(regular_expression,regular_expressions[regular_expression]))
-    '''
-    automata.convertREToNFA()
-    automata.createTransitionMatrix()
+        alphabet = regular_expressions[regular_expression]
+        REPostfix = automata.convertREToPostfix(regular_expression,alphabet)
+        #print(REPostfix)
+        automata.convertREToNFA(REPostfix, alphabet)
+        
+        automata.createTransitionMatrix()
+        automata.NFA_to_DFA()
 
-    nfa_example = automata_IO.nfa_json_importer('quintuple_NFA.json')
-    automata_IO.nfa_to_dot(nfa_example, 'graphic_NFA', './')
-    
-    automata.NFA_to_DFA()
-
-    dfa_example = automata_IO.dfa_json_importer('quintuple_DFA.json')
-    automata_IO.dfa_to_dot(dfa_example, 'graphic_DFA', './')
-
-    automata.validateStrings()
-    print("The quintuple for the NFA is in 'quintuple_NFA.json', the graphic is in 'graphic_NFA.dot.svg'")
-    print("The quintuple for the DFA is in 'quintuple_DFA.json', the graphic is in 'graphic_DFA.dot.svg'")
-    '''
+    lexer = Lexer()
+    DFAs = lexer.readFileDFAs("quintuple_DFA.json")
+    tokens = lexer.readFileTokens("code.txt")
+    lexer.evalauteTokens(DFAs,tokens)

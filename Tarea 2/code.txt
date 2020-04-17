@@ -1,5 +1,5 @@
-ent age = 17;
-print age;
+int age = 17;
+int num = 1 + 2;
 
 dec mau = 17.999842;
 
