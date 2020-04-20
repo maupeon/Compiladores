@@ -36,7 +36,7 @@ code.txt
 
 output.txt
  - `identifier variable operator int ;`
- - `identifier variable operator int operator int ;`
+ - `identifier variable operator dec ;`
 
 
 ## 5. Eliminar proyecto.
