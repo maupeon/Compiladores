@@ -87,3 +87,10 @@ if __name__ == "__main__":
     lexer = Lexer(content)
 
     tokens = lexer.tokenize()
+
+    print('\n',tokens)
+
+    with open('output.txt','w') as file:
+        for token in tokens:
+            file.write('{0} : {1} \n'.format(token[1],token[0]))
+        #content = file.read()
