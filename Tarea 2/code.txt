@@ -5,6 +5,13 @@ dec mau = 17.999842;
 
 dec masdjf = 10.0e-38;
 
+¡¡¡ !!!
 
+¡!¡
 
 dec masdjf = 10.0e+38;
+or
+innt
+tin
+int
+#
