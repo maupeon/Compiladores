@@ -1,28 +1,3 @@
-<<<<<<< HEAD
-ent : VAR_DECLARATION 
-age : IDENTIFIER 
-= : OPERATOR 
-17 : INT 
-; : STATEMENT_END 
-print : IDENTIFIER 
-age : IDENTIFIER 
-; : STATEMENT_END 
-dec : VAR_DECLARATION 
-mau : IDENTIFIER 
-= : OPERATOR 
-17.999842 : SCI-NOT 
-; : STATEMENT_END 
-dec : VAR_DECLARATION 
-masdjf : IDENTIFIER 
-= : OPERATOR 
-10.0e-38 : SCI-NOT 
-; : STATEMENT_END 
-dec : VAR_DECLARATION 
-masdjf : IDENTIFIER 
-= : OPERATOR 
-10.0e+38 : SCI-NOT 
-; : STATEMENT_END 
-=======
 identifier variable operator int ;
 identifier variable operator int operator int ;
 
@@ -30,7 +5,7 @@ identifier variable operator dec ;
 
 identifier variable operator sci-note ;
 
-comment comment 
+comment variable comment 
 
 INVALID 
 
@@ -38,6 +13,7 @@ identifier variable operator sci-note ;
 operator 
 variable 
 variable 
-identifier 
+variable 
+
+variable INVALID 
 INVALID 
->>>>>>> f41fe4ab1351557bb7348ef194735c49e91c8c1c

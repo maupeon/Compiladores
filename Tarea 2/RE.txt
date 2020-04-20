@@ -1,6 +1,6 @@
 identifier
-i&n&t
-i,n,t
+e&n&t
+e,n,t
 identifier
 d&e&c
 d,e,c
