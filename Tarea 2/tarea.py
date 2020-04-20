@@ -112,6 +112,7 @@ class Automata():
                 REs = {}
                 while True:
                     alphabet = []
+                    identifier = f.readline().strip('\n')
                     RE = f.readline().rstrip('\n')
                     alpha = f.readline().rstrip('\n')
                     if not RE or not alpha: break  # EOF
@@ -119,7 +120,7 @@ class Automata():
                         if symbol != ',':
                             if symbol != '\n':
                                 alphabet.append(symbol)
-                    REs[RE]=alphabet
+                    REs[RE]=[identifier,alphabet]
 
                 print("REGULAR EXPRESIONS:",REs)
                 f.close() 
@@ -220,7 +221,7 @@ class Automata():
         if self.transitionToken(B) in self.alphabet:
             self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),self.transitionToken(B)])
         else:
-            self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),"e"])
+            self.NFA.append([self.finalNodeTransition(A), self.startNodeTransition(B),'$'])
 
     # Evaluation of #
     def plusEvaluation(self):
@@ -248,7 +249,7 @@ class Automata():
         self.N = self.N+2
 
     # Main function to convert the regular expression into a NFA
-    def convertREToNFA(self, REPostfix, alphabet):
+    def convertREToNFA(self, identifier, REPostfix, alphabet):
         self.stack=[]
         self.NFA=[]
         self.N=0
@@ -283,11 +284,12 @@ class Automata():
         #print()
         #print("The stack is:",self.stack)
         aux=self.stack.pop()
-        self.createOutputFile(str(self.startNodeTransition(aux)), str(self.finalNodeTransition(aux)), alphabet)
+        self.createOutputFile(str(self.startNodeTransition(aux)), str(self.finalNodeTransition(aux)), identifier, alphabet)
 
     # Creating the output which contains the quintuple of the NFA for graphic
-    def createOutputFile(self,starNode,finalNode, alphabet):
+    def createOutputFile(self,starNode,finalNode, identifier, alphabet):
         # Storing the quintuple of the NFA
+        self.output_file['identifier'] = identifier
         self.output_file['alphabet'] = alphabet
         self.output_file['states'] = [str(i) for i in range(self.N)]
         self.output_file['initial_states'] = [starNode]
@@ -341,6 +343,7 @@ class Automata():
         iterator = 0
         transitions = []
         NFA_states = [1 for i in range(self.N)] 
+        identifier = self.output_file["identifier"]
         initial_state = int(self.output_file["initial_states"][0])
         final_state = int(self.output_file["accepting_states"][0])
         alphabet = self.alphabet
@@ -349,6 +352,7 @@ class Automata():
         DFA_path = {}
         DFA_states.append(self.epsilon_closure([initial_state]))
         NFA_states[initial_state] = 1
+        #print(self.output_file)
         # Iterate from each state of the DFA, starting from the initial state of the NFA for evaluate the dfa transition
         for state in DFA_states:
             # Restore the path
@@ -382,9 +386,10 @@ class Automata():
             if final_state in state:
                 DFA_final_states[index]=1
         # Generate de new dictionary of quintuple.
+        self.DFA_file['identifier'] = identifier
         self.DFA_file['alphabet'] = alphabet
         self.DFA_file['states'] = [str(i) for i in range(len(DFA_states))]
-        self.DFA_file['initial_states'] =['0']
+        self.DFA_file['initial_state'] ='0'
         self.DFA_file['accepting_states'] = [str(i) for i,e in enumerate(DFA_final_states) if e == 1 ]
         self.DFA_file['transitions'] = transitions
         # Write de quintuple in a json
@@ -403,14 +408,20 @@ class Lexer():
     def readFileTokens(self,filename):
         try:
             f = open(filename,"r")
-            if f.mode == 'r':
-                content = f.read()
-                self.tokens = content.split()
-                f.close() 
-                return(self.tokens)
-            else:
-                print("ERROR reading file")
-            f.close() 
+            tokens = []
+            while True:
+                content = f.readline()
+                if not content: break  # EOF
+                print(content)
+                for token in list(content.split(" ")):
+                    if "\n" in token and len(token) > 2:
+                        tokens.append(token.strip("\n"))
+                        tokens.append("\n")
+                    else:
+                        tokens.append(token)
+                #tokens.append(content)
+            f.close()
+            return tokens
         except:
             print("ERROR verify that the file which contains the RE has the correct format")
     
@@ -421,11 +432,11 @@ class Lexer():
                 DFAs = []
                 while True:
                     content = f.readline()
-                    print(content)
+                    #print(content)
                     if not content or content == '\n': break
                     #print(content)
                     DFA = json.loads(content)
-                    print(DFA)
+                    #print(DFA)
                     DFAs.append(DFA)
                 f.close()
                 return DFAs
@@ -435,36 +446,63 @@ class Lexer():
         
     # Function to validate if the given string is in the RE using the transition matrix
     def evalauteTokens(self, DFAs, tokens):
-        for token in tokens:
-            for DFA in DFAs:
-                print("THE TOKEN:",token,"IS:",self.isValidToken(token, DFA))
+        with open('output.txt', 'w') as file:
+            for token in tokens:
+                type_token = "INVALID"
+                if token != "\n":
+                    for DFA in DFAs:
+                        type_token = self.typeToken(token.strip(';'), DFA)
+                        if type_token != "INVALID":
+                            break
+                    print(token.strip(';'),"->",type_token)
+                    file.write(type_token.strip(';')+" ")
+                    if ";" in token:
+                        file.write(";")
+                else:
+                    file.write(token)
+           
             
     # Function to validate if the given string is in the RE using the transition matrix
-    def isValidToken(self,token,DFA):
+    def typeToken(self,token,DFA):
         transitions = DFA['transitions']
         final_states = DFA['accepting_states']
         flag = 0
         state = 0
         states = {}
-        #print("AKSDNAKSJNDLKASJDNLAKJDNKASNDJKASN",token,DFA)
-        # Evaluate with the DFA transition table
-        for transition in transitions: 
-            if transition[0] == DFA['initial_states'][0] and transition[1] == token[0]:
-                state = transition[2]
-                flag = 1
-        if flag ==1:
-            for index,character in enumerate(token[1:]):
-                for transition in transitions:
-                    if character == transition[1] and state == transition[0]:
-                        state = transition[2]
-                        break
-            if state in final_states:
-                return True
+        transitions_states = {}#{a:[[b,c]] for a,b,c in transitions}
+        aux = []
+        #{char:[[from,to]...]}
+        for a,b,c in transitions:
+            if b in transitions_states:
+                transitions_states[b].update({a:c})
+                aux=[]
             else:
-                return False
+                transitions_states[b] = {a:c}
+        #print(transitions_states)
+        # Evaluate with the DFA transition table
+        if token[0] in transitions_states:
+            #print("kakakakaa:",str(DFA['initial_state'][0]), transitions_states[token[0]])
+            if DFA['initial_state'][0] in transitions_states[token[0]]:
+                #print("STATE:",'0', "Character:", token[0])
+                state = transitions_states[token[0]][DFA['initial_state'][0]]
+                for character in token[1:]:
+                    #print("STATE:",state, "Character:", character)
+                    if character in transitions_states:
+                        if state in transitions_states[character]:
+                            state = transitions_states[character][state]
+                        else:
+                            return "INVALID"
+                    else:
+                        return "INVALID"
+                if state in final_states:
+                    return DFA['identifier']
+                else:
+                    return "INVALID"
+            else:
+                return "INVALID"
         else:
-            return False
-        return True
+            return "INVALID"
+        return "INVALID"
 
 if __name__ == "__main__":
     automata = Automata()
@@ -483,14 +521,22 @@ if __name__ == "__main__":
         file.write("")
     for regular_expression in regular_expressions:
         #print(regular_expression)
-        alphabet = regular_expressions[regular_expression]
+        identifier = regular_expressions[regular_expression][0]
+        alphabet = regular_expressions[regular_expression][1]
         REPostfix = automata.convertREToPostfix(regular_expression,alphabet)
         #print(REPostfix)
-        automata.convertREToNFA(REPostfix, alphabet)
-        
+        automata.convertREToNFA(identifier, REPostfix, alphabet)
+        '''
+        nfa_example = automata_IO.nfa_json_importer('quintuple_NFA.json')
+        automata_IO.nfa_to_dot(nfa_example, 'graphic_NFA', './')
+        '''
         automata.createTransitionMatrix()
         automata.NFA_to_DFA()
-
+    
+    '''
+    dfa_example = automata_IO.dfa_json_importer('quintuple_DFA.json')
+    automata_IO.dfa_to_dot(dfa_example, 'graphic_DFA', './')
+    '''
     lexer = Lexer()
     DFAs = lexer.readFileDFAs("quintuple_DFA.json")
     tokens = lexer.readFileTokens("code.txt")

@@ -1,0 +1,17 @@
+identifier variable operator int ;
+identifier variable operator int operator int ;
+
+identifier variable operator dec ;
+
+identifier variable operator sci-note ;
+
+comment comment 
+
+INVALID 
+
+identifier variable operator sci-note ;
+operator 
+variable 
+variable 
+identifier 
+INVALID 
