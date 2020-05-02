@@ -1,5 +1,5 @@
 identifier variable operator int ;
-identifier variable operator int operator int ;
+identifier variable operator dec operator int ;
 
 identifier variable operator dec ;
 
@@ -9,8 +9,9 @@ comment variable comment
 
 INVALID 
 
+INVALID INVALID 
 identifier variable operator sci-note ;
-operator 
+operator operator operator 
 variable 
 variable 
 variable 

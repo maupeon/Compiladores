@@ -1,5 +1,5 @@
 ent age = 17;
-ent num = 1 + 2;
+ent num = 1.03423 + 2;
 
 dec mau = 17.999842;
 
@@ -9,8 +9,9 @@ dec masdjf = 10.0e-38;
 
 ¡!¡
 
+1. -eedsf
 dec masdjf = 10.0e+38;
-or
+or or or 
 innt
 tin
 int
