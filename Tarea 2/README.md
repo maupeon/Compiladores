@@ -25,7 +25,7 @@ Orientaciones para correr el programa que, a partir de un archivo de entrada, mu
   - "Lo que no se encuentre en estas definiciones, son tokens inválidos."
 
 ## 3. Ejecutar en la consola
-`python3 tarea2.py`
+`python3 main.py`
 
 ## 4. Explicación del archivo de salida.
 En el archivo de salida: `output.txt` se encuentra la definición de los tokens en el mismo orden en el que fue leído, ejemplos:
