@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'left+-left*/%rightUMINUSDIVIDE ELSE FOR IF LPAREN MINUS NAME NUMBER PLUS RPAREN THEN TIMES WHILEstatement : NAME "=" expressionstatement : expressionexpression : expression \'+\' expression\n                    | expression \'-\' expression\n                    | expression \'*\' expression\n                    | expression \'/\' expression\n                    | expression \'%\' expressionexpression : \'-\' expression %prec UMINUSexpression : \'(\' expression \')\'expression : NUMBERexpression : NAME'
+_lr_signature = 'leftGREATERTHANLOWERTHANGREATEREQLOWEREQEQEQDIFleft+-left*/%rightUMINUSCOMMA DIF DIVIDE ELSE ENDELSE ENDFOR ENDIF EQEQ FINFUNC FOR FUNC GREATEREQ GREATERTHAN IF LOWEREQ LOWERTHAN LPAREN MINUS NAME NUMBER PLUS PRINT REGRESA RPAREN THEN TIMES TWOPOINTS VAR WHILEstatement : NAME "=" expressionstatement : expression\n                     | comparison\n                     | if_statementstatement : expression \'+\' expression\n                    | expression \'-\' expression\n                    | expression \'*\' expression\n                    | expression \'/\' expression\n                    | expression \'%\' expressionexpression : \'-\' expression %prec UMINUSexpression : LPAREN expression RPARENexpression : NUMBERexpression : FUNC NAME LPAREN expression RPAREN TWOPOINTS\n                    |   FUNC NAME LPAREN  RPAREN TWOPOINTSif_statement : IF LPAREN comparison RPAREN TWOPOINTS statement ENDIFcomparison : expression GREATERTHAN expression\n                    | expression LOWERTHAN expression\n                    | expression GREATEREQ expression\n                    | expression LOWEREQ expression\n                    | expression EQEQ expression\n                    | expression DIF expressionexpression : ELSE TWOPOINTSexpression : PRINT LPAREN NAME RPAREN  \n                    |   PRINT LPAREN NUMBER RPAREN \n                   expression : FOR LPAREN NUMBER COMMA NUMBER COMMA NUMBER RPAREN TWOPOINTS expression : WHILE LPAREN NUMBER EQEQ NUMBER RPAREN TWOPOINTS\n                      | WHILE LPAREN NUMBER DIF NUMBER RPAREN TWOPOINTS\n                      | WHILE LPAREN NUMBER GREATERTHAN NUMBER RPAREN TWOPOINTS\n                      | WHILE LPAREN NUMBER LOWERTHAN NUMBER RPAREN TWOPOINTS\n                      | WHILE LPAREN NUMBER GREATEREQ NUMBER RPAREN TWOPOINTS\n                      | WHILE LPAREN NUMBER LOWEREQ NUMBER RPAREN TWOPOINTS\n         expression : FINFUNCexpression : ENDIFexpression : ENDFORexpression : NAME'
     
-_lr_action_items = {'NAME':([0,4,5,7,8,9,10,11,12,],[2,14,14,14,14,14,14,14,14,]),'-':([0,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,],[4,-11,9,4,4,-10,4,4,4,4,4,4,-8,-11,9,9,-3,-4,-5,-6,-7,-9,]),'(':([0,4,5,7,8,9,10,11,12,],[5,5,5,5,5,5,5,5,5,]),'NUMBER':([0,4,5,7,8,9,10,11,12,],[6,6,6,6,6,6,6,6,6,]),'$end':([1,2,3,6,13,14,16,17,18,19,20,21,22,],[0,-11,-2,-10,-8,-11,-1,-3,-4,-5,-6,-7,-9,]),'=':([2,],[7,]),'+':([2,3,6,13,14,15,16,17,18,19,20,21,22,],[-11,8,-10,-8,-11,8,8,-3,-4,-5,-6,-7,-9,]),'*':([2,3,6,13,14,15,16,17,18,19,20,21,22,],[-11,10,-10,-8,-11,10,10,10,10,-5,-6,-7,-9,]),'/':([2,3,6,13,14,15,16,17,18,19,20,21,22,],[-11,11,-10,-8,-11,11,11,11,11,-5,-6,-7,-9,]),'%':([2,3,6,13,14,15,16,17,18,19,20,21,22,],[-11,12,-10,-8,-11,12,12,12,12,-5,-6,-7,-9,]),')':([6,13,14,15,17,18,19,20,21,22,],[-10,-8,-11,22,-3,-4,-5,-6,-7,-9,]),}
+_lr_action_items = {'NAME':([0,6,7,9,18,19,20,21,22,23,24,25,26,27,28,29,35,38,52,80,],[2,31,31,33,31,31,31,31,31,31,31,31,31,31,31,31,53,31,31,2,]),'-':([0,2,3,6,7,8,14,15,16,18,19,20,21,22,23,24,25,26,27,28,29,30,31,34,38,51,52,61,62,72,80,81,91,92,93,94,95,96,99,],[6,-35,20,6,6,-12,-32,-33,-34,6,6,6,6,6,6,6,6,6,6,6,6,-10,-35,-22,6,-11,6,-23,-24,-14,6,-13,-26,-27,-28,-29,-30,-31,-25,]),'LPAREN':([0,6,7,11,12,13,17,18,19,20,21,22,23,24,25,26,27,28,29,33,38,52,80,],[7,7,7,35,36,37,38,7,7,7,7,7,7,7,7,7,7,7,7,52,7,7,7,]),'NUMBER':([0,6,7,18,19,20,21,22,23,24,25,26,27,28,29,35,36,37,38,52,63,64,65,66,67,68,69,80,82,],[8,8,8,8,8,8,8,8,8,8,8,8,8,8,8,54,55,56,8,8,73,74,75,76,77,78,79,8,90,]),'FUNC':([0,6,7,18,19,20,21,22,23,24,25,26,27,28,29,38,52,80,],[9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,9,]),'ELSE':([0,6,7,18,19,20,21,22,23,24,25,26,27,28,29,38,52,80,],[10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,10,]),'PRINT':([0,6,7,18,19,20,21,22,23,24,25,26,27,28,29,38,52,80,],[11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,]),'FOR':([0,6,7,18,19,20,21,22,23,24,25,26,27,28,29,38,52,80,],[12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,12,]),'WHILE':([0,6,7,18,19,20,21,22,23,24,25,26,27,28,29,38,52,80,],[13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,13,]),'FINFUNC':([0,6,7,18,19,20,21,22,23,24,25,26,27,28,29,38,52,80,],[14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,14,]),'ENDIF':([0,2,3,4,5,6,7,8,14,15,16,18,19,20,21,22,23,24,25,26,27,28,29,30,31,34,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,61,62,72,80,81,89,91,92,93,94,95,96,97,99,],[15,-35,-2,-3,-4,15,15,-12,-32,-33,-34,15,15,15,15,15,15,15,15,15,15,15,15,-10,-35,-22,15,-1,-5,-6,-7,-8,-9,-16,-17,-18,-19,-20,-21,-11,15,-23,-24,-14,15,-13,97,-26,-27,-28,-29,-30,-31,-15,-25,]),'ENDFOR':([0,6,7,18,19,20,21,22,23,24,25,26,27,28,29,38,52,80,],[16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,]),'IF':([0,80,],[17,17,]),'$end':([1,2,3,4,5,8,14,15,16,30,31,34,39,40,41,42,43,44,45,46,47,48,49,50,51,61,62,72,81,91,92,93,94,95,96,97,99,],[0,-35,-2,-3,-4,-12,-32,-33,-34,-10,-35,-22,-1,-5,-6,-7,-8,-9,-16,-17,-18,-19,-20,-21,-11,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-15,-25,]),'=':([2,],[18,]),'+':([2,3,8,14,15,16,30,31,34,51,61,62,72,81,91,92,93,94,95,96,99,],[-35,19,-12,-32,-33,-34,-10,-35,-22,-11,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-25,]),'*':([2,3,8,14,15,16,30,31,34,51,61,62,72,81,91,92,93,94,95,96,99,],[-35,21,-12,-32,-33,-34,-10,-35,-22,-11,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-25,]),'/':([2,3,8,14,15,16,30,31,34,51,61,62,72,81,91,92,93,94,95,96,99,],[-35,22,-12,-32,-33,-34,-10,-35,-22,-11,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-25,]),'%':([2,3,8,14,15,16,30,31,34,51,61,62,72,81,91,92,93,94,95,96,99,],[-35,23,-12,-32,-33,-34,-10,-35,-22,-11,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-25,]),'GREATERTHAN':([2,3,8,14,15,16,30,31,34,51,56,58,61,62,72,81,91,92,93,94,95,96,99,],[-35,24,-12,-32,-33,-34,-10,-35,-22,-11,66,24,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-25,]),'LOWERTHAN':([2,3,8,14,15,16,30,31,34,51,56,58,61,62,72,81,91,92,93,94,95,96,99,],[-35,25,-12,-32,-33,-34,-10,-35,-22,-11,67,25,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-25,]),'GREATEREQ':([2,3,8,14,15,16,30,31,34,51,56,58,61,62,72,81,91,92,93,94,95,96,99,],[-35,26,-12,-32,-33,-34,-10,-35,-22,-11,68,26,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-25,]),'LOWEREQ':([2,3,8,14,15,16,30,31,34,51,56,58,61,62,72,81,91,92,93,94,95,96,99,],[-35,27,-12,-32,-33,-34,-10,-35,-22,-11,69,27,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-25,]),'EQEQ':([2,3,8,14,15,16,30,31,34,51,56,58,61,62,72,81,91,92,93,94,95,96,99,],[-35,28,-12,-32,-33,-34,-10,-35,-22,-11,64,28,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-25,]),'DIF':([2,3,8,14,15,16,30,31,34,51,56,58,61,62,72,81,91,92,93,94,95,96,99,],[-35,29,-12,-32,-33,-34,-10,-35,-22,-11,65,29,-23,-24,-14,-13,-26,-27,-28,-29,-30,-31,-25,]),'RPAREN':([8,14,15,16,30,31,32,34,45,46,47,48,49,50,51,52,53,54,57,59,61,62,72,74,75,76,77,78,79,81,90,91,92,93,94,95,96,99,],[-12,-32,-33,-34,-10,-35,51,-22,-16,-17,-18,-19,-20,-21,-11,60,61,62,70,71,-23,-24,-14,83,84,85,86,87,88,-13,98,-26,-27,-28,-29,-30,-31,-25,]),'TWOPOINTS':([10,60,70,71,83,84,85,86,87,88,98,],[34,72,80,81,91,92,93,94,95,96,99,]),'COMMA':([55,73,],[63,82,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statement':([0,],[1,]),'expression':([0,4,5,7,8,9,10,11,12,],[3,13,15,16,17,18,19,20,21,]),}
+_lr_goto_items = {'statement':([0,80,],[1,89,]),'expression':([0,6,7,18,19,20,21,22,23,24,25,26,27,28,29,38,52,80,],[3,30,32,39,40,41,42,43,44,45,46,47,48,49,50,58,59,3,]),'comparison':([0,38,80,],[4,57,4,]),'if_statement':([0,80,],[5,5,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -27,15 +27,39 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> statement","S'",1,None,None,None),
-  ('statement -> NAME = expression','statement',3,'p_statement_assign','Yacc.py',23),
-  ('statement -> expression','statement',1,'p_statement_expr','Yacc.py',28),
-  ('expression -> expression + expression','expression',3,'p_expression_binop','Yacc.py',33),
-  ('expression -> expression - expression','expression',3,'p_expression_binop','Yacc.py',34),
-  ('expression -> expression * expression','expression',3,'p_expression_binop','Yacc.py',35),
-  ('expression -> expression / expression','expression',3,'p_expression_binop','Yacc.py',36),
-  ('expression -> expression % expression','expression',3,'p_expression_binop','Yacc.py',37),
-  ('expression -> - expression','expression',2,'p_expression_uminus','Yacc.py',51),
-  ('expression -> ( expression )','expression',3,'p_expression_group','Yacc.py',56),
-  ('expression -> NUMBER','expression',1,'p_expression_number','Yacc.py',61),
-  ('expression -> NAME','expression',1,'p_expression_name','Yacc.py',66),
+  ('statement -> NAME = expression','statement',3,'p_statement_assign','Yacc.py',25),
+  ('statement -> expression','statement',1,'p_statement_expr','Yacc.py',29),
+  ('statement -> comparison','statement',1,'p_statement_expr','Yacc.py',30),
+  ('statement -> if_statement','statement',1,'p_statement_expr','Yacc.py',31),
+  ('statement -> expression + expression','statement',3,'p_expression_binop','Yacc.py',35),
+  ('statement -> expression - expression','statement',3,'p_expression_binop','Yacc.py',36),
+  ('statement -> expression * expression','statement',3,'p_expression_binop','Yacc.py',37),
+  ('statement -> expression / expression','statement',3,'p_expression_binop','Yacc.py',38),
+  ('statement -> expression % expression','statement',3,'p_expression_binop','Yacc.py',39),
+  ('expression -> - expression','expression',2,'p_expression_uminus','Yacc.py',53),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','Yacc.py',58),
+  ('expression -> NUMBER','expression',1,'p_expression_number','Yacc.py',63),
+  ('expression -> FUNC NAME LPAREN expression RPAREN TWOPOINTS','expression',6,'p_expression_function','Yacc.py',68),
+  ('expression -> FUNC NAME LPAREN RPAREN TWOPOINTS','expression',5,'p_expression_function','Yacc.py',69),
+  ('if_statement -> IF LPAREN comparison RPAREN TWOPOINTS statement ENDIF','if_statement',7,'p_expression_si','Yacc.py',73),
+  ('comparison -> expression GREATERTHAN expression','comparison',3,'p_expression_comparison','Yacc.py',79),
+  ('comparison -> expression LOWERTHAN expression','comparison',3,'p_expression_comparison','Yacc.py',80),
+  ('comparison -> expression GREATEREQ expression','comparison',3,'p_expression_comparison','Yacc.py',81),
+  ('comparison -> expression LOWEREQ expression','comparison',3,'p_expression_comparison','Yacc.py',82),
+  ('comparison -> expression EQEQ expression','comparison',3,'p_expression_comparison','Yacc.py',83),
+  ('comparison -> expression DIF expression','comparison',3,'p_expression_comparison','Yacc.py',84),
+  ('expression -> ELSE TWOPOINTS','expression',2,'p_expression_sino','Yacc.py',125),
+  ('expression -> PRINT LPAREN NAME RPAREN','expression',4,'p_expression_print','Yacc.py',129),
+  ('expression -> PRINT LPAREN NUMBER RPAREN','expression',4,'p_expression_print','Yacc.py',130),
+  ('expression -> FOR LPAREN NUMBER COMMA NUMBER COMMA NUMBER RPAREN TWOPOINTS','expression',9,'p_expression_for','Yacc.py',137),
+  ('expression -> WHILE LPAREN NUMBER EQEQ NUMBER RPAREN TWOPOINTS','expression',7,'p_expression_while','Yacc.py',148),
+  ('expression -> WHILE LPAREN NUMBER DIF NUMBER RPAREN TWOPOINTS','expression',7,'p_expression_while','Yacc.py',149),
+  ('expression -> WHILE LPAREN NUMBER GREATERTHAN NUMBER RPAREN TWOPOINTS','expression',7,'p_expression_while','Yacc.py',150),
+  ('expression -> WHILE LPAREN NUMBER LOWERTHAN NUMBER RPAREN TWOPOINTS','expression',7,'p_expression_while','Yacc.py',151),
+  ('expression -> WHILE LPAREN NUMBER GREATEREQ NUMBER RPAREN TWOPOINTS','expression',7,'p_expression_while','Yacc.py',152),
+  ('expression -> WHILE LPAREN NUMBER LOWEREQ NUMBER RPAREN TWOPOINTS','expression',7,'p_expression_while','Yacc.py',153),
+  ('expression -> FINFUNC','expression',1,'p_expression_finfunc','Yacc.py',157),
+  ('expression -> ENDIF','expression',1,'p_expression_finsi','Yacc.py',160),
+  ('expression -> ENDFOR','expression',1,'p_expression_finfor','Yacc.py',164),
+  ('expression -> NAME','expression',1,'p_expression_name','Yacc.py',168),
 ]
