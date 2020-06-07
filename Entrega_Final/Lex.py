@@ -42,7 +42,7 @@ class Lex:
 
     t_LPAREN  = r'\('
     t_RPAREN  = r'\)'
-    t_ignore  = ' \t'
+    t_ANY_ignore  = ' \t\n'
     t_TWOPOINTS  = r'\:'
     t_EQEQ  = r'\=\='
     t_DIF  = r'\!\='

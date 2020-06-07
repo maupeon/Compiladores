@@ -2,97 +2,1271 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
+    COMMA
     DIVIDE
-    ENDELSE
+    ENDFOR
+    FINFUNC
+    FOR
+    FUNC
     MINUS
     PLUS
     REGRESA
     THEN
     TIMES
     VAR
+    WHILE
 
 Grammar
 
 Rule 0     S' -> statement
 Rule 1     statement -> NAME = expression
 Rule 2     statement -> expression
-Rule 3     statement -> comparison
-Rule 4     statement -> if_statement
-Rule 5     statement -> expression + expression
-Rule 6     statement -> expression - expression
-Rule 7     statement -> expression * expression
-Rule 8     statement -> expression / expression
-Rule 9     statement -> expression % expression
-Rule 10    expression -> - expression
-Rule 11    expression -> LPAREN expression RPAREN
-Rule 12    expression -> NUMBER
-Rule 13    expression -> FUNC NAME LPAREN expression RPAREN TWOPOINTS
-Rule 14    expression -> FUNC NAME LPAREN RPAREN TWOPOINTS
-Rule 15    statement -> IF LPAREN comparison RPAREN TWOPOINTS statement ENDIF
-Rule 16    comparison -> expression GREATERTHAN expression
-Rule 17    comparison -> expression LOWERTHAN expression
-Rule 18    comparison -> expression GREATEREQ expression
-Rule 19    comparison -> expression LOWEREQ expression
-Rule 20    comparison -> expression EQEQ expression
-Rule 21    comparison -> expression DIF expression
-Rule 22    expression -> ELSE TWOPOINTS
-Rule 23    expression -> PRINT LPAREN NAME RPAREN
-Rule 24    expression -> PRINT LPAREN NUMBER RPAREN
-Rule 25    expression -> FOR LPAREN NUMBER COMMA NUMBER COMMA NUMBER RPAREN TWOPOINTS
-Rule 26    expression -> WHILE LPAREN NUMBER EQEQ NUMBER RPAREN TWOPOINTS
-Rule 27    expression -> WHILE LPAREN NUMBER DIF NUMBER RPAREN TWOPOINTS
-Rule 28    expression -> WHILE LPAREN NUMBER GREATERTHAN NUMBER RPAREN TWOPOINTS
-Rule 29    expression -> WHILE LPAREN NUMBER LOWERTHAN NUMBER RPAREN TWOPOINTS
-Rule 30    expression -> WHILE LPAREN NUMBER GREATEREQ NUMBER RPAREN TWOPOINTS
-Rule 31    expression -> WHILE LPAREN NUMBER LOWEREQ NUMBER RPAREN TWOPOINTS
-Rule 32    expression -> FINFUNC
-Rule 33    expression -> ENDIF
-Rule 34    expression -> ENDFOR
-Rule 35    expression -> NAME
+Rule 3     statement -> if_statement
+Rule 4     print -> PRINT LPAREN NAME RPAREN
+Rule 5     print -> PRINT LPAREN NUMBER RPAREN
+Rule 6     expression -> expression + expression
+Rule 7     expression -> expression - expression
+Rule 8     expression -> expression * expression
+Rule 9     expression -> expression / expression
+Rule 10    expression -> expression % expression
+Rule 11    expression -> - expression
+Rule 12    expression -> ( expression )
+Rule 13    expression -> NUMBER
+Rule 14    expression -> NAME
+Rule 15    statements -> statement
+Rule 16    statements -> statements statement
+Rule 17    statements -> statements print
+Rule 18    if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF
+Rule 19    then_statement -> if_statement
+Rule 20    then_statement -> expression
+Rule 21    then_statement -> statement
+Rule 22    then_statement -> statements
+Rule 23    else_statement -> ELSE expression ENDELSE
+Rule 24    else_statement -> ELSE if_statement ENDELSE
+Rule 25    else_statement -> empty
+Rule 26    empty -> 
+Rule 27    comparison -> expression GREATERTHAN expression
+Rule 28    comparison -> expression LOWERTHAN expression
+Rule 29    comparison -> expression GREATEREQ expression
+Rule 30    comparison -> expression LOWEREQ expression
+Rule 31    comparison -> expression EQEQ expression
+Rule 32    comparison -> expression DIF expression
 
 Terminals, with rules where they appear
 
-%                    : 9
-*                    : 7
-+                    : 5
--                    : 6 10
-/                    : 8
+                     : 26
+%                    : 10
+(                    : 12
+)                    : 12
+*                    : 8
++                    : 6
+-                    : 7 11
+/                    : 9
 =                    : 1
-COMMA                : 25 25
-DIF                  : 21 27
+COMMA                : 
+DIF                  : 32
 DIVIDE               : 
-ELSE                 : 22
-ENDELSE              : 
-ENDFOR               : 34
-ENDIF                : 15 33
-EQEQ                 : 20 26
-FINFUNC              : 32
-FOR                  : 25
-FUNC                 : 13 14
-GREATEREQ            : 18 30
-GREATERTHAN          : 16 28
-IF                   : 15
-LOWEREQ              : 19 31
-LOWERTHAN            : 17 29
-LPAREN               : 11 13 14 15 23 24 25 26 27 28 29 30 31
+ELSE                 : 23 24
+ENDELSE              : 23 24
+ENDFOR               : 
+ENDIF                : 18
+EQEQ                 : 31
+FINFUNC              : 
+FOR                  : 
+FUNC                 : 
+GREATEREQ            : 29
+GREATERTHAN          : 27
+IF                   : 18
+LOWEREQ              : 30
+LOWERTHAN            : 28
+LPAREN               : 4 5 18
 MINUS                : 
-NAME                 : 1 13 14 23 35
-NUMBER               : 12 24 25 25 25 26 26 27 27 28 28 29 29 30 30 31 31
+NAME                 : 1 4 14
+NUMBER               : 5 13
 PLUS                 : 
-PRINT                : 23 24
+PRINT                : 4 5
 REGRESA              : 
-RPAREN               : 11 13 14 15 23 24 25 26 27 28 29 30 31
+RPAREN               : 4 5 18
 THEN                 : 
 TIMES                : 
-TWOPOINTS            : 13 14 15 22 25 26 27 28 29 30 31
+TWOPOINTS            : 18
 VAR                  : 
-WHILE                : 26 27 28 29 30 31
+WHILE                : 
 error                : 
 
 Nonterminals, with rules where they appear
 
-comparison           : 3 15
-expression           : 1 2 5 5 6 6 7 7 8 8 9 9 10 11 13 16 16 17 17 18 18 19 19 20 20 21 21
-if_statement         : 4
-statement            : 15 0
+comparison           : 18
+else_statement       : 
+empty                : 25
+expression           : 1 2 6 6 7 7 8 8 9 9 10 10 11 12 20 23 27 27 28 28 29 29 30 30 31 31 32 32
+if_statement         : 3 19 24
+print                : 17
+statement            : 15 16 21 0
+statements           : 16 17 22
+then_statement       : 18
 
+Parsing method: LALR
+
+state 0
+
+    (0) S' -> . statement
+    (1) statement -> . NAME = expression
+    (2) statement -> . expression
+    (3) statement -> . if_statement
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+    (18) if_statement -> . IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF
+
+    NAME            shift and go to state 2
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    IF              shift and go to state 8
+
+    statement                      shift and go to state 1
+    expression                     shift and go to state 3
+    if_statement                   shift and go to state 4
+
+state 1
+
+    (0) S' -> statement .
+
+
+
+state 2
+
+    (1) statement -> NAME . = expression
+    (14) expression -> NAME .
+
+    =               shift and go to state 9
+    +               reduce using rule 14 (expression -> NAME .)
+    -               reduce using rule 14 (expression -> NAME .)
+    *               reduce using rule 14 (expression -> NAME .)
+    /               reduce using rule 14 (expression -> NAME .)
+    %               reduce using rule 14 (expression -> NAME .)
+    $end            reduce using rule 14 (expression -> NAME .)
+    NAME            reduce using rule 14 (expression -> NAME .)
+    PRINT           reduce using rule 14 (expression -> NAME .)
+    (               reduce using rule 14 (expression -> NAME .)
+    NUMBER          reduce using rule 14 (expression -> NAME .)
+    IF              reduce using rule 14 (expression -> NAME .)
+    ENDIF           reduce using rule 14 (expression -> NAME .)
+
+
+state 3
+
+    (2) statement -> expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+  ! shift/reduce conflict for - resolved as shift
+    $end            reduce using rule 2 (statement -> expression .)
+    NAME            reduce using rule 2 (statement -> expression .)
+    PRINT           reduce using rule 2 (statement -> expression .)
+    (               reduce using rule 2 (statement -> expression .)
+    NUMBER          reduce using rule 2 (statement -> expression .)
+    IF              reduce using rule 2 (statement -> expression .)
+    ENDIF           reduce using rule 2 (statement -> expression .)
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+  ! -               [ reduce using rule 2 (statement -> expression .) ]
+
+
+state 4
+
+    (3) statement -> if_statement .
+
+    $end            reduce using rule 3 (statement -> if_statement .)
+    NAME            reduce using rule 3 (statement -> if_statement .)
+    PRINT           reduce using rule 3 (statement -> if_statement .)
+    -               reduce using rule 3 (statement -> if_statement .)
+    (               reduce using rule 3 (statement -> if_statement .)
+    NUMBER          reduce using rule 3 (statement -> if_statement .)
+    IF              reduce using rule 3 (statement -> if_statement .)
+    ENDIF           reduce using rule 3 (statement -> if_statement .)
+
+
+state 5
+
+    (11) expression -> - . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 15
+
+state 6
+
+    (12) expression -> ( . expression )
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 17
+
+state 7
+
+    (13) expression -> NUMBER .
+
+    +               reduce using rule 13 (expression -> NUMBER .)
+    -               reduce using rule 13 (expression -> NUMBER .)
+    *               reduce using rule 13 (expression -> NUMBER .)
+    /               reduce using rule 13 (expression -> NUMBER .)
+    %               reduce using rule 13 (expression -> NUMBER .)
+    $end            reduce using rule 13 (expression -> NUMBER .)
+    )               reduce using rule 13 (expression -> NUMBER .)
+    ENDIF           reduce using rule 13 (expression -> NUMBER .)
+    NAME            reduce using rule 13 (expression -> NUMBER .)
+    PRINT           reduce using rule 13 (expression -> NUMBER .)
+    (               reduce using rule 13 (expression -> NUMBER .)
+    NUMBER          reduce using rule 13 (expression -> NUMBER .)
+    IF              reduce using rule 13 (expression -> NUMBER .)
+    GREATERTHAN     reduce using rule 13 (expression -> NUMBER .)
+    LOWERTHAN       reduce using rule 13 (expression -> NUMBER .)
+    GREATEREQ       reduce using rule 13 (expression -> NUMBER .)
+    LOWEREQ         reduce using rule 13 (expression -> NUMBER .)
+    EQEQ            reduce using rule 13 (expression -> NUMBER .)
+    DIF             reduce using rule 13 (expression -> NUMBER .)
+    RPAREN          reduce using rule 13 (expression -> NUMBER .)
+
+
+state 8
+
+    (18) if_statement -> IF . LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF
+
+    LPAREN          shift and go to state 18
+
+
+state 9
+
+    (1) statement -> NAME = . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 19
+
+state 10
+
+    (6) expression -> expression + . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 20
+
+state 11
+
+    (7) expression -> expression - . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 21
+
+state 12
+
+    (8) expression -> expression * . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 22
+
+state 13
+
+    (9) expression -> expression / . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 23
+
+state 14
+
+    (10) expression -> expression % . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 24
+
+state 15
+
+    (11) expression -> - expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    +               reduce using rule 11 (expression -> - expression .)
+    -               reduce using rule 11 (expression -> - expression .)
+    *               reduce using rule 11 (expression -> - expression .)
+    /               reduce using rule 11 (expression -> - expression .)
+    %               reduce using rule 11 (expression -> - expression .)
+    $end            reduce using rule 11 (expression -> - expression .)
+    )               reduce using rule 11 (expression -> - expression .)
+    ENDIF           reduce using rule 11 (expression -> - expression .)
+    NAME            reduce using rule 11 (expression -> - expression .)
+    PRINT           reduce using rule 11 (expression -> - expression .)
+    (               reduce using rule 11 (expression -> - expression .)
+    NUMBER          reduce using rule 11 (expression -> - expression .)
+    IF              reduce using rule 11 (expression -> - expression .)
+    GREATERTHAN     reduce using rule 11 (expression -> - expression .)
+    LOWERTHAN       reduce using rule 11 (expression -> - expression .)
+    GREATEREQ       reduce using rule 11 (expression -> - expression .)
+    LOWEREQ         reduce using rule 11 (expression -> - expression .)
+    EQEQ            reduce using rule 11 (expression -> - expression .)
+    DIF             reduce using rule 11 (expression -> - expression .)
+    RPAREN          reduce using rule 11 (expression -> - expression .)
+
+  ! +               [ shift and go to state 10 ]
+  ! -               [ shift and go to state 11 ]
+  ! *               [ shift and go to state 12 ]
+  ! /               [ shift and go to state 13 ]
+  ! %               [ shift and go to state 14 ]
+
+
+state 16
+
+    (14) expression -> NAME .
+
+    +               reduce using rule 14 (expression -> NAME .)
+    -               reduce using rule 14 (expression -> NAME .)
+    *               reduce using rule 14 (expression -> NAME .)
+    /               reduce using rule 14 (expression -> NAME .)
+    %               reduce using rule 14 (expression -> NAME .)
+    $end            reduce using rule 14 (expression -> NAME .)
+    )               reduce using rule 14 (expression -> NAME .)
+    ENDIF           reduce using rule 14 (expression -> NAME .)
+    NAME            reduce using rule 14 (expression -> NAME .)
+    PRINT           reduce using rule 14 (expression -> NAME .)
+    (               reduce using rule 14 (expression -> NAME .)
+    NUMBER          reduce using rule 14 (expression -> NAME .)
+    IF              reduce using rule 14 (expression -> NAME .)
+    GREATERTHAN     reduce using rule 14 (expression -> NAME .)
+    LOWERTHAN       reduce using rule 14 (expression -> NAME .)
+    GREATEREQ       reduce using rule 14 (expression -> NAME .)
+    LOWEREQ         reduce using rule 14 (expression -> NAME .)
+    EQEQ            reduce using rule 14 (expression -> NAME .)
+    DIF             reduce using rule 14 (expression -> NAME .)
+    RPAREN          reduce using rule 14 (expression -> NAME .)
+
+
+state 17
+
+    (12) expression -> ( expression . )
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    )               shift and go to state 25
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+
+state 18
+
+    (18) if_statement -> IF LPAREN . comparison RPAREN TWOPOINTS then_statement ENDIF
+    (27) comparison -> . expression GREATERTHAN expression
+    (28) comparison -> . expression LOWERTHAN expression
+    (29) comparison -> . expression GREATEREQ expression
+    (30) comparison -> . expression LOWEREQ expression
+    (31) comparison -> . expression EQEQ expression
+    (32) comparison -> . expression DIF expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    comparison                     shift and go to state 26
+    expression                     shift and go to state 27
+
+state 19
+
+    (1) statement -> NAME = expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+  ! shift/reduce conflict for - resolved as shift
+    $end            reduce using rule 1 (statement -> NAME = expression .)
+    ENDIF           reduce using rule 1 (statement -> NAME = expression .)
+    NAME            reduce using rule 1 (statement -> NAME = expression .)
+    PRINT           reduce using rule 1 (statement -> NAME = expression .)
+    (               reduce using rule 1 (statement -> NAME = expression .)
+    NUMBER          reduce using rule 1 (statement -> NAME = expression .)
+    IF              reduce using rule 1 (statement -> NAME = expression .)
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+  ! -               [ reduce using rule 1 (statement -> NAME = expression .) ]
+
+
+state 20
+
+    (6) expression -> expression + expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    +               reduce using rule 6 (expression -> expression + expression .)
+    -               reduce using rule 6 (expression -> expression + expression .)
+    $end            reduce using rule 6 (expression -> expression + expression .)
+    )               reduce using rule 6 (expression -> expression + expression .)
+    ENDIF           reduce using rule 6 (expression -> expression + expression .)
+    NAME            reduce using rule 6 (expression -> expression + expression .)
+    PRINT           reduce using rule 6 (expression -> expression + expression .)
+    (               reduce using rule 6 (expression -> expression + expression .)
+    NUMBER          reduce using rule 6 (expression -> expression + expression .)
+    IF              reduce using rule 6 (expression -> expression + expression .)
+    GREATERTHAN     reduce using rule 6 (expression -> expression + expression .)
+    LOWERTHAN       reduce using rule 6 (expression -> expression + expression .)
+    GREATEREQ       reduce using rule 6 (expression -> expression + expression .)
+    LOWEREQ         reduce using rule 6 (expression -> expression + expression .)
+    EQEQ            reduce using rule 6 (expression -> expression + expression .)
+    DIF             reduce using rule 6 (expression -> expression + expression .)
+    RPAREN          reduce using rule 6 (expression -> expression + expression .)
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+  ! *               [ reduce using rule 6 (expression -> expression + expression .) ]
+  ! /               [ reduce using rule 6 (expression -> expression + expression .) ]
+  ! %               [ reduce using rule 6 (expression -> expression + expression .) ]
+  ! +               [ shift and go to state 10 ]
+  ! -               [ shift and go to state 11 ]
+
+
+state 21
+
+    (7) expression -> expression - expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    +               reduce using rule 7 (expression -> expression - expression .)
+    -               reduce using rule 7 (expression -> expression - expression .)
+    $end            reduce using rule 7 (expression -> expression - expression .)
+    )               reduce using rule 7 (expression -> expression - expression .)
+    ENDIF           reduce using rule 7 (expression -> expression - expression .)
+    NAME            reduce using rule 7 (expression -> expression - expression .)
+    PRINT           reduce using rule 7 (expression -> expression - expression .)
+    (               reduce using rule 7 (expression -> expression - expression .)
+    NUMBER          reduce using rule 7 (expression -> expression - expression .)
+    IF              reduce using rule 7 (expression -> expression - expression .)
+    GREATERTHAN     reduce using rule 7 (expression -> expression - expression .)
+    LOWERTHAN       reduce using rule 7 (expression -> expression - expression .)
+    GREATEREQ       reduce using rule 7 (expression -> expression - expression .)
+    LOWEREQ         reduce using rule 7 (expression -> expression - expression .)
+    EQEQ            reduce using rule 7 (expression -> expression - expression .)
+    DIF             reduce using rule 7 (expression -> expression - expression .)
+    RPAREN          reduce using rule 7 (expression -> expression - expression .)
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+  ! *               [ reduce using rule 7 (expression -> expression - expression .) ]
+  ! /               [ reduce using rule 7 (expression -> expression - expression .) ]
+  ! %               [ reduce using rule 7 (expression -> expression - expression .) ]
+  ! +               [ shift and go to state 10 ]
+  ! -               [ shift and go to state 11 ]
+
+
+state 22
+
+    (8) expression -> expression * expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    +               reduce using rule 8 (expression -> expression * expression .)
+    -               reduce using rule 8 (expression -> expression * expression .)
+    *               reduce using rule 8 (expression -> expression * expression .)
+    /               reduce using rule 8 (expression -> expression * expression .)
+    %               reduce using rule 8 (expression -> expression * expression .)
+    $end            reduce using rule 8 (expression -> expression * expression .)
+    )               reduce using rule 8 (expression -> expression * expression .)
+    ENDIF           reduce using rule 8 (expression -> expression * expression .)
+    NAME            reduce using rule 8 (expression -> expression * expression .)
+    PRINT           reduce using rule 8 (expression -> expression * expression .)
+    (               reduce using rule 8 (expression -> expression * expression .)
+    NUMBER          reduce using rule 8 (expression -> expression * expression .)
+    IF              reduce using rule 8 (expression -> expression * expression .)
+    GREATERTHAN     reduce using rule 8 (expression -> expression * expression .)
+    LOWERTHAN       reduce using rule 8 (expression -> expression * expression .)
+    GREATEREQ       reduce using rule 8 (expression -> expression * expression .)
+    LOWEREQ         reduce using rule 8 (expression -> expression * expression .)
+    EQEQ            reduce using rule 8 (expression -> expression * expression .)
+    DIF             reduce using rule 8 (expression -> expression * expression .)
+    RPAREN          reduce using rule 8 (expression -> expression * expression .)
+
+  ! +               [ shift and go to state 10 ]
+  ! -               [ shift and go to state 11 ]
+  ! *               [ shift and go to state 12 ]
+  ! /               [ shift and go to state 13 ]
+  ! %               [ shift and go to state 14 ]
+
+
+state 23
+
+    (9) expression -> expression / expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    +               reduce using rule 9 (expression -> expression / expression .)
+    -               reduce using rule 9 (expression -> expression / expression .)
+    *               reduce using rule 9 (expression -> expression / expression .)
+    /               reduce using rule 9 (expression -> expression / expression .)
+    %               reduce using rule 9 (expression -> expression / expression .)
+    $end            reduce using rule 9 (expression -> expression / expression .)
+    )               reduce using rule 9 (expression -> expression / expression .)
+    ENDIF           reduce using rule 9 (expression -> expression / expression .)
+    NAME            reduce using rule 9 (expression -> expression / expression .)
+    PRINT           reduce using rule 9 (expression -> expression / expression .)
+    (               reduce using rule 9 (expression -> expression / expression .)
+    NUMBER          reduce using rule 9 (expression -> expression / expression .)
+    IF              reduce using rule 9 (expression -> expression / expression .)
+    GREATERTHAN     reduce using rule 9 (expression -> expression / expression .)
+    LOWERTHAN       reduce using rule 9 (expression -> expression / expression .)
+    GREATEREQ       reduce using rule 9 (expression -> expression / expression .)
+    LOWEREQ         reduce using rule 9 (expression -> expression / expression .)
+    EQEQ            reduce using rule 9 (expression -> expression / expression .)
+    DIF             reduce using rule 9 (expression -> expression / expression .)
+    RPAREN          reduce using rule 9 (expression -> expression / expression .)
+
+  ! +               [ shift and go to state 10 ]
+  ! -               [ shift and go to state 11 ]
+  ! *               [ shift and go to state 12 ]
+  ! /               [ shift and go to state 13 ]
+  ! %               [ shift and go to state 14 ]
+
+
+state 24
+
+    (10) expression -> expression % expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    +               reduce using rule 10 (expression -> expression % expression .)
+    -               reduce using rule 10 (expression -> expression % expression .)
+    *               reduce using rule 10 (expression -> expression % expression .)
+    /               reduce using rule 10 (expression -> expression % expression .)
+    %               reduce using rule 10 (expression -> expression % expression .)
+    $end            reduce using rule 10 (expression -> expression % expression .)
+    )               reduce using rule 10 (expression -> expression % expression .)
+    ENDIF           reduce using rule 10 (expression -> expression % expression .)
+    NAME            reduce using rule 10 (expression -> expression % expression .)
+    PRINT           reduce using rule 10 (expression -> expression % expression .)
+    (               reduce using rule 10 (expression -> expression % expression .)
+    NUMBER          reduce using rule 10 (expression -> expression % expression .)
+    IF              reduce using rule 10 (expression -> expression % expression .)
+    GREATERTHAN     reduce using rule 10 (expression -> expression % expression .)
+    LOWERTHAN       reduce using rule 10 (expression -> expression % expression .)
+    GREATEREQ       reduce using rule 10 (expression -> expression % expression .)
+    LOWEREQ         reduce using rule 10 (expression -> expression % expression .)
+    EQEQ            reduce using rule 10 (expression -> expression % expression .)
+    DIF             reduce using rule 10 (expression -> expression % expression .)
+    RPAREN          reduce using rule 10 (expression -> expression % expression .)
+
+  ! +               [ shift and go to state 10 ]
+  ! -               [ shift and go to state 11 ]
+  ! *               [ shift and go to state 12 ]
+  ! /               [ shift and go to state 13 ]
+  ! %               [ shift and go to state 14 ]
+
+
+state 25
+
+    (12) expression -> ( expression ) .
+
+    +               reduce using rule 12 (expression -> ( expression ) .)
+    -               reduce using rule 12 (expression -> ( expression ) .)
+    *               reduce using rule 12 (expression -> ( expression ) .)
+    /               reduce using rule 12 (expression -> ( expression ) .)
+    %               reduce using rule 12 (expression -> ( expression ) .)
+    $end            reduce using rule 12 (expression -> ( expression ) .)
+    )               reduce using rule 12 (expression -> ( expression ) .)
+    ENDIF           reduce using rule 12 (expression -> ( expression ) .)
+    NAME            reduce using rule 12 (expression -> ( expression ) .)
+    PRINT           reduce using rule 12 (expression -> ( expression ) .)
+    (               reduce using rule 12 (expression -> ( expression ) .)
+    NUMBER          reduce using rule 12 (expression -> ( expression ) .)
+    IF              reduce using rule 12 (expression -> ( expression ) .)
+    GREATERTHAN     reduce using rule 12 (expression -> ( expression ) .)
+    LOWERTHAN       reduce using rule 12 (expression -> ( expression ) .)
+    GREATEREQ       reduce using rule 12 (expression -> ( expression ) .)
+    LOWEREQ         reduce using rule 12 (expression -> ( expression ) .)
+    EQEQ            reduce using rule 12 (expression -> ( expression ) .)
+    DIF             reduce using rule 12 (expression -> ( expression ) .)
+    RPAREN          reduce using rule 12 (expression -> ( expression ) .)
+
+
+state 26
+
+    (18) if_statement -> IF LPAREN comparison . RPAREN TWOPOINTS then_statement ENDIF
+
+    RPAREN          shift and go to state 28
+
+
+state 27
+
+    (27) comparison -> expression . GREATERTHAN expression
+    (28) comparison -> expression . LOWERTHAN expression
+    (29) comparison -> expression . GREATEREQ expression
+    (30) comparison -> expression . LOWEREQ expression
+    (31) comparison -> expression . EQEQ expression
+    (32) comparison -> expression . DIF expression
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    GREATERTHAN     shift and go to state 29
+    LOWERTHAN       shift and go to state 30
+    GREATEREQ       shift and go to state 31
+    LOWEREQ         shift and go to state 32
+    EQEQ            shift and go to state 33
+    DIF             shift and go to state 34
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+
+state 28
+
+    (18) if_statement -> IF LPAREN comparison RPAREN . TWOPOINTS then_statement ENDIF
+
+    TWOPOINTS       shift and go to state 35
+
+
+state 29
+
+    (27) comparison -> expression GREATERTHAN . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 36
+
+state 30
+
+    (28) comparison -> expression LOWERTHAN . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 37
+
+state 31
+
+    (29) comparison -> expression GREATEREQ . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 38
+
+state 32
+
+    (30) comparison -> expression LOWEREQ . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 39
+
+state 33
+
+    (31) comparison -> expression EQEQ . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 40
+
+state 34
+
+    (32) comparison -> expression DIF . expression
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 16
+
+    expression                     shift and go to state 41
+
+state 35
+
+    (18) if_statement -> IF LPAREN comparison RPAREN TWOPOINTS . then_statement ENDIF
+    (19) then_statement -> . if_statement
+    (20) then_statement -> . expression
+    (21) then_statement -> . statement
+    (22) then_statement -> . statements
+    (18) if_statement -> . IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+    (1) statement -> . NAME = expression
+    (2) statement -> . expression
+    (3) statement -> . if_statement
+    (15) statements -> . statement
+    (16) statements -> . statements statement
+    (17) statements -> . statements print
+
+    IF              shift and go to state 8
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    NAME            shift and go to state 47
+
+    then_statement                 shift and go to state 42
+    if_statement                   shift and go to state 43
+    expression                     shift and go to state 44
+    statement                      shift and go to state 45
+    statements                     shift and go to state 46
+
+state 36
+
+    (27) comparison -> expression GREATERTHAN expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    RPAREN          reduce using rule 27 (comparison -> expression GREATERTHAN expression .)
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+
+state 37
+
+    (28) comparison -> expression LOWERTHAN expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    RPAREN          reduce using rule 28 (comparison -> expression LOWERTHAN expression .)
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+
+state 38
+
+    (29) comparison -> expression GREATEREQ expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    RPAREN          reduce using rule 29 (comparison -> expression GREATEREQ expression .)
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+
+state 39
+
+    (30) comparison -> expression LOWEREQ expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    RPAREN          reduce using rule 30 (comparison -> expression LOWEREQ expression .)
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+
+state 40
+
+    (31) comparison -> expression EQEQ expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    RPAREN          reduce using rule 31 (comparison -> expression EQEQ expression .)
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+
+state 41
+
+    (32) comparison -> expression DIF expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+
+    RPAREN          reduce using rule 32 (comparison -> expression DIF expression .)
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+
+
+state 42
+
+    (18) if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement . ENDIF
+
+    ENDIF           shift and go to state 48
+
+
+state 43
+
+    (19) then_statement -> if_statement .
+    (3) statement -> if_statement .
+
+  ! reduce/reduce conflict for ENDIF resolved using rule 3 (statement -> if_statement .)
+    ENDIF           reduce using rule 3 (statement -> if_statement .)
+    NAME            reduce using rule 3 (statement -> if_statement .)
+    PRINT           reduce using rule 3 (statement -> if_statement .)
+    -               reduce using rule 3 (statement -> if_statement .)
+    (               reduce using rule 3 (statement -> if_statement .)
+    NUMBER          reduce using rule 3 (statement -> if_statement .)
+    IF              reduce using rule 3 (statement -> if_statement .)
+
+  ! ENDIF           [ reduce using rule 19 (then_statement -> if_statement .) ]
+
+
+state 44
+
+    (20) then_statement -> expression .
+    (6) expression -> expression . + expression
+    (7) expression -> expression . - expression
+    (8) expression -> expression . * expression
+    (9) expression -> expression . / expression
+    (10) expression -> expression . % expression
+    (2) statement -> expression .
+
+  ! reduce/reduce conflict for ENDIF resolved using rule 2 (statement -> expression .)
+  ! shift/reduce conflict for - resolved as shift
+    +               shift and go to state 10
+    -               shift and go to state 11
+    *               shift and go to state 12
+    /               shift and go to state 13
+    %               shift and go to state 14
+    ENDIF           reduce using rule 2 (statement -> expression .)
+    NAME            reduce using rule 2 (statement -> expression .)
+    PRINT           reduce using rule 2 (statement -> expression .)
+    (               reduce using rule 2 (statement -> expression .)
+    NUMBER          reduce using rule 2 (statement -> expression .)
+    IF              reduce using rule 2 (statement -> expression .)
+
+  ! ENDIF           [ reduce using rule 20 (then_statement -> expression .) ]
+  ! -               [ reduce using rule 2 (statement -> expression .) ]
+
+
+state 45
+
+    (21) then_statement -> statement .
+    (15) statements -> statement .
+
+  ! reduce/reduce conflict for ENDIF resolved using rule 15 (statements -> statement .)
+    NAME            reduce using rule 15 (statements -> statement .)
+    PRINT           reduce using rule 15 (statements -> statement .)
+    -               reduce using rule 15 (statements -> statement .)
+    (               reduce using rule 15 (statements -> statement .)
+    NUMBER          reduce using rule 15 (statements -> statement .)
+    IF              reduce using rule 15 (statements -> statement .)
+    ENDIF           reduce using rule 15 (statements -> statement .)
+
+  ! ENDIF           [ reduce using rule 21 (then_statement -> statement .) ]
+
+
+state 46
+
+    (22) then_statement -> statements .
+    (16) statements -> statements . statement
+    (17) statements -> statements . print
+    (1) statement -> . NAME = expression
+    (2) statement -> . expression
+    (3) statement -> . if_statement
+    (4) print -> . PRINT LPAREN NAME RPAREN
+    (5) print -> . PRINT LPAREN NUMBER RPAREN
+    (6) expression -> . expression + expression
+    (7) expression -> . expression - expression
+    (8) expression -> . expression * expression
+    (9) expression -> . expression / expression
+    (10) expression -> . expression % expression
+    (11) expression -> . - expression
+    (12) expression -> . ( expression )
+    (13) expression -> . NUMBER
+    (14) expression -> . NAME
+    (18) if_statement -> . IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF
+
+    ENDIF           reduce using rule 22 (then_statement -> statements .)
+    NAME            shift and go to state 2
+    PRINT           shift and go to state 51
+    -               shift and go to state 5
+    (               shift and go to state 6
+    NUMBER          shift and go to state 7
+    IF              shift and go to state 8
+
+    statement                      shift and go to state 49
+    print                          shift and go to state 50
+    expression                     shift and go to state 3
+    if_statement                   shift and go to state 4
+
+state 47
+
+    (14) expression -> NAME .
+    (1) statement -> NAME . = expression
+
+    +               reduce using rule 14 (expression -> NAME .)
+    -               reduce using rule 14 (expression -> NAME .)
+    *               reduce using rule 14 (expression -> NAME .)
+    /               reduce using rule 14 (expression -> NAME .)
+    %               reduce using rule 14 (expression -> NAME .)
+    ENDIF           reduce using rule 14 (expression -> NAME .)
+    NAME            reduce using rule 14 (expression -> NAME .)
+    PRINT           reduce using rule 14 (expression -> NAME .)
+    (               reduce using rule 14 (expression -> NAME .)
+    NUMBER          reduce using rule 14 (expression -> NAME .)
+    IF              reduce using rule 14 (expression -> NAME .)
+    =               shift and go to state 9
+
+
+state 48
+
+    (18) if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .
+
+    $end            reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
+    ENDIF           reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
+    NAME            reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
+    PRINT           reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
+    -               reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
+    (               reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
+    NUMBER          reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
+    IF              reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
+
+
+state 49
+
+    (16) statements -> statements statement .
+
+    NAME            reduce using rule 16 (statements -> statements statement .)
+    PRINT           reduce using rule 16 (statements -> statements statement .)
+    -               reduce using rule 16 (statements -> statements statement .)
+    (               reduce using rule 16 (statements -> statements statement .)
+    NUMBER          reduce using rule 16 (statements -> statements statement .)
+    IF              reduce using rule 16 (statements -> statements statement .)
+    ENDIF           reduce using rule 16 (statements -> statements statement .)
+
+
+state 50
+
+    (17) statements -> statements print .
+
+    NAME            reduce using rule 17 (statements -> statements print .)
+    PRINT           reduce using rule 17 (statements -> statements print .)
+    -               reduce using rule 17 (statements -> statements print .)
+    (               reduce using rule 17 (statements -> statements print .)
+    NUMBER          reduce using rule 17 (statements -> statements print .)
+    IF              reduce using rule 17 (statements -> statements print .)
+    ENDIF           reduce using rule 17 (statements -> statements print .)
+
+
+state 51
+
+    (4) print -> PRINT . LPAREN NAME RPAREN
+    (5) print -> PRINT . LPAREN NUMBER RPAREN
+
+    LPAREN          shift and go to state 52
+
+
+state 52
+
+    (4) print -> PRINT LPAREN . NAME RPAREN
+    (5) print -> PRINT LPAREN . NUMBER RPAREN
+
+    NAME            shift and go to state 53
+    NUMBER          shift and go to state 54
+
+
+state 53
+
+    (4) print -> PRINT LPAREN NAME . RPAREN
+
+    RPAREN          shift and go to state 55
+
+
+state 54
+
+    (5) print -> PRINT LPAREN NUMBER . RPAREN
+
+    RPAREN          shift and go to state 56
+
+
+state 55
+
+    (4) print -> PRINT LPAREN NAME RPAREN .
+
+    NAME            reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
+    PRINT           reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
+    -               reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
+    (               reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
+    NUMBER          reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
+    IF              reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
+    ENDIF           reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
+
+
+state 56
+
+    (5) print -> PRINT LPAREN NUMBER RPAREN .
+
+    NAME            reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
+    PRINT           reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
+    -               reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
+    (               reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
+    NUMBER          reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
+    IF              reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
+    ENDIF           reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
+
+WARNING: 
+WARNING: Conflicts:
+WARNING: 
+WARNING: shift/reduce conflict for - in state 3 resolved as shift
+WARNING: shift/reduce conflict for - in state 19 resolved as shift
+WARNING: shift/reduce conflict for - in state 44 resolved as shift
+WARNING: reduce/reduce conflict in state 43 resolved using rule (statement -> if_statement)
+WARNING: rejected rule (then_statement -> if_statement) in state 43
+WARNING: reduce/reduce conflict in state 44 resolved using rule (statement -> expression)
+WARNING: rejected rule (then_statement -> expression) in state 44
+WARNING: reduce/reduce conflict in state 45 resolved using rule (statements -> statement)
+WARNING: rejected rule (then_statement -> statement) in state 45
+WARNING: Rule (then_statement -> if_statement) is never reduced
+WARNING: Rule (then_statement -> expression) is never reduced
+WARNING: Rule (then_statement -> statement) is never reduced

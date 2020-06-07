@@ -1,3 +1,10 @@
-n = 5
-sal(n)
-si(3==5): x=2 finsi
+n = 8
+n
+si(n==6): 
+z=2
+ p=11 
+ sal(caca) finsi
+z
+p
+n
+si(n==6): si(n==8): n finsi finsi
