@@ -29,10 +29,10 @@ A continuación se presenta una tabla con cada palabra clave y su descripción:
 | PARA | Ciclo funcional en la que se le puede indicar de antemano el número de iteraciones | **PARA** I = 0 A 5 <br/> IMPRIMIR(FDX(I)) <br/> SIG I |
 | SIG | Instrucción que indica el regreso a la primera línea del PARA | PARA I = 0 A 5  <br/> IMPRIMIR(FDX(I))  <br/> **SIG** I
 | A | Indica hacia que iteración irá el ciclo PARA | PARA I = 0 **A** 5  <br/>IMPRIMIR(FDX(I))  <br/> SIG I|
-| FIN | Define el final del programa | VAR Z = 10000 IMPRIMIR(Z) **FIN** |
+| FIN | Define el final del programa | VAR Z = 10000 <br/> IMPRIMIR(Z) <br/> **FIN** |
 | FUNC | Declaración de funciones | **FUNC** FDX(X) = 2*X |
 | ARREGLO |  | |
-| COMENTARIO | Está representado por un "#", todo lo que viene después de ese símbolo, no se procesará | **#** Esto no debe salir |
+| COMENTARIO | Está representado por un "#", todo lo que viene después de ese símbolo, no se procesará | **#** Esto es un comentario |
 | REGRESAR | Indica el fin de una función | |
 
 A continuación se presenta una tabla con cada palabra clave y su descripción:
@@ -144,3 +144,41 @@ Para más información sobre la gramática, favor de revisar el documento `parse
 
 Por último, pero no menos importante, se encuentra el validador de tipado, que depende de los dos archivos anteriores. Ya habiendo analizado los tokens y palabras claves de *lexer* y combinarlo con la gramática en el *parser*, se necesita la inclusión de operaciones para saber qué hacer con el código.
 Este procesaminento se encuentra en el archivo `Interpreter.py`. Ahí se verifican cuántos ciclos, operaciones, funciones, etc. hay en el código fuente y los computa por medio de diferentes estructuras de datos definidas.
+
+# Instrucciones para usar el lenguaje ESPY 
+
+A continuación se mostrarán los pasos a seguir para crear un programa con el lenguaje ESPY.
+
+## 1. Creación del archivo de entrada
+
+Para poder correr un programa de ESPY, se necesita la creación de un archivo con las instrucciones del lenguaje.
+NOTA: Tiene que terminar con un FIN
+
+Ejemplo de código a evaluar:
+`prueba.espy`
+```
+FUNC FORMULA(X) = (2*X)
+
+VAR NUM = 18
+VAR Z = FORMULA(NUM)
+IMPRIMIR("La variable es: " Z)
+FIN
+
+```
+
+## 2. Ejecutar en la consola
+
+`python3 main.py prueba.espy`
+
+## 3. Resultado
+
+El resultado se encuentra en en la misma consola.
+
+Ejemplo:
+![alt text](./consola.jpg)
+
+## 4. Eliminar proyecto
+
+Para dejar de usar el proyecto, solamente se rquiere eliminar el repositorio raíz.
+* `cd ..`
+* `rm -rf Compiladores`
