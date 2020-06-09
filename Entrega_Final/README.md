@@ -22,17 +22,17 @@ A continuación se presenta una tabla con cada palabra clave y su descripción:
 
 | Palabra Clave | Descripción | Ejemplo
 | --- | --- | --- |
-| VAR | Indica que la palabra que viene después, será considerada como variable | `**VAR** Z = 1` |
-| IMPRIMIR | Similar a 'print' en python, imprime el contenido que le mandes |`**IMPRIMIR**("Hola Mundo")`|
+| VAR | Indica que la palabra que viene después, será considerada como variable | **VAR** Z = 1 |
+| IMPRIMIR | Similar a 'print' en python, imprime el contenido que le mandes | **IMPRIMIR**("Hola Mundo")|
 | SI | Condicional para realizar una operación  | **SI**(I>4) ENTONCES 6 |
-| ENTONCES | Define que operación se realizará si la condición del SI se cumple | `SI(I>4) **ENTONCES** 6` |
-| PARA | Ciclo funcional en la que se le puede indicar de antemano el número de iteraciones | `**PARA** I = 0 A 5 IMPRIMIR(FDX(I)) SIG I` |
+| ENTONCES | Define que operación se realizará si la condición del SI se cumple | SI(I>4) **ENTONCES** 6 |
+| PARA | Ciclo funcional en la que se le puede indicar de antemano el número de iteraciones | **PARA** I = 0 A 5 <br/> IMPRIMIR(FDX(I)) <br/> SIG I |
 | SIG | Instrucción que indica el regreso a la primera línea del PARA | PARA I = 0 A 5 IMPRIMIR(FDX(I)) **SIG** I
 | A | Indica hacia que iteración irá el ciclo PARA | PARA I = 0 **A** 5 IMPRIMIR(FDX(I)) SIG I|
 | FIN | Define el final del programa | VAR Z = 10000 IMPRIMIR(Z) **FIN** |
-| FUNC | Declaración de funciones | |
+| FUNC | Declaración de funciones | **FUNC** FDX(X) = 2*X |
 | ARREGLO |  | |
-| COMENTARIO | Está representado por un "#", todo lo que viene después de ese símbolo, no se procesará | |
+| COMENTARIO | Está representado por un "#", todo lo que viene después de ese símbolo, no se procesará | **#** Esto no debe salir |
 | REGRESAR | Indica el fin de una función | |
 
 A continuación se presenta una tabla con cada palabra clave y su descripción:
