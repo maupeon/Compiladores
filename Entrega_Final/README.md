@@ -31,9 +31,8 @@ A continuación se presenta una tabla con cada palabra clave y su descripción:
 | A | Indica hacia que iteración irá el ciclo PARA | PARA I = 0 **A** 5  <br/>IMPRIMIR(FDX(I))  <br/> SIG I|
 | FIN | Define el final del programa | VAR Z = 10000 <br/> IMPRIMIR(Z) <br/> **FIN** |
 | FUNC | Declaración de funciones | **FUNC** FDX(X) = 2*X |
-| ARREGLO |  | |
+| ARREGLO |  Declaración de arreglos | **ARREGLO** ARR(10) |
 | COMENTARIO | Está representado por un "#", todo lo que viene después de ese símbolo, no se procesará | **#** Esto es un comentario |
-| REGRESAR | Indica el fin de una función | |
 
 A continuación se presenta una tabla con cada palabra clave y su descripción:
 | Token | Descripción |
