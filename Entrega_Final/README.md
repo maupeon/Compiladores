@@ -27,8 +27,8 @@ A continuación se presenta una tabla con cada palabra clave y su descripción:
 | SI | Condicional para realizar una operación  | **SI**(I>4) ENTONCES 6 |
 | ENTONCES | Define que operación se realizará si la condición del SI se cumple | SI(I>4) **ENTONCES** 6 |
 | PARA | Ciclo funcional en la que se le puede indicar de antemano el número de iteraciones | **PARA** I = 0 A 5 <br/> IMPRIMIR(FDX(I)) <br/> SIG I |
-| SIG | Instrucción que indica el regreso a la primera línea del PARA | PARA I = 0 A 5 IMPRIMIR(FDX(I)) **SIG** I
-| A | Indica hacia que iteración irá el ciclo PARA | PARA I = 0 **A** 5 IMPRIMIR(FDX(I)) SIG I|
+| SIG | Instrucción que indica el regreso a la primera línea del PARA | PARA I = 0 A 5  <br/> IMPRIMIR(FDX(I))  <br/> **SIG** I
+| A | Indica hacia que iteración irá el ciclo PARA | PARA I = 0 **A** 5  <br/>IMPRIMIR(FDX(I))  <br/> SIG I|
 | FIN | Define el final del programa | VAR Z = 10000 IMPRIMIR(Z) **FIN** |
 | FUNC | Declaración de funciones | **FUNC** FDX(X) = 2*X |
 | ARREGLO |  | |
