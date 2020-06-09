@@ -22,14 +22,14 @@ A continuación se presenta una tabla con cada palabra clave y su descripción:
 
 | Palabra Clave | Descripción | Ejemplo
 | --- | --- | --- |
-| VAR | Indica que la palabra que viene después, será considerada como variable | |
-| IMPRIMIR | Similar a 'print' en python, imprime el contenido que le mandes | |
-| SI | Condicional para realizar una operación  | |
-| ENTONCES | Define que operación se realizará si la condición del SI se cumple | |
-| PARA | Ciclo funcional en la que se le puede indicar de antemano el número de iteraciones |
-| SIG | Instrucción que indica el regreso a la primera línea del PARA |
-| A | Indica hacia que iteración irá el ciclo PARA | |
-| FIN | Define el final del programa | |
+| VAR | Indica que la palabra que viene después, será considerada como variable | **VAR** Z = 1 |
+| IMPRIMIR | Similar a 'print' en python, imprime el contenido que le mandes | **IMPRIMIR**("Hola Mundo")|
+| SI | Condicional para realizar una operación  | **SI**(I>4) ENTONCES 6 |
+| ENTONCES | Define que operación se realizará si la condición del SI se cumple | SI(I>4) **ENTONCES** 6 |
+| PARA | Ciclo funcional en la que se le puede indicar de antemano el número de iteraciones | **PARA** I = 0 A 5 IMPRIMIR(FDX(I)) SIG I |
+| SIG | Instrucción que indica el regreso a la primera línea del PARA | PARA I = 0 A 5 IMPRIMIR(FDX(I)) **SIG** I
+| A | Indica hacia que iteración irá el ciclo PARA | PARA I = 0 **A** 5 IMPRIMIR(FDX(I)) SIG I|
+| FIN | Define el final del programa | VAR Z = 10000 IMPRIMIR(Z) **FIN** |
 | FUNC | Declaración de funciones | |
 | ARREGLO |  | |
 | COMENTARIO | Está representado por un "#", todo lo que viene después de ese símbolo, no se procesará | |
@@ -60,7 +60,7 @@ A continuación se presenta una tabla con cada palabra clave y su descripción:
 
 ## 2. Análisis Sintáctico 
 
-En el análisis sintáctico se verifica si la estructura del lenguaje es correcta, para ello se usó el módulo `yacc` de la librería `PLY.py`. Es importante decir que el *parser* necesita del *lexer* para poder recibri todos los tokens de la gramática, así como las palabras clave.
+En el análisis sintáctico se verifica si la estructura del lenguaje es correcta, para ello se usó el módulo `yacc` de la librería `PLY.py`. Es importante decir que el *parser* necesita del *lexer* para poder recibri todos los tokens de la gramática, así como las palabras clave. Este código se encuentra en el archivo `Yacc.py`
 
 Las reglas utilizadas en la gramática del lenguaje fueron las siguientes:
 ```
@@ -142,3 +142,5 @@ Para más información sobre la gramática, favor de revisar el documento `parse
 
 ## 3. Validación de Tipado
 
+Por último, pero no menos importante, se encuentra el validador de tipado, que depende de los dos archivos anteriores. Ya habiendo analizado los tokens y palabras claves de *lexer* y combinarlo con la gramática en el *parser*, se necesita la inclusión de operaciones para saber qué hacer con el código.
+Este procesaminento se encuentra en el archivo `Interpreter.py`. Ahí se verifican cuántos ciclos, operaciones, funciones, etc. hay en el código fuente y los computa por medio de diferentes estructuras de datos definidas.
