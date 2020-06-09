@@ -1,0 +1,6 @@
+FUNC FORMULA(X) = (2*X)
+
+VAR NUM = 18
+VAR Z = FORMULA(NUM)
+IMPRIMIR("La variable es: " Z)
+FIN

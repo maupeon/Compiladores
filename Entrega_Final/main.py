@@ -1,34 +1,31 @@
-from Lex import Lex
-from Yacc import Yacc
-import ply.lex as lex
-import ply.yacc as yacc
+'''
+Mauricio Peón García                    A01024162
+Alexandro Francisco Marcelo González    A01021383
+Andrés Campos Tams                      A01024385
+12 Jun 2020
+'''
 
 import sys
 sys.path.insert(0, "../..")
 
-lexer = Lex()
-lexer.build()
+import Lex
+import Yacc
+import Interpreter
 
-my_yacc = Yacc(lexer)
-my_yacc.build()
-   
-data = open("test", "r")
-data_tokens = data.read()
-lexer.test(data_tokens)
-data = open("test", "r")
-lines = data.readlines() 
-print(lines)
-s = data
+# Recibe un archivo como parámetro, ejemplo: input.espy (la terminación no importa)
+if len(sys.argv) == 2:
+    with open(sys.argv[1]) as f:
+        data = f.read()
+    prog = Yacc.parse(data)
+    #print("PROG:",prog)
+    if not prog:
+        raise SystemExit
+    compilador = Interpreter.Interpreter(prog)
+    try:
+        compilador.ejecutar()
+        raise SystemExit
+    except RuntimeError:
+        pass
 
-for line in lines:
-    if line != '\n':
-        my_yacc.parse_(line)
-
-# while True:
-#     try:
-#         s = data
-#     except EOFError:
-#         break
-#     if not s:
-#         continue
-#     my_yacc.parse_(s)
+else:
+    compilador = Interpreter.Interpreter({})

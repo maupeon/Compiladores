@@ -6,9 +6,9 @@ _tabversion = '3.10'
 
 _lr_method = 'LALR'
 
-_lr_signature = 'leftGREATERTHANLOWERTHANGREATEREQLOWEREQEQEQDIFleft+-left*/%ifIFleftELSErightUMINUSCOMMA DIF DIVIDE ELSE ENDELSE ENDFOR ENDIF EQEQ FINFUNC FOR FUNC GREATEREQ GREATERTHAN IF LOWEREQ LOWERTHAN LPAREN MINUS NAME NUMBER PLUS PRINT REGRESA RPAREN THEN TIMES TWOPOINTS VAR WHILEstatement : NAME "=" expressionstatement : expression\n                     | if_statementprint : PRINT LPAREN NAME RPAREN\n                | PRINT LPAREN NUMBER RPAREN\n                expression : expression \'+\' expression\n                    | expression \'-\' expression\n                    | expression \'*\' expression\n                    | expression \'/\' expression\n                    | expression \'%\' expressionexpression : \'-\' expression %prec UMINUSexpression : \'(\' expression \')\'expression : NUMBERexpression : NAMEstatements : statement\n                    | statements statement\n                    | statements print\n        if_statement : IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF\n        then_statement : if_statement\n                        |  expression\n                        |  statement\n                        |  statements\n        \n        else_statement :    ELSE expression ENDELSE\n                    |   ELSE if_statement ENDELSE\n                    |   empty\n         empty : \'\'\n        comparison : expression GREATERTHAN expression\n                    | expression LOWERTHAN expression\n                    | expression GREATEREQ expression\n                    | expression LOWEREQ expression\n                    | expression EQEQ expression\n                    | expression DIF expression'
+_lr_signature = 'leftMASMENOSleftMULTIPLICACIONDIVISIONleftPOTENCIArightUMENOSA ARREGLO CADENA COMA COMENTARIO DIF DIVISION DPAREN ENTERO ENTONCES FIN FINSI FLOTANTE FUNC IGUAL II IMPRIMIR IPAREN LINEA LIST MAI MAQ MAS MEI MENOS MEQ MULTIPLICACION NEW PALABRA PARA POTENCIA REGRESAR SI SIG VARprograma : programa declaracion\n               | declaracionprograma : errordeclaracion : instruccion LINEAdeclaracion : LINEAdeclaracion : error LINEAinstruccion : VAR variable IGUAL exprinstruccion : VAR variable IGUAL errorinstruccion : IMPRIMIR IPAREN plista DPAREN optendoptend : COMA \n              |instruccion : IMPRIMIR errorinstruccion : IMPRIMIRinstruccion : SI IPAREN comparacion DPAREN ENTONCES ENTERO\n                    | SI IPAREN comparacion DPAREN ENTONCES LINEA programa FINSIinstruccion : SI error ENTONCES ENTEROinstruccion : SI comparacion ENTONCES errorinstruccion : PARA PALABRA IGUAL expr A expr optstepinstruccion : PARA PALABRA IGUAL error A expr optstepinstruccion : PARA PALABRA IGUAL expr A error optstepinstruccion : PARA PALABRA IGUAL expr A expr erroroptstep : expr\n               | vacioinstruccion : SIG PALABRAinstruccion : SIG errorinstruccion : FINinstruccion : COMENTARIOinstruccion : FUNC PALABRA IPAREN PALABRA DPAREN IGUAL exprinstruccion : FUNC PALABRA IPAREN PALABRA DPAREN IGUAL errorinstruccion : FUNC PALABRA IPAREN error DPAREN IGUAL exprinstruccion : REGRESARinstruccion : ARREGLO arreglolistainstruccion : ARREGLO errorarreglolista : arreglolista COMA elementoarreglo\n               | elementoarregloelementoarreglo : PALABRA IPAREN ENTERO DPARENelementoarreglo : PALABRA IPAREN ENTERO COMA ENTERO DPARENexpr : expr MAS expr\n            | expr MENOS expr\n            | expr MULTIPLICACION expr\n            | expr DIVISION expr\n            | expr POTENCIA exprexpr : ENTERO\n            | FLOTANTEexpr : variableexpr : IPAREN expr DPARENexpr : MENOS expr %prec UMENOScomparacion : expr MEQ expr\n               | expr MEI expr\n               | expr MAQ expr\n               | expr MAI expr\n               | expr II expr\n               | expr IGUAL expr\n               | expr DIF exprvariable : PALABRA\n              | PALABRA IPAREN expr DPAREN\n              | PALABRA IPAREN expr COMA expr DPARENvarlista : varlista COMA variable\n               | variablenumlista : numlista COMA numero\n               | numeronumero  : ENTERO\n               | FLOTANTEnumero  : MENOS ENTERO\n               | MENOS FLOTANTEplista   : plista COMA pelemento\n               | pelementopelemento : CADENApelemento : CADENA exprpelemento : exprvacio : '
     
-_lr_action_items = {'NAME':([0,2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,29,30,31,32,33,34,35,43,44,45,46,47,48,49,50,52,55,56,],[2,-14,-2,-3,16,16,-13,16,16,16,16,16,16,-11,-14,16,-1,-6,-7,-8,-9,-10,-12,16,16,16,16,16,16,47,-3,-2,-15,2,-14,-18,-16,-17,53,-4,-5,]),'-':([0,2,3,4,5,6,7,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,27,29,30,31,32,33,34,35,36,37,38,39,40,41,43,44,45,46,47,48,49,50,55,56,],[5,-14,11,-3,5,5,-13,5,5,5,5,5,5,-11,-14,11,5,11,-6,-7,-8,-9,-10,-12,11,5,5,5,5,5,5,5,11,11,11,11,11,11,-3,11,-15,5,-14,-18,-16,-17,-4,-5,]),'(':([0,2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,29,30,31,32,33,34,35,43,44,45,46,47,48,49,50,55,56,],[6,-14,-2,-3,6,6,-13,6,6,6,6,6,6,-11,-14,6,-1,-6,-7,-8,-9,-10,-12,6,6,6,6,6,6,6,-3,-2,-15,6,-14,-18,-16,-17,-4,-5,]),'NUMBER':([0,2,3,4,5,6,7,9,10,11,12,13,14,15,16,18,19,20,21,22,23,24,25,29,30,31,32,33,34,35,43,44,45,46,47,48,49,50,52,55,56,],[7,-14,-2,-3,7,7,-13,7,7,7,7,7,7,-11,-14,7,-1,-6,-7,-8,-9,-10,-12,7,7,7,7,7,7,7,-3,-2,-15,7,-14,-18,-16,-17,54,-4,-5,]),'IF':([0,2,3,4,7,15,16,19,20,21,22,23,24,25,35,43,44,45,46,47,48,49,50,55,56,],[8,-14,-2,-3,-13,-11,-14,-1,-6,-7,-8,-9,-10,-12,8,-3,-2,-15,8,-14,-18,-16,-17,-4,-5,]),'$end':([1,2,3,4,7,15,16,19,20,21,22,23,24,25,48,],[0,-14,-2,-3,-13,-11,-14,-1,-6,-7,-8,-9,-10,-12,-18,]),'=':([2,47,],[9,9,]),'+':([2,3,7,15,16,17,19,20,21,22,23,24,25,27,36,37,38,39,40,41,44,47,],[-14,10,-13,-11,-14,10,10,-6,-7,-8,-9,-10,-12,10,10,10,10,10,10,10,10,-14,]),'*':([2,3,7,15,16,17,19,20,21,22,23,24,25,27,36,37,38,39,40,41,44,47,],[-14,12,-13,-11,-14,12,12,12,12,-8,-9,-10,-12,12,12,12,12,12,12,12,12,-14,]),'/':([2,3,7,15,16,17,19,20,21,22,23,24,25,27,36,37,38,39,40,41,44,47,],[-14,13,-13,-11,-14,13,13,13,13,-8,-9,-10,-12,13,13,13,13,13,13,13,13,-14,]),'%':([2,3,7,15,16,17,19,20,21,22,23,24,25,27,36,37,38,39,40,41,44,47,],[-14,14,-13,-11,-14,14,14,14,14,-8,-9,-10,-12,14,14,14,14,14,14,14,14,-14,]),'PRINT':([2,3,4,7,15,16,19,20,21,22,23,24,25,43,44,45,46,47,48,49,50,55,56,],[-14,-2,-3,-13,-11,-14,-1,-6,-7,-8,-9,-10,-12,-3,-2,-15,51,-14,-18,-16,-17,-4,-5,]),'ENDIF':([2,3,4,7,15,16,19,20,21,22,23,24,25,42,43,44,45,46,47,48,49,50,55,56,],[-14,-2,-3,-13,-11,-14,-1,-6,-7,-8,-9,-10,-12,48,-3,-2,-15,-22,-14,-18,-16,-17,-4,-5,]),')':([7,15,16,17,20,21,22,23,24,25,],[-13,-11,-14,25,-6,-7,-8,-9,-10,-12,]),'GREATERTHAN':([7,15,16,20,21,22,23,24,25,27,],[-13,-11,-14,-6,-7,-8,-9,-10,-12,29,]),'LOWERTHAN':([7,15,16,20,21,22,23,24,25,27,],[-13,-11,-14,-6,-7,-8,-9,-10,-12,30,]),'GREATEREQ':([7,15,16,20,21,22,23,24,25,27,],[-13,-11,-14,-6,-7,-8,-9,-10,-12,31,]),'LOWEREQ':([7,15,16,20,21,22,23,24,25,27,],[-13,-11,-14,-6,-7,-8,-9,-10,-12,32,]),'EQEQ':([7,15,16,20,21,22,23,24,25,27,],[-13,-11,-14,-6,-7,-8,-9,-10,-12,33,]),'DIF':([7,15,16,20,21,22,23,24,25,27,],[-13,-11,-14,-6,-7,-8,-9,-10,-12,34,]),'RPAREN':([7,15,16,20,21,22,23,24,25,26,36,37,38,39,40,41,53,54,],[-13,-11,-14,-6,-7,-8,-9,-10,-12,28,-27,-28,-29,-30,-31,-32,55,56,]),'LPAREN':([8,51,],[18,52,]),'TWOPOINTS':([28,],[35,]),}
+_lr_action_items = {'error':([0,1,2,3,5,7,8,10,15,16,18,19,21,26,30,31,40,49,63,64,65,76,86,87,88,89,90,97,103,111,112,115,118,119,132,],[3,17,-2,-3,-5,23,27,34,37,-1,-6,-4,-55,-43,-44,-45,69,77,-47,92,94,-46,-38,-39,-40,-41,-42,-56,113,3,122,128,-57,17,-39,]),'LINEA':([0,1,2,3,4,5,7,11,12,14,16,17,18,19,21,23,26,30,31,33,34,36,37,38,63,68,69,72,76,77,78,86,87,88,89,90,95,97,99,100,102,107,110,111,112,113,114,118,119,120,121,122,124,125,126,127,128,129,130,131,132,],[5,5,-2,18,19,-5,-13,-26,-27,-31,-1,18,-6,-4,-55,-12,-43,-44,-45,-24,-25,-32,-33,-35,-47,-7,-8,-11,-46,-17,-16,-38,-39,-40,-41,-42,-34,-56,-9,-10,111,-36,-14,5,-71,-71,-71,-57,5,-22,-18,-21,-23,-20,-19,-28,-29,-30,-37,-15,-39,]),'VAR':([0,1,2,3,5,16,18,19,111,119,],[6,6,-2,-3,-5,-1,-6,-4,6,6,]),'IMPRIMIR':([0,1,2,3,5,16,18,19,111,119,],[7,7,-2,-3,-5,-1,-6,-4,7,7,]),'SI':([0,1,2,3,5,16,18,19,111,119,],[8,8,-2,-3,-5,-1,-6,-4,8,8,]),'PARA':([0,1,2,3,5,16,18,19,111,119,],[9,9,-2,-3,-5,-1,-6,-4,9,9,]),'SIG':([0,1,2,3,5,16,18,19,111,119,],[10,10,-2,-3,-5,-1,-6,-4,10,10,]),'FIN':([0,1,2,3,5,16,18,19,111,119,],[11,11,-2,-3,-5,-1,-6,-4,11,11,]),'COMENTARIO':([0,1,2,3,5,16,18,19,111,119,],[12,12,-2,-3,-5,-1,-6,-4,12,12,]),'FUNC':([0,1,2,3,5,16,18,19,111,119,],[13,13,-2,-3,-5,-1,-6,-4,13,13,]),'REGRESAR':([0,1,2,3,5,16,18,19,111,119,],[14,14,-2,-3,-5,-1,-6,-4,14,14,]),'ARREGLO':([0,1,2,3,5,16,18,19,111,119,],[15,15,-2,-3,-5,-1,-6,-4,15,15,]),'$end':([1,2,3,5,16,18,19,],[0,-2,-3,-5,-1,-6,-4,]),'FINSI':([2,3,5,16,18,19,119,],[-2,-3,-5,-1,-6,-4,131,]),'PALABRA':([6,8,9,10,13,15,21,22,24,26,29,30,31,40,41,42,45,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,73,76,86,87,88,89,90,97,98,103,104,112,113,114,115,116,118,123,132,],[21,21,32,33,35,39,-55,21,21,-43,21,-44,-45,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,21,-47,21,93,39,21,-46,-38,-39,-40,-41,-42,-56,21,21,21,21,21,21,21,21,-57,21,-39,]),'IPAREN':([7,8,21,22,24,26,29,30,31,35,39,40,41,42,45,51,52,53,54,55,56,57,58,59,60,61,62,63,64,73,76,86,87,88,89,90,97,98,103,104,112,113,114,115,116,118,123,132,],[22,24,41,42,42,-43,42,-44,-45,65,67,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,42,-47,42,42,-46,-38,-39,-40,-41,-42,-56,42,42,42,42,42,42,42,42,-57,42,-39,]),'ENTERO':([8,21,22,24,26,29,30,31,40,41,42,45,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,67,73,76,86,87,88,89,90,97,98,102,103,104,108,112,113,114,115,116,118,123,132,],[26,-55,26,26,-43,26,-44,-45,26,26,26,26,78,26,26,26,26,26,26,26,26,26,26,26,26,-47,26,96,26,-46,-38,-39,-40,-41,-42,-56,26,110,26,26,117,26,26,26,26,26,-57,26,-39,]),'FLOTANTE':([8,21,22,24,26,29,30,31,40,41,42,45,51,52,53,54,55,56,57,58,59,60,61,62,63,64,73,76,86,87,88,89,90,97,98,103,104,112,113,114,115,116,118,123,132,],[30,-55,30,30,-43,30,-44,-45,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,30,-47,30,30,-46,-38,-39,-40,-41,-42,-56,30,30,30,30,30,30,30,30,-57,30,-39,]),'MENOS':([8,21,22,24,26,28,29,30,31,40,41,42,45,46,48,51,52,53,54,55,56,57,58,59,60,61,62,63,64,68,70,71,73,74,76,79,80,81,82,83,84,85,86,87,88,89,90,91,97,98,103,104,109,112,113,114,115,116,118,120,123,127,129,132,],[29,-55,29,29,-43,59,29,-44,-45,29,29,29,29,59,59,29,29,29,29,29,29,29,29,29,29,29,29,-47,29,59,59,59,29,59,-46,59,59,59,59,59,59,59,-38,-39,-40,-41,-42,59,-56,29,29,29,59,123,29,123,29,29,-57,59,29,59,59,-39,]),'IGUAL':([20,21,26,28,30,31,32,48,63,76,86,87,88,89,90,97,105,106,118,],[40,-55,-43,56,-44,-45,64,56,-47,-46,-38,-39,-40,-41,-42,-56,115,116,-57,]),'MEQ':([21,26,28,30,31,48,63,76,86,87,88,89,90,97,118,],[-55,-43,51,-44,-45,51,-47,-46,-38,-39,-40,-41,-42,-56,-57,]),'MEI':([21,26,28,30,31,48,63,76,86,87,88,89,90,97,118,],[-55,-43,52,-44,-45,52,-47,-46,-38,-39,-40,-41,-42,-56,-57,]),'MAQ':([21,26,28,30,31,48,63,76,86,87,88,89,90,97,118,],[-55,-43,53,-44,-45,53,-47,-46,-38,-39,-40,-41,-42,-56,-57,]),'MAI':([21,26,28,30,31,48,63,76,86,87,88,89,90,97,118,],[-55,-43,54,-44,-45,54,-47,-46,-38,-39,-40,-41,-42,-56,-57,]),'II':([21,26,28,30,31,48,63,76,86,87,88,89,90,97,118,],[-55,-43,55,-44,-45,55,-47,-46,-38,-39,-40,-41,-42,-56,-57,]),'DIF':([21,26,28,30,31,48,63,76,86,87,88,89,90,97,118,],[-55,-43,57,-44,-45,57,-47,-46,-38,-39,-40,-41,-42,-56,-57,]),'MAS':([21,26,28,30,31,46,48,63,68,70,71,74,76,79,80,81,82,83,84,85,86,87,88,89,90,91,97,109,112,114,118,120,127,129,132,],[-55,-43,58,-44,-45,58,58,-47,58,58,58,58,-46,58,58,58,58,58,58,58,-38,-39,-40,-41,-42,58,-56,58,58,58,-57,58,58,58,-39,]),'MULTIPLICACION':([21,26,28,30,31,46,48,63,68,70,71,74,76,79,80,81,82,83,84,85,86,87,88,89,90,91,97,109,112,114,118,120,127,129,132,],[-55,-43,60,-44,-45,60,60,-47,60,60,60,60,-46,60,60,60,60,60,60,60,60,60,-40,-41,-42,60,-56,60,60,60,-57,60,60,60,60,]),'DIVISION':([21,26,28,30,31,46,48,63,68,70,71,74,76,79,80,81,82,83,84,85,86,87,88,89,90,91,97,109,112,114,118,120,127,129,132,],[-55,-43,61,-44,-45,61,61,-47,61,61,61,61,-46,61,61,61,61,61,61,61,61,61,-40,-41,-42,61,-56,61,61,61,-57,61,61,61,61,]),'POTENCIA':([21,26,28,30,31,46,48,63,68,70,71,74,76,79,80,81,82,83,84,85,86,87,88,89,90,91,97,109,112,114,118,120,127,129,132,],[-55,-43,62,-44,-45,62,62,-47,62,62,62,62,-46,62,62,62,62,62,62,62,62,62,62,62,-42,62,-56,62,62,62,-57,62,62,62,62,]),'DPAREN':([21,26,30,31,43,44,45,46,47,48,63,70,71,74,76,79,80,81,82,83,84,85,86,87,88,89,90,93,94,96,97,101,109,117,118,],[-55,-43,-44,-45,72,-67,-68,-70,75,76,-47,97,76,-69,-46,-48,-49,-50,-51,-52,-53,-54,-38,-39,-40,-41,-42,105,106,107,-56,-66,118,130,-57,]),'COMA':([21,26,30,31,36,38,43,44,45,46,63,70,72,74,76,86,87,88,89,90,95,96,97,101,107,118,130,],[-55,-43,-44,-45,66,-35,73,-67,-68,-70,-47,98,100,-69,-46,-38,-39,-40,-41,-42,-34,108,-56,-66,-36,-57,-37,]),'ENTONCES':([21,25,26,27,30,31,63,75,76,79,80,81,82,83,84,85,86,87,88,89,90,97,118,],[-55,49,-43,50,-44,-45,-47,102,-46,-48,-49,-50,-51,-52,-53,-54,-38,-39,-40,-41,-42,-56,-57,]),'A':([21,26,30,31,63,76,86,87,88,89,90,91,92,97,118,],[-55,-43,-44,-45,-47,-46,-38,-39,-40,-41,-42,103,104,-56,-57,]),'CADENA':([22,73,],[45,45,]),}
 
 _lr_action = {}
 for _k, _v in _lr_action_items.items():
@@ -17,7 +17,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'statement':([0,35,46,],[1,45,49,]),'expression':([0,5,6,9,10,11,12,13,14,18,29,30,31,32,33,34,35,46,],[3,15,17,19,20,21,22,23,24,27,36,37,38,39,40,41,44,3,]),'if_statement':([0,35,46,],[4,43,4,]),'comparison':([18,],[26,]),'then_statement':([35,],[42,]),'statements':([35,],[46,]),'print':([46,],[50,]),}
+_lr_goto_items = {'programa':([0,111,],[1,119,]),'declaracion':([0,1,111,119,],[2,16,2,16,]),'instruccion':([0,1,111,119,],[4,4,4,4,]),'variable':([6,8,22,24,29,40,41,42,45,51,52,53,54,55,56,57,58,59,60,61,62,64,73,98,103,104,112,113,114,115,116,123,],[20,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,31,]),'comparacion':([8,24,],[25,47,]),'expr':([8,22,24,29,40,41,42,45,51,52,53,54,55,56,57,58,59,60,61,62,64,73,98,103,104,112,113,114,115,116,123,],[28,46,48,63,68,70,71,74,79,80,81,82,83,84,85,86,87,88,89,90,91,46,109,112,114,120,120,120,127,129,132,]),'arreglolista':([15,],[36,]),'elementoarreglo':([15,66,],[38,95,]),'plista':([22,],[43,]),'pelemento':([22,73,],[44,101,]),'optend':([72,],[99,]),'optstep':([112,113,114,],[121,125,126,]),'vacio':([112,113,114,],[124,124,124,]),}
 
 _lr_goto = {}
 for _k, _v in _lr_goto_items.items():
@@ -26,37 +26,76 @@ for _k, _v in _lr_goto_items.items():
        _lr_goto[_x][_k] = _y
 del _lr_goto_items
 _lr_productions = [
-  ("S' -> statement","S'",1,None,None,None),
-  ('statement -> NAME = expression','statement',3,'p_statement_assign','Yacc.py',27),
-  ('statement -> expression','statement',1,'p_statement_expr','Yacc.py',32),
-  ('statement -> if_statement','statement',1,'p_statement_expr','Yacc.py',33),
-  ('print -> PRINT LPAREN NAME RPAREN','print',4,'p_print','Yacc.py',37),
-  ('print -> PRINT LPAREN NUMBER RPAREN','print',4,'p_print','Yacc.py',38),
-  ('expression -> expression + expression','expression',3,'p_expression_binop','Yacc.py',43),
-  ('expression -> expression - expression','expression',3,'p_expression_binop','Yacc.py',44),
-  ('expression -> expression * expression','expression',3,'p_expression_binop','Yacc.py',45),
-  ('expression -> expression / expression','expression',3,'p_expression_binop','Yacc.py',46),
-  ('expression -> expression % expression','expression',3,'p_expression_binop','Yacc.py',47),
-  ('expression -> - expression','expression',2,'p_expression_uminus','Yacc.py',61),
-  ('expression -> ( expression )','expression',3,'p_expression_group','Yacc.py',66),
-  ('expression -> NUMBER','expression',1,'p_expression_number','Yacc.py',71),
-  ('expression -> NAME','expression',1,'p_expression_name','Yacc.py',76),
-  ('statements -> statement','statements',1,'p_statements_expr','Yacc.py',84),
-  ('statements -> statements statement','statements',2,'p_statements_expr','Yacc.py',85),
-  ('statements -> statements print','statements',2,'p_statements_expr','Yacc.py',86),
-  ('if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF','if_statement',7,'p_expression_if','Yacc.py',91),
-  ('then_statement -> if_statement','then_statement',1,'p_expression_then','Yacc.py',96),
-  ('then_statement -> expression','then_statement',1,'p_expression_then','Yacc.py',97),
-  ('then_statement -> statement','then_statement',1,'p_expression_then','Yacc.py',98),
-  ('then_statement -> statements','then_statement',1,'p_expression_then','Yacc.py',99),
-  ('else_statement -> ELSE expression ENDELSE','else_statement',3,'p_expression_else','Yacc.py',105),
-  ('else_statement -> ELSE if_statement ENDELSE','else_statement',3,'p_expression_else','Yacc.py',106),
-  ('else_statement -> empty','else_statement',1,'p_expression_else','Yacc.py',107),
-  ('empty -> ','empty',1,'p_empty','Yacc.py',112),
-  ('comparison -> expression GREATERTHAN expression','comparison',3,'p_expression_comparison','Yacc.py',116),
-  ('comparison -> expression LOWERTHAN expression','comparison',3,'p_expression_comparison','Yacc.py',117),
-  ('comparison -> expression GREATEREQ expression','comparison',3,'p_expression_comparison','Yacc.py',118),
-  ('comparison -> expression LOWEREQ expression','comparison',3,'p_expression_comparison','Yacc.py',119),
-  ('comparison -> expression EQEQ expression','comparison',3,'p_expression_comparison','Yacc.py',120),
-  ('comparison -> expression DIF expression','comparison',3,'p_expression_comparison','Yacc.py',121),
+  ("S' -> programa","S'",1,None,None,None),
+  ('programa -> programa declaracion','programa',2,'p_programa','Yacc.py',25),
+  ('programa -> declaracion','programa',1,'p_programa','Yacc.py',26),
+  ('programa -> error','programa',1,'p_programa_error','Yacc.py',43),
+  ('declaracion -> instruccion LINEA','declaracion',2,'p_declaracion','Yacc.py',48),
+  ('declaracion -> LINEA','declaracion',1,'p_declaracion_blanca','Yacc.py',59),
+  ('declaracion -> error LINEA','declaracion',2,'p_declaracion_mala','Yacc.py',64),
+  ('instruccion -> VAR variable IGUAL expr','instruccion',4,'p_instruccion_var','Yacc.py',71),
+  ('instruccion -> VAR variable IGUAL error','instruccion',4,'p_instruccion_mal_var','Yacc.py',76),
+  ('instruccion -> IMPRIMIR IPAREN plista DPAREN optend','instruccion',5,'p_instruccion_imprimir','Yacc.py',81),
+  ('optend -> COMA','optend',1,'p_optend','Yacc.py',85),
+  ('optend -> <empty>','optend',0,'p_optend','Yacc.py',86),
+  ('instruccion -> IMPRIMIR error','instruccion',2,'p_instruccion_imprimir_mal','Yacc.py',93),
+  ('instruccion -> IMPRIMIR','instruccion',1,'p_instruccion_imprimir_vacio','Yacc.py',98),
+  ('instruccion -> SI IPAREN comparacion DPAREN ENTONCES ENTERO','instruccion',6,'p_instruccion_si','Yacc.py',103),
+  ('instruccion -> SI IPAREN comparacion DPAREN ENTONCES LINEA programa FINSI','instruccion',8,'p_instruccion_si','Yacc.py',104),
+  ('instruccion -> SI error ENTONCES ENTERO','instruccion',4,'p_instruccion_si_mal','Yacc.py',111),
+  ('instruccion -> SI comparacion ENTONCES error','instruccion',4,'p_instruccion_si_mal2','Yacc.py',116),
+  ('instruccion -> PARA PALABRA IGUAL expr A expr optstep','instruccion',7,'p_instruccion_para','Yacc.py',121),
+  ('instruccion -> PARA PALABRA IGUAL error A expr optstep','instruccion',7,'p_instruccion_para_mal_initial','Yacc.py',126),
+  ('instruccion -> PARA PALABRA IGUAL expr A error optstep','instruccion',7,'p_instruccion_para_mal_final','Yacc.py',131),
+  ('instruccion -> PARA PALABRA IGUAL expr A expr error','instruccion',7,'p_instruccion_para_mal_step','Yacc.py',136),
+  ('optstep -> expr','optstep',1,'p_optstep','Yacc.py',140),
+  ('optstep -> vacio','optstep',1,'p_optstep','Yacc.py',141),
+  ('instruccion -> SIG PALABRA','instruccion',2,'p_instruccion_sig','Yacc.py',148),
+  ('instruccion -> SIG error','instruccion',2,'p_instruccion_sig_mal','Yacc.py',154),
+  ('instruccion -> FIN','instruccion',1,'p_instruccion_FIN','Yacc.py',159),
+  ('instruccion -> COMENTARIO','instruccion',1,'p_instruccion_rem','Yacc.py',164),
+  ('instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr','instruccion',7,'p_instruccion_def','Yacc.py',169),
+  ('instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN IGUAL error','instruccion',7,'p_instruccion_def_mal_rhs','Yacc.py',174),
+  ('instruccion -> FUNC PALABRA IPAREN error DPAREN IGUAL expr','instruccion',7,'p_instruccion_def_mal_arg','Yacc.py',179),
+  ('instruccion -> REGRESAR','instruccion',1,'p_instruccion_regresar','Yacc.py',183),
+  ('instruccion -> ARREGLO arreglolista','instruccion',2,'p_instruccion_arreglo','Yacc.py',187),
+  ('instruccion -> ARREGLO error','instruccion',2,'p_instruccion_arreglo_mal','Yacc.py',192),
+  ('arreglolista -> arreglolista COMA elementoarreglo','arreglolista',3,'p_arreglolista','Yacc.py',196),
+  ('arreglolista -> elementoarreglo','arreglolista',1,'p_arreglolista','Yacc.py',197),
+  ('elementoarreglo -> PALABRA IPAREN ENTERO DPAREN','elementoarreglo',4,'p_elementoarreglo_individual','Yacc.py',205),
+  ('elementoarreglo -> PALABRA IPAREN ENTERO COMA ENTERO DPAREN','elementoarreglo',6,'p_elementoarreglo_doble','Yacc.py',210),
+  ('expr -> expr MAS expr','expr',3,'p_expr_binaria','Yacc.py',214),
+  ('expr -> expr MENOS expr','expr',3,'p_expr_binaria','Yacc.py',215),
+  ('expr -> expr MULTIPLICACION expr','expr',3,'p_expr_binaria','Yacc.py',216),
+  ('expr -> expr DIVISION expr','expr',3,'p_expr_binaria','Yacc.py',217),
+  ('expr -> expr POTENCIA expr','expr',3,'p_expr_binaria','Yacc.py',218),
+  ('expr -> ENTERO','expr',1,'p_expr_numero','Yacc.py',224),
+  ('expr -> FLOTANTE','expr',1,'p_expr_numero','Yacc.py',225),
+  ('expr -> variable','expr',1,'p_expr_variable','Yacc.py',230),
+  ('expr -> IPAREN expr DPAREN','expr',3,'p_expr_groupo','Yacc.py',235),
+  ('expr -> MENOS expr','expr',2,'p_expr_unario','Yacc.py',240),
+  ('comparacion -> expr MEQ expr','comparacion',3,'p_comparacion','Yacc.py',244),
+  ('comparacion -> expr MEI expr','comparacion',3,'p_comparacion','Yacc.py',245),
+  ('comparacion -> expr MAQ expr','comparacion',3,'p_comparacion','Yacc.py',246),
+  ('comparacion -> expr MAI expr','comparacion',3,'p_comparacion','Yacc.py',247),
+  ('comparacion -> expr II expr','comparacion',3,'p_comparacion','Yacc.py',248),
+  ('comparacion -> expr IGUAL expr','comparacion',3,'p_comparacion','Yacc.py',249),
+  ('comparacion -> expr DIF expr','comparacion',3,'p_comparacion','Yacc.py',250),
+  ('variable -> PALABRA','variable',1,'p_variable','Yacc.py',254),
+  ('variable -> PALABRA IPAREN expr DPAREN','variable',4,'p_variable','Yacc.py',255),
+  ('variable -> PALABRA IPAREN expr COMA expr DPAREN','variable',6,'p_variable','Yacc.py',256),
+  ('varlista -> varlista COMA variable','varlista',3,'p_varlista','Yacc.py',265),
+  ('varlista -> variable','varlista',1,'p_varlista','Yacc.py',266),
+  ('numlista -> numlista COMA numero','numlista',3,'p_numlista','Yacc.py',274),
+  ('numlista -> numero','numlista',1,'p_numlista','Yacc.py',275),
+  ('numero -> ENTERO','numero',1,'p_numero','Yacc.py',284),
+  ('numero -> FLOTANTE','numero',1,'p_numero','Yacc.py',285),
+  ('numero -> MENOS ENTERO','numero',2,'p_numero_signo','Yacc.py',289),
+  ('numero -> MENOS FLOTANTE','numero',2,'p_numero_signo','Yacc.py',290),
+  ('plista -> plista COMA pelemento','plista',3,'p_plista','Yacc.py',294),
+  ('plista -> pelemento','plista',1,'p_plista','Yacc.py',295),
+  ('pelemento -> CADENA','pelemento',1,'p_elemento_cadena','Yacc.py',304),
+  ('pelemento -> CADENA expr','pelemento',2,'p_elemento_CADENA_expr','Yacc.py',309),
+  ('pelemento -> expr','pelemento',1,'p_elemento_expr','Yacc.py',314),
+  ('vacio -> <empty>','vacio',0,'p_vacio','Yacc.py',318),
 ]

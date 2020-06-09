@@ -2,1271 +2,2672 @@ Created by PLY version 3.11 (http://www.dabeaz.com/ply)
 
 Unused terminals:
 
-    COMMA
-    DIVIDE
-    ENDFOR
-    FINFUNC
-    FOR
-    FUNC
-    MINUS
-    PLUS
-    REGRESA
-    THEN
-    TIMES
-    VAR
-    WHILE
+    LIST
+    NEW
 
 Grammar
 
-Rule 0     S' -> statement
-Rule 1     statement -> NAME = expression
-Rule 2     statement -> expression
-Rule 3     statement -> if_statement
-Rule 4     print -> PRINT LPAREN NAME RPAREN
-Rule 5     print -> PRINT LPAREN NUMBER RPAREN
-Rule 6     expression -> expression + expression
-Rule 7     expression -> expression - expression
-Rule 8     expression -> expression * expression
-Rule 9     expression -> expression / expression
-Rule 10    expression -> expression % expression
-Rule 11    expression -> - expression
-Rule 12    expression -> ( expression )
-Rule 13    expression -> NUMBER
-Rule 14    expression -> NAME
-Rule 15    statements -> statement
-Rule 16    statements -> statements statement
-Rule 17    statements -> statements print
-Rule 18    if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF
-Rule 19    then_statement -> if_statement
-Rule 20    then_statement -> expression
-Rule 21    then_statement -> statement
-Rule 22    then_statement -> statements
-Rule 23    else_statement -> ELSE expression ENDELSE
-Rule 24    else_statement -> ELSE if_statement ENDELSE
-Rule 25    else_statement -> empty
-Rule 26    empty -> 
-Rule 27    comparison -> expression GREATERTHAN expression
-Rule 28    comparison -> expression LOWERTHAN expression
-Rule 29    comparison -> expression GREATEREQ expression
-Rule 30    comparison -> expression LOWEREQ expression
-Rule 31    comparison -> expression EQEQ expression
-Rule 32    comparison -> expression DIF expression
+Rule 0     S' -> programa
+Rule 1     programa -> programa declaracion
+Rule 2     programa -> declaracion
+Rule 3     programa -> error
+Rule 4     declaracion -> instruccion LINEA
+Rule 5     declaracion -> LINEA
+Rule 6     declaracion -> error LINEA
+Rule 7     instruccion -> VAR variable IGUAL expr
+Rule 8     instruccion -> VAR variable IGUAL error
+Rule 9     instruccion -> IMPRIMIR IPAREN plista DPAREN optend
+Rule 10    optend -> COMA
+Rule 11    optend -> <empty>
+Rule 12    instruccion -> IMPRIMIR error
+Rule 13    instruccion -> IMPRIMIR
+Rule 14    instruccion -> SI IPAREN comparacion DPAREN ENTONCES ENTERO
+Rule 15    instruccion -> SI IPAREN comparacion DPAREN ENTONCES LINEA programa FINSI
+Rule 16    instruccion -> SI error ENTONCES ENTERO
+Rule 17    instruccion -> SI comparacion ENTONCES error
+Rule 18    instruccion -> PARA PALABRA IGUAL expr A expr optstep
+Rule 19    instruccion -> PARA PALABRA IGUAL error A expr optstep
+Rule 20    instruccion -> PARA PALABRA IGUAL expr A error optstep
+Rule 21    instruccion -> PARA PALABRA IGUAL expr A expr error
+Rule 22    optstep -> expr
+Rule 23    optstep -> vacio
+Rule 24    instruccion -> SIG PALABRA
+Rule 25    instruccion -> SIG error
+Rule 26    instruccion -> FIN
+Rule 27    instruccion -> COMENTARIO
+Rule 28    instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr
+Rule 29    instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN IGUAL error
+Rule 30    instruccion -> FUNC PALABRA IPAREN error DPAREN IGUAL expr
+Rule 31    instruccion -> REGRESAR
+Rule 32    instruccion -> ARREGLO arreglolista
+Rule 33    instruccion -> ARREGLO error
+Rule 34    arreglolista -> arreglolista COMA elementoarreglo
+Rule 35    arreglolista -> elementoarreglo
+Rule 36    elementoarreglo -> PALABRA IPAREN ENTERO DPAREN
+Rule 37    elementoarreglo -> PALABRA IPAREN ENTERO COMA ENTERO DPAREN
+Rule 38    expr -> expr MAS expr
+Rule 39    expr -> expr MENOS expr
+Rule 40    expr -> expr MULTIPLICACION expr
+Rule 41    expr -> expr DIVISION expr
+Rule 42    expr -> expr POTENCIA expr
+Rule 43    expr -> ENTERO
+Rule 44    expr -> FLOTANTE
+Rule 45    expr -> variable
+Rule 46    expr -> IPAREN expr DPAREN
+Rule 47    expr -> MENOS expr
+Rule 48    comparacion -> expr MEQ expr
+Rule 49    comparacion -> expr MEI expr
+Rule 50    comparacion -> expr MAQ expr
+Rule 51    comparacion -> expr MAI expr
+Rule 52    comparacion -> expr II expr
+Rule 53    comparacion -> expr IGUAL expr
+Rule 54    comparacion -> expr DIF expr
+Rule 55    variable -> PALABRA
+Rule 56    variable -> PALABRA IPAREN expr DPAREN
+Rule 57    variable -> PALABRA IPAREN expr COMA expr DPAREN
+Rule 58    varlista -> varlista COMA variable
+Rule 59    varlista -> variable
+Rule 60    numlista -> numlista COMA numero
+Rule 61    numlista -> numero
+Rule 62    numero -> ENTERO
+Rule 63    numero -> FLOTANTE
+Rule 64    numero -> MENOS ENTERO
+Rule 65    numero -> MENOS FLOTANTE
+Rule 66    plista -> plista COMA pelemento
+Rule 67    plista -> pelemento
+Rule 68    pelemento -> CADENA
+Rule 69    pelemento -> CADENA expr
+Rule 70    pelemento -> expr
+Rule 71    vacio -> <empty>
 
 Terminals, with rules where they appear
 
-                     : 26
-%                    : 10
-(                    : 12
-)                    : 12
-*                    : 8
-+                    : 6
--                    : 7 11
-/                    : 9
-=                    : 1
-COMMA                : 
-DIF                  : 32
-DIVIDE               : 
-ELSE                 : 23 24
-ENDELSE              : 23 24
-ENDFOR               : 
-ENDIF                : 18
-EQEQ                 : 31
-FINFUNC              : 
-FOR                  : 
-FUNC                 : 
-GREATEREQ            : 29
-GREATERTHAN          : 27
-IF                   : 18
-LOWEREQ              : 30
-LOWERTHAN            : 28
-LPAREN               : 4 5 18
-MINUS                : 
-NAME                 : 1 4 14
-NUMBER               : 5 13
-PLUS                 : 
-PRINT                : 4 5
-REGRESA              : 
-RPAREN               : 4 5 18
-THEN                 : 
-TIMES                : 
-TWOPOINTS            : 18
-VAR                  : 
-WHILE                : 
-error                : 
+A                    : 18 19 20 21
+ARREGLO              : 32 33
+CADENA               : 68 69
+COMA                 : 10 34 37 57 58 60 66
+COMENTARIO           : 27
+DIF                  : 54
+DIVISION             : 41
+DPAREN               : 9 14 15 28 29 30 36 37 46 56 57
+ENTERO               : 14 16 36 37 37 43 62 64
+ENTONCES             : 14 15 16 17
+FIN                  : 26
+FINSI                : 15
+FLOTANTE             : 44 63 65
+FUNC                 : 28 29 30
+IGUAL                : 7 8 18 19 20 21 28 29 30 53
+II                   : 52
+IMPRIMIR             : 9 12 13
+IPAREN               : 9 14 15 28 29 30 36 37 46 56 57
+LINEA                : 4 5 6 15
+LIST                 : 
+MAI                  : 51
+MAQ                  : 50
+MAS                  : 38
+MEI                  : 49
+MENOS                : 39 47 64 65
+MEQ                  : 48
+MULTIPLICACION       : 40
+NEW                  : 
+PALABRA              : 18 19 20 21 24 28 28 29 29 30 36 37 55 56 57
+PARA                 : 18 19 20 21
+POTENCIA             : 42
+REGRESAR             : 31
+SI                   : 14 15 16 17
+SIG                  : 24 25
+VAR                  : 7 8
+error                : 3 6 8 12 16 17 19 20 21 25 29 30 33
 
 Nonterminals, with rules where they appear
 
-comparison           : 18
-else_statement       : 
-empty                : 25
-expression           : 1 2 6 6 7 7 8 8 9 9 10 10 11 12 20 23 27 27 28 28 29 29 30 30 31 31 32 32
-if_statement         : 3 19 24
-print                : 17
-statement            : 15 16 21 0
-statements           : 16 17 22
-then_statement       : 18
+arreglolista         : 32 34
+comparacion          : 14 15 17
+declaracion          : 1 2
+elementoarreglo      : 34 35
+expr                 : 7 18 18 19 20 21 21 22 28 30 38 38 39 39 40 40 41 41 42 42 46 47 48 48 49 49 50 50 51 51 52 52 53 53 54 54 56 57 57 69 70
+instruccion          : 4
+numero               : 60 61
+numlista             : 60
+optend               : 9
+optstep              : 18 19 20
+pelemento            : 66 67
+plista               : 9 66
+programa             : 1 15 0
+vacio                : 23
+variable             : 7 8 45 58 59
+varlista             : 58
 
 Parsing method: LALR
 
 state 0
 
-    (0) S' -> . statement
-    (1) statement -> . NAME = expression
-    (2) statement -> . expression
-    (3) statement -> . if_statement
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
-    (18) if_statement -> . IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF
+    (0) S' -> . programa
+    (1) programa -> . programa declaracion
+    (2) programa -> . declaracion
+    (3) programa -> . error
+    (4) declaracion -> . instruccion LINEA
+    (5) declaracion -> . LINEA
+    (6) declaracion -> . error LINEA
+    (7) instruccion -> . VAR variable IGUAL expr
+    (8) instruccion -> . VAR variable IGUAL error
+    (9) instruccion -> . IMPRIMIR IPAREN plista DPAREN optend
+    (12) instruccion -> . IMPRIMIR error
+    (13) instruccion -> . IMPRIMIR
+    (14) instruccion -> . SI IPAREN comparacion DPAREN ENTONCES ENTERO
+    (15) instruccion -> . SI IPAREN comparacion DPAREN ENTONCES LINEA programa FINSI
+    (16) instruccion -> . SI error ENTONCES ENTERO
+    (17) instruccion -> . SI comparacion ENTONCES error
+    (18) instruccion -> . PARA PALABRA IGUAL expr A expr optstep
+    (19) instruccion -> . PARA PALABRA IGUAL error A expr optstep
+    (20) instruccion -> . PARA PALABRA IGUAL expr A error optstep
+    (21) instruccion -> . PARA PALABRA IGUAL expr A expr error
+    (24) instruccion -> . SIG PALABRA
+    (25) instruccion -> . SIG error
+    (26) instruccion -> . FIN
+    (27) instruccion -> . COMENTARIO
+    (28) instruccion -> . FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr
+    (29) instruccion -> . FUNC PALABRA IPAREN PALABRA DPAREN IGUAL error
+    (30) instruccion -> . FUNC PALABRA IPAREN error DPAREN IGUAL expr
+    (31) instruccion -> . REGRESAR
+    (32) instruccion -> . ARREGLO arreglolista
+    (33) instruccion -> . ARREGLO error
 
-    NAME            shift and go to state 2
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    IF              shift and go to state 8
+    error           shift and go to state 3
+    LINEA           shift and go to state 5
+    VAR             shift and go to state 6
+    IMPRIMIR        shift and go to state 7
+    SI              shift and go to state 8
+    PARA            shift and go to state 9
+    SIG             shift and go to state 10
+    FIN             shift and go to state 11
+    COMENTARIO      shift and go to state 12
+    FUNC            shift and go to state 13
+    REGRESAR        shift and go to state 14
+    ARREGLO         shift and go to state 15
 
-    statement                      shift and go to state 1
-    expression                     shift and go to state 3
-    if_statement                   shift and go to state 4
+    programa                       shift and go to state 1
+    declaracion                    shift and go to state 2
+    instruccion                    shift and go to state 4
 
 state 1
 
-    (0) S' -> statement .
+    (0) S' -> programa .
+    (1) programa -> programa . declaracion
+    (4) declaracion -> . instruccion LINEA
+    (5) declaracion -> . LINEA
+    (6) declaracion -> . error LINEA
+    (7) instruccion -> . VAR variable IGUAL expr
+    (8) instruccion -> . VAR variable IGUAL error
+    (9) instruccion -> . IMPRIMIR IPAREN plista DPAREN optend
+    (12) instruccion -> . IMPRIMIR error
+    (13) instruccion -> . IMPRIMIR
+    (14) instruccion -> . SI IPAREN comparacion DPAREN ENTONCES ENTERO
+    (15) instruccion -> . SI IPAREN comparacion DPAREN ENTONCES LINEA programa FINSI
+    (16) instruccion -> . SI error ENTONCES ENTERO
+    (17) instruccion -> . SI comparacion ENTONCES error
+    (18) instruccion -> . PARA PALABRA IGUAL expr A expr optstep
+    (19) instruccion -> . PARA PALABRA IGUAL error A expr optstep
+    (20) instruccion -> . PARA PALABRA IGUAL expr A error optstep
+    (21) instruccion -> . PARA PALABRA IGUAL expr A expr error
+    (24) instruccion -> . SIG PALABRA
+    (25) instruccion -> . SIG error
+    (26) instruccion -> . FIN
+    (27) instruccion -> . COMENTARIO
+    (28) instruccion -> . FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr
+    (29) instruccion -> . FUNC PALABRA IPAREN PALABRA DPAREN IGUAL error
+    (30) instruccion -> . FUNC PALABRA IPAREN error DPAREN IGUAL expr
+    (31) instruccion -> . REGRESAR
+    (32) instruccion -> . ARREGLO arreglolista
+    (33) instruccion -> . ARREGLO error
 
+    LINEA           shift and go to state 5
+    error           shift and go to state 17
+    VAR             shift and go to state 6
+    IMPRIMIR        shift and go to state 7
+    SI              shift and go to state 8
+    PARA            shift and go to state 9
+    SIG             shift and go to state 10
+    FIN             shift and go to state 11
+    COMENTARIO      shift and go to state 12
+    FUNC            shift and go to state 13
+    REGRESAR        shift and go to state 14
+    ARREGLO         shift and go to state 15
 
+    declaracion                    shift and go to state 16
+    instruccion                    shift and go to state 4
 
 state 2
 
-    (1) statement -> NAME . = expression
-    (14) expression -> NAME .
+    (2) programa -> declaracion .
 
-    =               shift and go to state 9
-    +               reduce using rule 14 (expression -> NAME .)
-    -               reduce using rule 14 (expression -> NAME .)
-    *               reduce using rule 14 (expression -> NAME .)
-    /               reduce using rule 14 (expression -> NAME .)
-    %               reduce using rule 14 (expression -> NAME .)
-    $end            reduce using rule 14 (expression -> NAME .)
-    NAME            reduce using rule 14 (expression -> NAME .)
-    PRINT           reduce using rule 14 (expression -> NAME .)
-    (               reduce using rule 14 (expression -> NAME .)
-    NUMBER          reduce using rule 14 (expression -> NAME .)
-    IF              reduce using rule 14 (expression -> NAME .)
-    ENDIF           reduce using rule 14 (expression -> NAME .)
+    LINEA           reduce using rule 2 (programa -> declaracion .)
+    error           reduce using rule 2 (programa -> declaracion .)
+    VAR             reduce using rule 2 (programa -> declaracion .)
+    IMPRIMIR        reduce using rule 2 (programa -> declaracion .)
+    SI              reduce using rule 2 (programa -> declaracion .)
+    PARA            reduce using rule 2 (programa -> declaracion .)
+    SIG             reduce using rule 2 (programa -> declaracion .)
+    FIN             reduce using rule 2 (programa -> declaracion .)
+    COMENTARIO      reduce using rule 2 (programa -> declaracion .)
+    FUNC            reduce using rule 2 (programa -> declaracion .)
+    REGRESAR        reduce using rule 2 (programa -> declaracion .)
+    ARREGLO         reduce using rule 2 (programa -> declaracion .)
+    $end            reduce using rule 2 (programa -> declaracion .)
+    FINSI           reduce using rule 2 (programa -> declaracion .)
 
 
 state 3
 
-    (2) statement -> expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (3) programa -> error .
+    (6) declaracion -> error . LINEA
 
-  ! shift/reduce conflict for - resolved as shift
-    $end            reduce using rule 2 (statement -> expression .)
-    NAME            reduce using rule 2 (statement -> expression .)
-    PRINT           reduce using rule 2 (statement -> expression .)
-    (               reduce using rule 2 (statement -> expression .)
-    NUMBER          reduce using rule 2 (statement -> expression .)
-    IF              reduce using rule 2 (statement -> expression .)
-    ENDIF           reduce using rule 2 (statement -> expression .)
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
+  ! shift/reduce conflict for LINEA resolved as shift
+    error           reduce using rule 3 (programa -> error .)
+    VAR             reduce using rule 3 (programa -> error .)
+    IMPRIMIR        reduce using rule 3 (programa -> error .)
+    SI              reduce using rule 3 (programa -> error .)
+    PARA            reduce using rule 3 (programa -> error .)
+    SIG             reduce using rule 3 (programa -> error .)
+    FIN             reduce using rule 3 (programa -> error .)
+    COMENTARIO      reduce using rule 3 (programa -> error .)
+    FUNC            reduce using rule 3 (programa -> error .)
+    REGRESAR        reduce using rule 3 (programa -> error .)
+    ARREGLO         reduce using rule 3 (programa -> error .)
+    $end            reduce using rule 3 (programa -> error .)
+    FINSI           reduce using rule 3 (programa -> error .)
+    LINEA           shift and go to state 18
 
-  ! -               [ reduce using rule 2 (statement -> expression .) ]
+  ! LINEA           [ reduce using rule 3 (programa -> error .) ]
 
 
 state 4
 
-    (3) statement -> if_statement .
+    (4) declaracion -> instruccion . LINEA
 
-    $end            reduce using rule 3 (statement -> if_statement .)
-    NAME            reduce using rule 3 (statement -> if_statement .)
-    PRINT           reduce using rule 3 (statement -> if_statement .)
-    -               reduce using rule 3 (statement -> if_statement .)
-    (               reduce using rule 3 (statement -> if_statement .)
-    NUMBER          reduce using rule 3 (statement -> if_statement .)
-    IF              reduce using rule 3 (statement -> if_statement .)
-    ENDIF           reduce using rule 3 (statement -> if_statement .)
+    LINEA           shift and go to state 19
 
 
 state 5
 
-    (11) expression -> - . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (5) declaracion -> LINEA .
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    LINEA           reduce using rule 5 (declaracion -> LINEA .)
+    error           reduce using rule 5 (declaracion -> LINEA .)
+    VAR             reduce using rule 5 (declaracion -> LINEA .)
+    IMPRIMIR        reduce using rule 5 (declaracion -> LINEA .)
+    SI              reduce using rule 5 (declaracion -> LINEA .)
+    PARA            reduce using rule 5 (declaracion -> LINEA .)
+    SIG             reduce using rule 5 (declaracion -> LINEA .)
+    FIN             reduce using rule 5 (declaracion -> LINEA .)
+    COMENTARIO      reduce using rule 5 (declaracion -> LINEA .)
+    FUNC            reduce using rule 5 (declaracion -> LINEA .)
+    REGRESAR        reduce using rule 5 (declaracion -> LINEA .)
+    ARREGLO         reduce using rule 5 (declaracion -> LINEA .)
+    $end            reduce using rule 5 (declaracion -> LINEA .)
+    FINSI           reduce using rule 5 (declaracion -> LINEA .)
 
-    expression                     shift and go to state 15
 
 state 6
 
-    (12) expression -> ( . expression )
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (7) instruccion -> VAR . variable IGUAL expr
+    (8) instruccion -> VAR . variable IGUAL error
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    PALABRA         shift and go to state 21
 
-    expression                     shift and go to state 17
+    variable                       shift and go to state 20
 
 state 7
 
-    (13) expression -> NUMBER .
+    (9) instruccion -> IMPRIMIR . IPAREN plista DPAREN optend
+    (12) instruccion -> IMPRIMIR . error
+    (13) instruccion -> IMPRIMIR .
 
-    +               reduce using rule 13 (expression -> NUMBER .)
-    -               reduce using rule 13 (expression -> NUMBER .)
-    *               reduce using rule 13 (expression -> NUMBER .)
-    /               reduce using rule 13 (expression -> NUMBER .)
-    %               reduce using rule 13 (expression -> NUMBER .)
-    $end            reduce using rule 13 (expression -> NUMBER .)
-    )               reduce using rule 13 (expression -> NUMBER .)
-    ENDIF           reduce using rule 13 (expression -> NUMBER .)
-    NAME            reduce using rule 13 (expression -> NUMBER .)
-    PRINT           reduce using rule 13 (expression -> NUMBER .)
-    (               reduce using rule 13 (expression -> NUMBER .)
-    NUMBER          reduce using rule 13 (expression -> NUMBER .)
-    IF              reduce using rule 13 (expression -> NUMBER .)
-    GREATERTHAN     reduce using rule 13 (expression -> NUMBER .)
-    LOWERTHAN       reduce using rule 13 (expression -> NUMBER .)
-    GREATEREQ       reduce using rule 13 (expression -> NUMBER .)
-    LOWEREQ         reduce using rule 13 (expression -> NUMBER .)
-    EQEQ            reduce using rule 13 (expression -> NUMBER .)
-    DIF             reduce using rule 13 (expression -> NUMBER .)
-    RPAREN          reduce using rule 13 (expression -> NUMBER .)
+    IPAREN          shift and go to state 22
+    error           shift and go to state 23
+    LINEA           reduce using rule 13 (instruccion -> IMPRIMIR .)
 
 
 state 8
 
-    (18) if_statement -> IF . LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF
+    (14) instruccion -> SI . IPAREN comparacion DPAREN ENTONCES ENTERO
+    (15) instruccion -> SI . IPAREN comparacion DPAREN ENTONCES LINEA programa FINSI
+    (16) instruccion -> SI . error ENTONCES ENTERO
+    (17) instruccion -> SI . comparacion ENTONCES error
+    (48) comparacion -> . expr MEQ expr
+    (49) comparacion -> . expr MEI expr
+    (50) comparacion -> . expr MAQ expr
+    (51) comparacion -> . expr MAI expr
+    (52) comparacion -> . expr II expr
+    (53) comparacion -> . expr IGUAL expr
+    (54) comparacion -> . expr DIF expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    LPAREN          shift and go to state 18
+    IPAREN          shift and go to state 24
+    error           shift and go to state 27
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
+    comparacion                    shift and go to state 25
+    expr                           shift and go to state 28
+    variable                       shift and go to state 31
 
 state 9
 
-    (1) statement -> NAME = . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (18) instruccion -> PARA . PALABRA IGUAL expr A expr optstep
+    (19) instruccion -> PARA . PALABRA IGUAL error A expr optstep
+    (20) instruccion -> PARA . PALABRA IGUAL expr A error optstep
+    (21) instruccion -> PARA . PALABRA IGUAL expr A expr error
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    PALABRA         shift and go to state 32
 
-    expression                     shift and go to state 19
 
 state 10
 
-    (6) expression -> expression + . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (24) instruccion -> SIG . PALABRA
+    (25) instruccion -> SIG . error
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    PALABRA         shift and go to state 33
+    error           shift and go to state 34
 
-    expression                     shift and go to state 20
 
 state 11
 
-    (7) expression -> expression - . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (26) instruccion -> FIN .
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    LINEA           reduce using rule 26 (instruccion -> FIN .)
 
-    expression                     shift and go to state 21
 
 state 12
 
-    (8) expression -> expression * . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (27) instruccion -> COMENTARIO .
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    LINEA           reduce using rule 27 (instruccion -> COMENTARIO .)
 
-    expression                     shift and go to state 22
 
 state 13
 
-    (9) expression -> expression / . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (28) instruccion -> FUNC . PALABRA IPAREN PALABRA DPAREN IGUAL expr
+    (29) instruccion -> FUNC . PALABRA IPAREN PALABRA DPAREN IGUAL error
+    (30) instruccion -> FUNC . PALABRA IPAREN error DPAREN IGUAL expr
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    PALABRA         shift and go to state 35
 
-    expression                     shift and go to state 23
 
 state 14
 
-    (10) expression -> expression % . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (31) instruccion -> REGRESAR .
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    LINEA           reduce using rule 31 (instruccion -> REGRESAR .)
 
-    expression                     shift and go to state 24
 
 state 15
 
-    (11) expression -> - expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (32) instruccion -> ARREGLO . arreglolista
+    (33) instruccion -> ARREGLO . error
+    (34) arreglolista -> . arreglolista COMA elementoarreglo
+    (35) arreglolista -> . elementoarreglo
+    (36) elementoarreglo -> . PALABRA IPAREN ENTERO DPAREN
+    (37) elementoarreglo -> . PALABRA IPAREN ENTERO COMA ENTERO DPAREN
 
-    +               reduce using rule 11 (expression -> - expression .)
-    -               reduce using rule 11 (expression -> - expression .)
-    *               reduce using rule 11 (expression -> - expression .)
-    /               reduce using rule 11 (expression -> - expression .)
-    %               reduce using rule 11 (expression -> - expression .)
-    $end            reduce using rule 11 (expression -> - expression .)
-    )               reduce using rule 11 (expression -> - expression .)
-    ENDIF           reduce using rule 11 (expression -> - expression .)
-    NAME            reduce using rule 11 (expression -> - expression .)
-    PRINT           reduce using rule 11 (expression -> - expression .)
-    (               reduce using rule 11 (expression -> - expression .)
-    NUMBER          reduce using rule 11 (expression -> - expression .)
-    IF              reduce using rule 11 (expression -> - expression .)
-    GREATERTHAN     reduce using rule 11 (expression -> - expression .)
-    LOWERTHAN       reduce using rule 11 (expression -> - expression .)
-    GREATEREQ       reduce using rule 11 (expression -> - expression .)
-    LOWEREQ         reduce using rule 11 (expression -> - expression .)
-    EQEQ            reduce using rule 11 (expression -> - expression .)
-    DIF             reduce using rule 11 (expression -> - expression .)
-    RPAREN          reduce using rule 11 (expression -> - expression .)
+    error           shift and go to state 37
+    PALABRA         shift and go to state 39
 
-  ! +               [ shift and go to state 10 ]
-  ! -               [ shift and go to state 11 ]
-  ! *               [ shift and go to state 12 ]
-  ! /               [ shift and go to state 13 ]
-  ! %               [ shift and go to state 14 ]
-
+    arreglolista                   shift and go to state 36
+    elementoarreglo                shift and go to state 38
 
 state 16
 
-    (14) expression -> NAME .
+    (1) programa -> programa declaracion .
 
-    +               reduce using rule 14 (expression -> NAME .)
-    -               reduce using rule 14 (expression -> NAME .)
-    *               reduce using rule 14 (expression -> NAME .)
-    /               reduce using rule 14 (expression -> NAME .)
-    %               reduce using rule 14 (expression -> NAME .)
-    $end            reduce using rule 14 (expression -> NAME .)
-    )               reduce using rule 14 (expression -> NAME .)
-    ENDIF           reduce using rule 14 (expression -> NAME .)
-    NAME            reduce using rule 14 (expression -> NAME .)
-    PRINT           reduce using rule 14 (expression -> NAME .)
-    (               reduce using rule 14 (expression -> NAME .)
-    NUMBER          reduce using rule 14 (expression -> NAME .)
-    IF              reduce using rule 14 (expression -> NAME .)
-    GREATERTHAN     reduce using rule 14 (expression -> NAME .)
-    LOWERTHAN       reduce using rule 14 (expression -> NAME .)
-    GREATEREQ       reduce using rule 14 (expression -> NAME .)
-    LOWEREQ         reduce using rule 14 (expression -> NAME .)
-    EQEQ            reduce using rule 14 (expression -> NAME .)
-    DIF             reduce using rule 14 (expression -> NAME .)
-    RPAREN          reduce using rule 14 (expression -> NAME .)
+    LINEA           reduce using rule 1 (programa -> programa declaracion .)
+    error           reduce using rule 1 (programa -> programa declaracion .)
+    VAR             reduce using rule 1 (programa -> programa declaracion .)
+    IMPRIMIR        reduce using rule 1 (programa -> programa declaracion .)
+    SI              reduce using rule 1 (programa -> programa declaracion .)
+    PARA            reduce using rule 1 (programa -> programa declaracion .)
+    SIG             reduce using rule 1 (programa -> programa declaracion .)
+    FIN             reduce using rule 1 (programa -> programa declaracion .)
+    COMENTARIO      reduce using rule 1 (programa -> programa declaracion .)
+    FUNC            reduce using rule 1 (programa -> programa declaracion .)
+    REGRESAR        reduce using rule 1 (programa -> programa declaracion .)
+    ARREGLO         reduce using rule 1 (programa -> programa declaracion .)
+    $end            reduce using rule 1 (programa -> programa declaracion .)
+    FINSI           reduce using rule 1 (programa -> programa declaracion .)
 
 
 state 17
 
-    (12) expression -> ( expression . )
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (6) declaracion -> error . LINEA
 
-    )               shift and go to state 25
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
+    LINEA           shift and go to state 18
 
 
 state 18
 
-    (18) if_statement -> IF LPAREN . comparison RPAREN TWOPOINTS then_statement ENDIF
-    (27) comparison -> . expression GREATERTHAN expression
-    (28) comparison -> . expression LOWERTHAN expression
-    (29) comparison -> . expression GREATEREQ expression
-    (30) comparison -> . expression LOWEREQ expression
-    (31) comparison -> . expression EQEQ expression
-    (32) comparison -> . expression DIF expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (6) declaracion -> error LINEA .
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    LINEA           reduce using rule 6 (declaracion -> error LINEA .)
+    error           reduce using rule 6 (declaracion -> error LINEA .)
+    VAR             reduce using rule 6 (declaracion -> error LINEA .)
+    IMPRIMIR        reduce using rule 6 (declaracion -> error LINEA .)
+    SI              reduce using rule 6 (declaracion -> error LINEA .)
+    PARA            reduce using rule 6 (declaracion -> error LINEA .)
+    SIG             reduce using rule 6 (declaracion -> error LINEA .)
+    FIN             reduce using rule 6 (declaracion -> error LINEA .)
+    COMENTARIO      reduce using rule 6 (declaracion -> error LINEA .)
+    FUNC            reduce using rule 6 (declaracion -> error LINEA .)
+    REGRESAR        reduce using rule 6 (declaracion -> error LINEA .)
+    ARREGLO         reduce using rule 6 (declaracion -> error LINEA .)
+    $end            reduce using rule 6 (declaracion -> error LINEA .)
+    FINSI           reduce using rule 6 (declaracion -> error LINEA .)
 
-    comparison                     shift and go to state 26
-    expression                     shift and go to state 27
 
 state 19
 
-    (1) statement -> NAME = expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (4) declaracion -> instruccion LINEA .
 
-  ! shift/reduce conflict for - resolved as shift
-    $end            reduce using rule 1 (statement -> NAME = expression .)
-    ENDIF           reduce using rule 1 (statement -> NAME = expression .)
-    NAME            reduce using rule 1 (statement -> NAME = expression .)
-    PRINT           reduce using rule 1 (statement -> NAME = expression .)
-    (               reduce using rule 1 (statement -> NAME = expression .)
-    NUMBER          reduce using rule 1 (statement -> NAME = expression .)
-    IF              reduce using rule 1 (statement -> NAME = expression .)
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
-
-  ! -               [ reduce using rule 1 (statement -> NAME = expression .) ]
+    LINEA           reduce using rule 4 (declaracion -> instruccion LINEA .)
+    error           reduce using rule 4 (declaracion -> instruccion LINEA .)
+    VAR             reduce using rule 4 (declaracion -> instruccion LINEA .)
+    IMPRIMIR        reduce using rule 4 (declaracion -> instruccion LINEA .)
+    SI              reduce using rule 4 (declaracion -> instruccion LINEA .)
+    PARA            reduce using rule 4 (declaracion -> instruccion LINEA .)
+    SIG             reduce using rule 4 (declaracion -> instruccion LINEA .)
+    FIN             reduce using rule 4 (declaracion -> instruccion LINEA .)
+    COMENTARIO      reduce using rule 4 (declaracion -> instruccion LINEA .)
+    FUNC            reduce using rule 4 (declaracion -> instruccion LINEA .)
+    REGRESAR        reduce using rule 4 (declaracion -> instruccion LINEA .)
+    ARREGLO         reduce using rule 4 (declaracion -> instruccion LINEA .)
+    $end            reduce using rule 4 (declaracion -> instruccion LINEA .)
+    FINSI           reduce using rule 4 (declaracion -> instruccion LINEA .)
 
 
 state 20
 
-    (6) expression -> expression + expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (7) instruccion -> VAR variable . IGUAL expr
+    (8) instruccion -> VAR variable . IGUAL error
 
-    +               reduce using rule 6 (expression -> expression + expression .)
-    -               reduce using rule 6 (expression -> expression + expression .)
-    $end            reduce using rule 6 (expression -> expression + expression .)
-    )               reduce using rule 6 (expression -> expression + expression .)
-    ENDIF           reduce using rule 6 (expression -> expression + expression .)
-    NAME            reduce using rule 6 (expression -> expression + expression .)
-    PRINT           reduce using rule 6 (expression -> expression + expression .)
-    (               reduce using rule 6 (expression -> expression + expression .)
-    NUMBER          reduce using rule 6 (expression -> expression + expression .)
-    IF              reduce using rule 6 (expression -> expression + expression .)
-    GREATERTHAN     reduce using rule 6 (expression -> expression + expression .)
-    LOWERTHAN       reduce using rule 6 (expression -> expression + expression .)
-    GREATEREQ       reduce using rule 6 (expression -> expression + expression .)
-    LOWEREQ         reduce using rule 6 (expression -> expression + expression .)
-    EQEQ            reduce using rule 6 (expression -> expression + expression .)
-    DIF             reduce using rule 6 (expression -> expression + expression .)
-    RPAREN          reduce using rule 6 (expression -> expression + expression .)
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
-
-  ! *               [ reduce using rule 6 (expression -> expression + expression .) ]
-  ! /               [ reduce using rule 6 (expression -> expression + expression .) ]
-  ! %               [ reduce using rule 6 (expression -> expression + expression .) ]
-  ! +               [ shift and go to state 10 ]
-  ! -               [ shift and go to state 11 ]
+    IGUAL           shift and go to state 40
 
 
 state 21
 
-    (7) expression -> expression - expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (55) variable -> PALABRA .
+    (56) variable -> PALABRA . IPAREN expr DPAREN
+    (57) variable -> PALABRA . IPAREN expr COMA expr DPAREN
 
-    +               reduce using rule 7 (expression -> expression - expression .)
-    -               reduce using rule 7 (expression -> expression - expression .)
-    $end            reduce using rule 7 (expression -> expression - expression .)
-    )               reduce using rule 7 (expression -> expression - expression .)
-    ENDIF           reduce using rule 7 (expression -> expression - expression .)
-    NAME            reduce using rule 7 (expression -> expression - expression .)
-    PRINT           reduce using rule 7 (expression -> expression - expression .)
-    (               reduce using rule 7 (expression -> expression - expression .)
-    NUMBER          reduce using rule 7 (expression -> expression - expression .)
-    IF              reduce using rule 7 (expression -> expression - expression .)
-    GREATERTHAN     reduce using rule 7 (expression -> expression - expression .)
-    LOWERTHAN       reduce using rule 7 (expression -> expression - expression .)
-    GREATEREQ       reduce using rule 7 (expression -> expression - expression .)
-    LOWEREQ         reduce using rule 7 (expression -> expression - expression .)
-    EQEQ            reduce using rule 7 (expression -> expression - expression .)
-    DIF             reduce using rule 7 (expression -> expression - expression .)
-    RPAREN          reduce using rule 7 (expression -> expression - expression .)
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
+  ! shift/reduce conflict for IPAREN resolved as shift
+    IGUAL           reduce using rule 55 (variable -> PALABRA .)
+    MEQ             reduce using rule 55 (variable -> PALABRA .)
+    MEI             reduce using rule 55 (variable -> PALABRA .)
+    MAQ             reduce using rule 55 (variable -> PALABRA .)
+    MAI             reduce using rule 55 (variable -> PALABRA .)
+    II              reduce using rule 55 (variable -> PALABRA .)
+    DIF             reduce using rule 55 (variable -> PALABRA .)
+    MAS             reduce using rule 55 (variable -> PALABRA .)
+    MENOS           reduce using rule 55 (variable -> PALABRA .)
+    MULTIPLICACION  reduce using rule 55 (variable -> PALABRA .)
+    DIVISION        reduce using rule 55 (variable -> PALABRA .)
+    POTENCIA        reduce using rule 55 (variable -> PALABRA .)
+    DPAREN          reduce using rule 55 (variable -> PALABRA .)
+    COMA            reduce using rule 55 (variable -> PALABRA .)
+    LINEA           reduce using rule 55 (variable -> PALABRA .)
+    ENTONCES        reduce using rule 55 (variable -> PALABRA .)
+    A               reduce using rule 55 (variable -> PALABRA .)
+    error           reduce using rule 55 (variable -> PALABRA .)
+    ENTERO          reduce using rule 55 (variable -> PALABRA .)
+    FLOTANTE        reduce using rule 55 (variable -> PALABRA .)
+    PALABRA         reduce using rule 55 (variable -> PALABRA .)
+    IPAREN          shift and go to state 41
 
-  ! *               [ reduce using rule 7 (expression -> expression - expression .) ]
-  ! /               [ reduce using rule 7 (expression -> expression - expression .) ]
-  ! %               [ reduce using rule 7 (expression -> expression - expression .) ]
-  ! +               [ shift and go to state 10 ]
-  ! -               [ shift and go to state 11 ]
+  ! IPAREN          [ reduce using rule 55 (variable -> PALABRA .) ]
 
 
 state 22
 
-    (8) expression -> expression * expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (9) instruccion -> IMPRIMIR IPAREN . plista DPAREN optend
+    (66) plista -> . plista COMA pelemento
+    (67) plista -> . pelemento
+    (68) pelemento -> . CADENA
+    (69) pelemento -> . CADENA expr
+    (70) pelemento -> . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    +               reduce using rule 8 (expression -> expression * expression .)
-    -               reduce using rule 8 (expression -> expression * expression .)
-    *               reduce using rule 8 (expression -> expression * expression .)
-    /               reduce using rule 8 (expression -> expression * expression .)
-    %               reduce using rule 8 (expression -> expression * expression .)
-    $end            reduce using rule 8 (expression -> expression * expression .)
-    )               reduce using rule 8 (expression -> expression * expression .)
-    ENDIF           reduce using rule 8 (expression -> expression * expression .)
-    NAME            reduce using rule 8 (expression -> expression * expression .)
-    PRINT           reduce using rule 8 (expression -> expression * expression .)
-    (               reduce using rule 8 (expression -> expression * expression .)
-    NUMBER          reduce using rule 8 (expression -> expression * expression .)
-    IF              reduce using rule 8 (expression -> expression * expression .)
-    GREATERTHAN     reduce using rule 8 (expression -> expression * expression .)
-    LOWERTHAN       reduce using rule 8 (expression -> expression * expression .)
-    GREATEREQ       reduce using rule 8 (expression -> expression * expression .)
-    LOWEREQ         reduce using rule 8 (expression -> expression * expression .)
-    EQEQ            reduce using rule 8 (expression -> expression * expression .)
-    DIF             reduce using rule 8 (expression -> expression * expression .)
-    RPAREN          reduce using rule 8 (expression -> expression * expression .)
+    CADENA          shift and go to state 45
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
-  ! +               [ shift and go to state 10 ]
-  ! -               [ shift and go to state 11 ]
-  ! *               [ shift and go to state 12 ]
-  ! /               [ shift and go to state 13 ]
-  ! %               [ shift and go to state 14 ]
-
+    plista                         shift and go to state 43
+    pelemento                      shift and go to state 44
+    expr                           shift and go to state 46
+    variable                       shift and go to state 31
 
 state 23
 
-    (9) expression -> expression / expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (12) instruccion -> IMPRIMIR error .
 
-    +               reduce using rule 9 (expression -> expression / expression .)
-    -               reduce using rule 9 (expression -> expression / expression .)
-    *               reduce using rule 9 (expression -> expression / expression .)
-    /               reduce using rule 9 (expression -> expression / expression .)
-    %               reduce using rule 9 (expression -> expression / expression .)
-    $end            reduce using rule 9 (expression -> expression / expression .)
-    )               reduce using rule 9 (expression -> expression / expression .)
-    ENDIF           reduce using rule 9 (expression -> expression / expression .)
-    NAME            reduce using rule 9 (expression -> expression / expression .)
-    PRINT           reduce using rule 9 (expression -> expression / expression .)
-    (               reduce using rule 9 (expression -> expression / expression .)
-    NUMBER          reduce using rule 9 (expression -> expression / expression .)
-    IF              reduce using rule 9 (expression -> expression / expression .)
-    GREATERTHAN     reduce using rule 9 (expression -> expression / expression .)
-    LOWERTHAN       reduce using rule 9 (expression -> expression / expression .)
-    GREATEREQ       reduce using rule 9 (expression -> expression / expression .)
-    LOWEREQ         reduce using rule 9 (expression -> expression / expression .)
-    EQEQ            reduce using rule 9 (expression -> expression / expression .)
-    DIF             reduce using rule 9 (expression -> expression / expression .)
-    RPAREN          reduce using rule 9 (expression -> expression / expression .)
-
-  ! +               [ shift and go to state 10 ]
-  ! -               [ shift and go to state 11 ]
-  ! *               [ shift and go to state 12 ]
-  ! /               [ shift and go to state 13 ]
-  ! %               [ shift and go to state 14 ]
+    LINEA           reduce using rule 12 (instruccion -> IMPRIMIR error .)
 
 
 state 24
 
-    (10) expression -> expression % expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (14) instruccion -> SI IPAREN . comparacion DPAREN ENTONCES ENTERO
+    (15) instruccion -> SI IPAREN . comparacion DPAREN ENTONCES LINEA programa FINSI
+    (46) expr -> IPAREN . expr DPAREN
+    (48) comparacion -> . expr MEQ expr
+    (49) comparacion -> . expr MEI expr
+    (50) comparacion -> . expr MAQ expr
+    (51) comparacion -> . expr MAI expr
+    (52) comparacion -> . expr II expr
+    (53) comparacion -> . expr IGUAL expr
+    (54) comparacion -> . expr DIF expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    +               reduce using rule 10 (expression -> expression % expression .)
-    -               reduce using rule 10 (expression -> expression % expression .)
-    *               reduce using rule 10 (expression -> expression % expression .)
-    /               reduce using rule 10 (expression -> expression % expression .)
-    %               reduce using rule 10 (expression -> expression % expression .)
-    $end            reduce using rule 10 (expression -> expression % expression .)
-    )               reduce using rule 10 (expression -> expression % expression .)
-    ENDIF           reduce using rule 10 (expression -> expression % expression .)
-    NAME            reduce using rule 10 (expression -> expression % expression .)
-    PRINT           reduce using rule 10 (expression -> expression % expression .)
-    (               reduce using rule 10 (expression -> expression % expression .)
-    NUMBER          reduce using rule 10 (expression -> expression % expression .)
-    IF              reduce using rule 10 (expression -> expression % expression .)
-    GREATERTHAN     reduce using rule 10 (expression -> expression % expression .)
-    LOWERTHAN       reduce using rule 10 (expression -> expression % expression .)
-    GREATEREQ       reduce using rule 10 (expression -> expression % expression .)
-    LOWEREQ         reduce using rule 10 (expression -> expression % expression .)
-    EQEQ            reduce using rule 10 (expression -> expression % expression .)
-    DIF             reduce using rule 10 (expression -> expression % expression .)
-    RPAREN          reduce using rule 10 (expression -> expression % expression .)
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
-  ! +               [ shift and go to state 10 ]
-  ! -               [ shift and go to state 11 ]
-  ! *               [ shift and go to state 12 ]
-  ! /               [ shift and go to state 13 ]
-  ! %               [ shift and go to state 14 ]
-
+    comparacion                    shift and go to state 47
+    expr                           shift and go to state 48
+    variable                       shift and go to state 31
 
 state 25
 
-    (12) expression -> ( expression ) .
+    (17) instruccion -> SI comparacion . ENTONCES error
 
-    +               reduce using rule 12 (expression -> ( expression ) .)
-    -               reduce using rule 12 (expression -> ( expression ) .)
-    *               reduce using rule 12 (expression -> ( expression ) .)
-    /               reduce using rule 12 (expression -> ( expression ) .)
-    %               reduce using rule 12 (expression -> ( expression ) .)
-    $end            reduce using rule 12 (expression -> ( expression ) .)
-    )               reduce using rule 12 (expression -> ( expression ) .)
-    ENDIF           reduce using rule 12 (expression -> ( expression ) .)
-    NAME            reduce using rule 12 (expression -> ( expression ) .)
-    PRINT           reduce using rule 12 (expression -> ( expression ) .)
-    (               reduce using rule 12 (expression -> ( expression ) .)
-    NUMBER          reduce using rule 12 (expression -> ( expression ) .)
-    IF              reduce using rule 12 (expression -> ( expression ) .)
-    GREATERTHAN     reduce using rule 12 (expression -> ( expression ) .)
-    LOWERTHAN       reduce using rule 12 (expression -> ( expression ) .)
-    GREATEREQ       reduce using rule 12 (expression -> ( expression ) .)
-    LOWEREQ         reduce using rule 12 (expression -> ( expression ) .)
-    EQEQ            reduce using rule 12 (expression -> ( expression ) .)
-    DIF             reduce using rule 12 (expression -> ( expression ) .)
-    RPAREN          reduce using rule 12 (expression -> ( expression ) .)
+    ENTONCES        shift and go to state 49
 
 
 state 26
 
-    (18) if_statement -> IF LPAREN comparison . RPAREN TWOPOINTS then_statement ENDIF
+    (43) expr -> ENTERO .
 
-    RPAREN          shift and go to state 28
+    MEQ             reduce using rule 43 (expr -> ENTERO .)
+    MEI             reduce using rule 43 (expr -> ENTERO .)
+    MAQ             reduce using rule 43 (expr -> ENTERO .)
+    MAI             reduce using rule 43 (expr -> ENTERO .)
+    II              reduce using rule 43 (expr -> ENTERO .)
+    IGUAL           reduce using rule 43 (expr -> ENTERO .)
+    DIF             reduce using rule 43 (expr -> ENTERO .)
+    MAS             reduce using rule 43 (expr -> ENTERO .)
+    MENOS           reduce using rule 43 (expr -> ENTERO .)
+    MULTIPLICACION  reduce using rule 43 (expr -> ENTERO .)
+    DIVISION        reduce using rule 43 (expr -> ENTERO .)
+    POTENCIA        reduce using rule 43 (expr -> ENTERO .)
+    DPAREN          reduce using rule 43 (expr -> ENTERO .)
+    COMA            reduce using rule 43 (expr -> ENTERO .)
+    LINEA           reduce using rule 43 (expr -> ENTERO .)
+    ENTONCES        reduce using rule 43 (expr -> ENTERO .)
+    A               reduce using rule 43 (expr -> ENTERO .)
+    error           reduce using rule 43 (expr -> ENTERO .)
+    ENTERO          reduce using rule 43 (expr -> ENTERO .)
+    FLOTANTE        reduce using rule 43 (expr -> ENTERO .)
+    IPAREN          reduce using rule 43 (expr -> ENTERO .)
+    PALABRA         reduce using rule 43 (expr -> ENTERO .)
 
 
 state 27
 
-    (27) comparison -> expression . GREATERTHAN expression
-    (28) comparison -> expression . LOWERTHAN expression
-    (29) comparison -> expression . GREATEREQ expression
-    (30) comparison -> expression . LOWEREQ expression
-    (31) comparison -> expression . EQEQ expression
-    (32) comparison -> expression . DIF expression
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (16) instruccion -> SI error . ENTONCES ENTERO
 
-    GREATERTHAN     shift and go to state 29
-    LOWERTHAN       shift and go to state 30
-    GREATEREQ       shift and go to state 31
-    LOWEREQ         shift and go to state 32
-    EQEQ            shift and go to state 33
-    DIF             shift and go to state 34
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
+    ENTONCES        shift and go to state 50
 
 
 state 28
 
-    (18) if_statement -> IF LPAREN comparison RPAREN . TWOPOINTS then_statement ENDIF
+    (48) comparacion -> expr . MEQ expr
+    (49) comparacion -> expr . MEI expr
+    (50) comparacion -> expr . MAQ expr
+    (51) comparacion -> expr . MAI expr
+    (52) comparacion -> expr . II expr
+    (53) comparacion -> expr . IGUAL expr
+    (54) comparacion -> expr . DIF expr
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
 
-    TWOPOINTS       shift and go to state 35
+    MEQ             shift and go to state 51
+    MEI             shift and go to state 52
+    MAQ             shift and go to state 53
+    MAI             shift and go to state 54
+    II              shift and go to state 55
+    IGUAL           shift and go to state 56
+    DIF             shift and go to state 57
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
 
 
 state 29
 
-    (27) comparison -> expression GREATERTHAN . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (47) expr -> MENOS . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
-    expression                     shift and go to state 36
+    expr                           shift and go to state 63
+    variable                       shift and go to state 31
 
 state 30
 
-    (28) comparison -> expression LOWERTHAN . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (44) expr -> FLOTANTE .
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    MEQ             reduce using rule 44 (expr -> FLOTANTE .)
+    MEI             reduce using rule 44 (expr -> FLOTANTE .)
+    MAQ             reduce using rule 44 (expr -> FLOTANTE .)
+    MAI             reduce using rule 44 (expr -> FLOTANTE .)
+    II              reduce using rule 44 (expr -> FLOTANTE .)
+    IGUAL           reduce using rule 44 (expr -> FLOTANTE .)
+    DIF             reduce using rule 44 (expr -> FLOTANTE .)
+    MAS             reduce using rule 44 (expr -> FLOTANTE .)
+    MENOS           reduce using rule 44 (expr -> FLOTANTE .)
+    MULTIPLICACION  reduce using rule 44 (expr -> FLOTANTE .)
+    DIVISION        reduce using rule 44 (expr -> FLOTANTE .)
+    POTENCIA        reduce using rule 44 (expr -> FLOTANTE .)
+    DPAREN          reduce using rule 44 (expr -> FLOTANTE .)
+    COMA            reduce using rule 44 (expr -> FLOTANTE .)
+    LINEA           reduce using rule 44 (expr -> FLOTANTE .)
+    ENTONCES        reduce using rule 44 (expr -> FLOTANTE .)
+    A               reduce using rule 44 (expr -> FLOTANTE .)
+    error           reduce using rule 44 (expr -> FLOTANTE .)
+    ENTERO          reduce using rule 44 (expr -> FLOTANTE .)
+    FLOTANTE        reduce using rule 44 (expr -> FLOTANTE .)
+    IPAREN          reduce using rule 44 (expr -> FLOTANTE .)
+    PALABRA         reduce using rule 44 (expr -> FLOTANTE .)
 
-    expression                     shift and go to state 37
 
 state 31
 
-    (29) comparison -> expression GREATEREQ . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (45) expr -> variable .
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    MEQ             reduce using rule 45 (expr -> variable .)
+    MEI             reduce using rule 45 (expr -> variable .)
+    MAQ             reduce using rule 45 (expr -> variable .)
+    MAI             reduce using rule 45 (expr -> variable .)
+    II              reduce using rule 45 (expr -> variable .)
+    IGUAL           reduce using rule 45 (expr -> variable .)
+    DIF             reduce using rule 45 (expr -> variable .)
+    MAS             reduce using rule 45 (expr -> variable .)
+    MENOS           reduce using rule 45 (expr -> variable .)
+    MULTIPLICACION  reduce using rule 45 (expr -> variable .)
+    DIVISION        reduce using rule 45 (expr -> variable .)
+    POTENCIA        reduce using rule 45 (expr -> variable .)
+    DPAREN          reduce using rule 45 (expr -> variable .)
+    COMA            reduce using rule 45 (expr -> variable .)
+    LINEA           reduce using rule 45 (expr -> variable .)
+    ENTONCES        reduce using rule 45 (expr -> variable .)
+    A               reduce using rule 45 (expr -> variable .)
+    error           reduce using rule 45 (expr -> variable .)
+    ENTERO          reduce using rule 45 (expr -> variable .)
+    FLOTANTE        reduce using rule 45 (expr -> variable .)
+    IPAREN          reduce using rule 45 (expr -> variable .)
+    PALABRA         reduce using rule 45 (expr -> variable .)
 
-    expression                     shift and go to state 38
 
 state 32
 
-    (30) comparison -> expression LOWEREQ . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (18) instruccion -> PARA PALABRA . IGUAL expr A expr optstep
+    (19) instruccion -> PARA PALABRA . IGUAL error A expr optstep
+    (20) instruccion -> PARA PALABRA . IGUAL expr A error optstep
+    (21) instruccion -> PARA PALABRA . IGUAL expr A expr error
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    IGUAL           shift and go to state 64
 
-    expression                     shift and go to state 39
 
 state 33
 
-    (31) comparison -> expression EQEQ . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (24) instruccion -> SIG PALABRA .
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    LINEA           reduce using rule 24 (instruccion -> SIG PALABRA .)
 
-    expression                     shift and go to state 40
 
 state 34
 
-    (32) comparison -> expression DIF . expression
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
+    (25) instruccion -> SIG error .
 
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 16
+    LINEA           reduce using rule 25 (instruccion -> SIG error .)
 
-    expression                     shift and go to state 41
 
 state 35
 
-    (18) if_statement -> IF LPAREN comparison RPAREN TWOPOINTS . then_statement ENDIF
-    (19) then_statement -> . if_statement
-    (20) then_statement -> . expression
-    (21) then_statement -> . statement
-    (22) then_statement -> . statements
-    (18) if_statement -> . IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
-    (1) statement -> . NAME = expression
-    (2) statement -> . expression
-    (3) statement -> . if_statement
-    (15) statements -> . statement
-    (16) statements -> . statements statement
-    (17) statements -> . statements print
+    (28) instruccion -> FUNC PALABRA . IPAREN PALABRA DPAREN IGUAL expr
+    (29) instruccion -> FUNC PALABRA . IPAREN PALABRA DPAREN IGUAL error
+    (30) instruccion -> FUNC PALABRA . IPAREN error DPAREN IGUAL expr
 
-    IF              shift and go to state 8
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    NAME            shift and go to state 47
+    IPAREN          shift and go to state 65
 
-    then_statement                 shift and go to state 42
-    if_statement                   shift and go to state 43
-    expression                     shift and go to state 44
-    statement                      shift and go to state 45
-    statements                     shift and go to state 46
 
 state 36
 
-    (27) comparison -> expression GREATERTHAN expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (32) instruccion -> ARREGLO arreglolista .
+    (34) arreglolista -> arreglolista . COMA elementoarreglo
 
-    RPAREN          reduce using rule 27 (comparison -> expression GREATERTHAN expression .)
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
+    LINEA           reduce using rule 32 (instruccion -> ARREGLO arreglolista .)
+    COMA            shift and go to state 66
 
 
 state 37
 
-    (28) comparison -> expression LOWERTHAN expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (33) instruccion -> ARREGLO error .
 
-    RPAREN          reduce using rule 28 (comparison -> expression LOWERTHAN expression .)
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
+    LINEA           reduce using rule 33 (instruccion -> ARREGLO error .)
 
 
 state 38
 
-    (29) comparison -> expression GREATEREQ expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (35) arreglolista -> elementoarreglo .
 
-    RPAREN          reduce using rule 29 (comparison -> expression GREATEREQ expression .)
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
+    COMA            reduce using rule 35 (arreglolista -> elementoarreglo .)
+    LINEA           reduce using rule 35 (arreglolista -> elementoarreglo .)
 
 
 state 39
 
-    (30) comparison -> expression LOWEREQ expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (36) elementoarreglo -> PALABRA . IPAREN ENTERO DPAREN
+    (37) elementoarreglo -> PALABRA . IPAREN ENTERO COMA ENTERO DPAREN
 
-    RPAREN          reduce using rule 30 (comparison -> expression LOWEREQ expression .)
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
+    IPAREN          shift and go to state 67
 
 
 state 40
 
-    (31) comparison -> expression EQEQ expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (7) instruccion -> VAR variable IGUAL . expr
+    (8) instruccion -> VAR variable IGUAL . error
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    RPAREN          reduce using rule 31 (comparison -> expression EQEQ expression .)
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
+    error           shift and go to state 69
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
+    variable                       shift and go to state 31
+    expr                           shift and go to state 68
 
 state 41
 
-    (32) comparison -> expression DIF expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
+    (56) variable -> PALABRA IPAREN . expr DPAREN
+    (57) variable -> PALABRA IPAREN . expr COMA expr DPAREN
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    RPAREN          reduce using rule 32 (comparison -> expression DIF expression .)
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
+    expr                           shift and go to state 70
+    variable                       shift and go to state 31
 
 state 42
 
-    (18) if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement . ENDIF
+    (46) expr -> IPAREN . expr DPAREN
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    ENDIF           shift and go to state 48
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
+    expr                           shift and go to state 71
+    variable                       shift and go to state 31
 
 state 43
 
-    (19) then_statement -> if_statement .
-    (3) statement -> if_statement .
+    (9) instruccion -> IMPRIMIR IPAREN plista . DPAREN optend
+    (66) plista -> plista . COMA pelemento
 
-  ! reduce/reduce conflict for ENDIF resolved using rule 3 (statement -> if_statement .)
-    ENDIF           reduce using rule 3 (statement -> if_statement .)
-    NAME            reduce using rule 3 (statement -> if_statement .)
-    PRINT           reduce using rule 3 (statement -> if_statement .)
-    -               reduce using rule 3 (statement -> if_statement .)
-    (               reduce using rule 3 (statement -> if_statement .)
-    NUMBER          reduce using rule 3 (statement -> if_statement .)
-    IF              reduce using rule 3 (statement -> if_statement .)
-
-  ! ENDIF           [ reduce using rule 19 (then_statement -> if_statement .) ]
+    DPAREN          shift and go to state 72
+    COMA            shift and go to state 73
 
 
 state 44
 
-    (20) then_statement -> expression .
-    (6) expression -> expression . + expression
-    (7) expression -> expression . - expression
-    (8) expression -> expression . * expression
-    (9) expression -> expression . / expression
-    (10) expression -> expression . % expression
-    (2) statement -> expression .
+    (67) plista -> pelemento .
 
-  ! reduce/reduce conflict for ENDIF resolved using rule 2 (statement -> expression .)
-  ! shift/reduce conflict for - resolved as shift
-    +               shift and go to state 10
-    -               shift and go to state 11
-    *               shift and go to state 12
-    /               shift and go to state 13
-    %               shift and go to state 14
-    ENDIF           reduce using rule 2 (statement -> expression .)
-    NAME            reduce using rule 2 (statement -> expression .)
-    PRINT           reduce using rule 2 (statement -> expression .)
-    (               reduce using rule 2 (statement -> expression .)
-    NUMBER          reduce using rule 2 (statement -> expression .)
-    IF              reduce using rule 2 (statement -> expression .)
-
-  ! ENDIF           [ reduce using rule 20 (then_statement -> expression .) ]
-  ! -               [ reduce using rule 2 (statement -> expression .) ]
+    DPAREN          reduce using rule 67 (plista -> pelemento .)
+    COMA            reduce using rule 67 (plista -> pelemento .)
 
 
 state 45
 
-    (21) then_statement -> statement .
-    (15) statements -> statement .
+    (68) pelemento -> CADENA .
+    (69) pelemento -> CADENA . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-  ! reduce/reduce conflict for ENDIF resolved using rule 15 (statements -> statement .)
-    NAME            reduce using rule 15 (statements -> statement .)
-    PRINT           reduce using rule 15 (statements -> statement .)
-    -               reduce using rule 15 (statements -> statement .)
-    (               reduce using rule 15 (statements -> statement .)
-    NUMBER          reduce using rule 15 (statements -> statement .)
-    IF              reduce using rule 15 (statements -> statement .)
-    ENDIF           reduce using rule 15 (statements -> statement .)
+    DPAREN          reduce using rule 68 (pelemento -> CADENA .)
+    COMA            reduce using rule 68 (pelemento -> CADENA .)
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
-  ! ENDIF           [ reduce using rule 21 (then_statement -> statement .) ]
-
+    expr                           shift and go to state 74
+    variable                       shift and go to state 31
 
 state 46
 
-    (22) then_statement -> statements .
-    (16) statements -> statements . statement
-    (17) statements -> statements . print
-    (1) statement -> . NAME = expression
-    (2) statement -> . expression
-    (3) statement -> . if_statement
-    (4) print -> . PRINT LPAREN NAME RPAREN
-    (5) print -> . PRINT LPAREN NUMBER RPAREN
-    (6) expression -> . expression + expression
-    (7) expression -> . expression - expression
-    (8) expression -> . expression * expression
-    (9) expression -> . expression / expression
-    (10) expression -> . expression % expression
-    (11) expression -> . - expression
-    (12) expression -> . ( expression )
-    (13) expression -> . NUMBER
-    (14) expression -> . NAME
-    (18) if_statement -> . IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF
+    (70) pelemento -> expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
 
-    ENDIF           reduce using rule 22 (then_statement -> statements .)
-    NAME            shift and go to state 2
-    PRINT           shift and go to state 51
-    -               shift and go to state 5
-    (               shift and go to state 6
-    NUMBER          shift and go to state 7
-    IF              shift and go to state 8
+    DPAREN          reduce using rule 70 (pelemento -> expr .)
+    COMA            reduce using rule 70 (pelemento -> expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
 
-    statement                      shift and go to state 49
-    print                          shift and go to state 50
-    expression                     shift and go to state 3
-    if_statement                   shift and go to state 4
 
 state 47
 
-    (14) expression -> NAME .
-    (1) statement -> NAME . = expression
+    (14) instruccion -> SI IPAREN comparacion . DPAREN ENTONCES ENTERO
+    (15) instruccion -> SI IPAREN comparacion . DPAREN ENTONCES LINEA programa FINSI
 
-    +               reduce using rule 14 (expression -> NAME .)
-    -               reduce using rule 14 (expression -> NAME .)
-    *               reduce using rule 14 (expression -> NAME .)
-    /               reduce using rule 14 (expression -> NAME .)
-    %               reduce using rule 14 (expression -> NAME .)
-    ENDIF           reduce using rule 14 (expression -> NAME .)
-    NAME            reduce using rule 14 (expression -> NAME .)
-    PRINT           reduce using rule 14 (expression -> NAME .)
-    (               reduce using rule 14 (expression -> NAME .)
-    NUMBER          reduce using rule 14 (expression -> NAME .)
-    IF              reduce using rule 14 (expression -> NAME .)
-    =               shift and go to state 9
+    DPAREN          shift and go to state 75
 
 
 state 48
 
-    (18) if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .
+    (46) expr -> IPAREN expr . DPAREN
+    (48) comparacion -> expr . MEQ expr
+    (49) comparacion -> expr . MEI expr
+    (50) comparacion -> expr . MAQ expr
+    (51) comparacion -> expr . MAI expr
+    (52) comparacion -> expr . II expr
+    (53) comparacion -> expr . IGUAL expr
+    (54) comparacion -> expr . DIF expr
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
 
-    $end            reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
-    ENDIF           reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
-    NAME            reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
-    PRINT           reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
-    -               reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
-    (               reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
-    NUMBER          reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
-    IF              reduce using rule 18 (if_statement -> IF LPAREN comparison RPAREN TWOPOINTS then_statement ENDIF .)
+    DPAREN          shift and go to state 76
+    MEQ             shift and go to state 51
+    MEI             shift and go to state 52
+    MAQ             shift and go to state 53
+    MAI             shift and go to state 54
+    II              shift and go to state 55
+    IGUAL           shift and go to state 56
+    DIF             shift and go to state 57
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
 
 
 state 49
 
-    (16) statements -> statements statement .
+    (17) instruccion -> SI comparacion ENTONCES . error
 
-    NAME            reduce using rule 16 (statements -> statements statement .)
-    PRINT           reduce using rule 16 (statements -> statements statement .)
-    -               reduce using rule 16 (statements -> statements statement .)
-    (               reduce using rule 16 (statements -> statements statement .)
-    NUMBER          reduce using rule 16 (statements -> statements statement .)
-    IF              reduce using rule 16 (statements -> statements statement .)
-    ENDIF           reduce using rule 16 (statements -> statements statement .)
+    error           shift and go to state 77
 
 
 state 50
 
-    (17) statements -> statements print .
+    (16) instruccion -> SI error ENTONCES . ENTERO
 
-    NAME            reduce using rule 17 (statements -> statements print .)
-    PRINT           reduce using rule 17 (statements -> statements print .)
-    -               reduce using rule 17 (statements -> statements print .)
-    (               reduce using rule 17 (statements -> statements print .)
-    NUMBER          reduce using rule 17 (statements -> statements print .)
-    IF              reduce using rule 17 (statements -> statements print .)
-    ENDIF           reduce using rule 17 (statements -> statements print .)
+    ENTERO          shift and go to state 78
 
 
 state 51
 
-    (4) print -> PRINT . LPAREN NAME RPAREN
-    (5) print -> PRINT . LPAREN NUMBER RPAREN
+    (48) comparacion -> expr MEQ . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    LPAREN          shift and go to state 52
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
+    expr                           shift and go to state 79
+    variable                       shift and go to state 31
 
 state 52
 
-    (4) print -> PRINT LPAREN . NAME RPAREN
-    (5) print -> PRINT LPAREN . NUMBER RPAREN
+    (49) comparacion -> expr MEI . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    NAME            shift and go to state 53
-    NUMBER          shift and go to state 54
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
+    expr                           shift and go to state 80
+    variable                       shift and go to state 31
 
 state 53
 
-    (4) print -> PRINT LPAREN NAME . RPAREN
+    (50) comparacion -> expr MAQ . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    RPAREN          shift and go to state 55
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
+    expr                           shift and go to state 81
+    variable                       shift and go to state 31
 
 state 54
 
-    (5) print -> PRINT LPAREN NUMBER . RPAREN
+    (51) comparacion -> expr MAI . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    RPAREN          shift and go to state 56
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
+    expr                           shift and go to state 82
+    variable                       shift and go to state 31
 
 state 55
 
-    (4) print -> PRINT LPAREN NAME RPAREN .
+    (52) comparacion -> expr II . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    NAME            reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
-    PRINT           reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
-    -               reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
-    (               reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
-    NUMBER          reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
-    IF              reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
-    ENDIF           reduce using rule 4 (print -> PRINT LPAREN NAME RPAREN .)
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
 
+    expr                           shift and go to state 83
+    variable                       shift and go to state 31
 
 state 56
 
-    (5) print -> PRINT LPAREN NUMBER RPAREN .
+    (53) comparacion -> expr IGUAL . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
 
-    NAME            reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
-    PRINT           reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
-    -               reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
-    (               reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
-    NUMBER          reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
-    IF              reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
-    ENDIF           reduce using rule 5 (print -> PRINT LPAREN NUMBER RPAREN .)
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 84
+    variable                       shift and go to state 31
+
+state 57
+
+    (54) comparacion -> expr DIF . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 85
+    variable                       shift and go to state 31
+
+state 58
+
+    (38) expr -> expr MAS . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 86
+    variable                       shift and go to state 31
+
+state 59
+
+    (39) expr -> expr MENOS . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 87
+    variable                       shift and go to state 31
+
+state 60
+
+    (40) expr -> expr MULTIPLICACION . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 88
+    variable                       shift and go to state 31
+
+state 61
+
+    (41) expr -> expr DIVISION . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 89
+    variable                       shift and go to state 31
+
+state 62
+
+    (42) expr -> expr POTENCIA . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 90
+    variable                       shift and go to state 31
+
+state 63
+
+    (47) expr -> MENOS expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    MEQ             reduce using rule 47 (expr -> MENOS expr .)
+    MEI             reduce using rule 47 (expr -> MENOS expr .)
+    MAQ             reduce using rule 47 (expr -> MENOS expr .)
+    MAI             reduce using rule 47 (expr -> MENOS expr .)
+    II              reduce using rule 47 (expr -> MENOS expr .)
+    IGUAL           reduce using rule 47 (expr -> MENOS expr .)
+    DIF             reduce using rule 47 (expr -> MENOS expr .)
+    MAS             reduce using rule 47 (expr -> MENOS expr .)
+    MENOS           reduce using rule 47 (expr -> MENOS expr .)
+    MULTIPLICACION  reduce using rule 47 (expr -> MENOS expr .)
+    DIVISION        reduce using rule 47 (expr -> MENOS expr .)
+    POTENCIA        reduce using rule 47 (expr -> MENOS expr .)
+    DPAREN          reduce using rule 47 (expr -> MENOS expr .)
+    COMA            reduce using rule 47 (expr -> MENOS expr .)
+    LINEA           reduce using rule 47 (expr -> MENOS expr .)
+    ENTONCES        reduce using rule 47 (expr -> MENOS expr .)
+    A               reduce using rule 47 (expr -> MENOS expr .)
+    error           reduce using rule 47 (expr -> MENOS expr .)
+    ENTERO          reduce using rule 47 (expr -> MENOS expr .)
+    FLOTANTE        reduce using rule 47 (expr -> MENOS expr .)
+    IPAREN          reduce using rule 47 (expr -> MENOS expr .)
+    PALABRA         reduce using rule 47 (expr -> MENOS expr .)
+
+  ! MAS             [ shift and go to state 58 ]
+  ! MENOS           [ shift and go to state 59 ]
+  ! MULTIPLICACION  [ shift and go to state 60 ]
+  ! DIVISION        [ shift and go to state 61 ]
+  ! POTENCIA        [ shift and go to state 62 ]
+
+
+state 64
+
+    (18) instruccion -> PARA PALABRA IGUAL . expr A expr optstep
+    (19) instruccion -> PARA PALABRA IGUAL . error A expr optstep
+    (20) instruccion -> PARA PALABRA IGUAL . expr A error optstep
+    (21) instruccion -> PARA PALABRA IGUAL . expr A expr error
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    error           shift and go to state 92
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 91
+    variable                       shift and go to state 31
+
+state 65
+
+    (28) instruccion -> FUNC PALABRA IPAREN . PALABRA DPAREN IGUAL expr
+    (29) instruccion -> FUNC PALABRA IPAREN . PALABRA DPAREN IGUAL error
+    (30) instruccion -> FUNC PALABRA IPAREN . error DPAREN IGUAL expr
+
+    PALABRA         shift and go to state 93
+    error           shift and go to state 94
+
+
+state 66
+
+    (34) arreglolista -> arreglolista COMA . elementoarreglo
+    (36) elementoarreglo -> . PALABRA IPAREN ENTERO DPAREN
+    (37) elementoarreglo -> . PALABRA IPAREN ENTERO COMA ENTERO DPAREN
+
+    PALABRA         shift and go to state 39
+
+    elementoarreglo                shift and go to state 95
+
+state 67
+
+    (36) elementoarreglo -> PALABRA IPAREN . ENTERO DPAREN
+    (37) elementoarreglo -> PALABRA IPAREN . ENTERO COMA ENTERO DPAREN
+
+    ENTERO          shift and go to state 96
+
+
+state 68
+
+    (7) instruccion -> VAR variable IGUAL expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    LINEA           reduce using rule 7 (instruccion -> VAR variable IGUAL expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 69
+
+    (8) instruccion -> VAR variable IGUAL error .
+
+    LINEA           reduce using rule 8 (instruccion -> VAR variable IGUAL error .)
+
+
+state 70
+
+    (56) variable -> PALABRA IPAREN expr . DPAREN
+    (57) variable -> PALABRA IPAREN expr . COMA expr DPAREN
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    DPAREN          shift and go to state 97
+    COMA            shift and go to state 98
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 71
+
+    (46) expr -> IPAREN expr . DPAREN
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    DPAREN          shift and go to state 76
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 72
+
+    (9) instruccion -> IMPRIMIR IPAREN plista DPAREN . optend
+    (10) optend -> . COMA
+    (11) optend -> .
+
+    COMA            shift and go to state 100
+    LINEA           reduce using rule 11 (optend -> .)
+
+    optend                         shift and go to state 99
+
+state 73
+
+    (66) plista -> plista COMA . pelemento
+    (68) pelemento -> . CADENA
+    (69) pelemento -> . CADENA expr
+    (70) pelemento -> . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    CADENA          shift and go to state 45
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    pelemento                      shift and go to state 101
+    expr                           shift and go to state 46
+    variable                       shift and go to state 31
+
+state 74
+
+    (69) pelemento -> CADENA expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    DPAREN          reduce using rule 69 (pelemento -> CADENA expr .)
+    COMA            reduce using rule 69 (pelemento -> CADENA expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 75
+
+    (14) instruccion -> SI IPAREN comparacion DPAREN . ENTONCES ENTERO
+    (15) instruccion -> SI IPAREN comparacion DPAREN . ENTONCES LINEA programa FINSI
+
+    ENTONCES        shift and go to state 102
+
+
+state 76
+
+    (46) expr -> IPAREN expr DPAREN .
+
+    MEQ             reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    MEI             reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    MAQ             reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    MAI             reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    II              reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    IGUAL           reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    DIF             reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    MAS             reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    MENOS           reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    MULTIPLICACION  reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    DIVISION        reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    POTENCIA        reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    DPAREN          reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    COMA            reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    LINEA           reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    ENTONCES        reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    A               reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    error           reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    ENTERO          reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    FLOTANTE        reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    IPAREN          reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+    PALABRA         reduce using rule 46 (expr -> IPAREN expr DPAREN .)
+
+
+state 77
+
+    (17) instruccion -> SI comparacion ENTONCES error .
+
+    LINEA           reduce using rule 17 (instruccion -> SI comparacion ENTONCES error .)
+
+
+state 78
+
+    (16) instruccion -> SI error ENTONCES ENTERO .
+
+    LINEA           reduce using rule 16 (instruccion -> SI error ENTONCES ENTERO .)
+
+
+state 79
+
+    (48) comparacion -> expr MEQ expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    ENTONCES        reduce using rule 48 (comparacion -> expr MEQ expr .)
+    DPAREN          reduce using rule 48 (comparacion -> expr MEQ expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 80
+
+    (49) comparacion -> expr MEI expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    ENTONCES        reduce using rule 49 (comparacion -> expr MEI expr .)
+    DPAREN          reduce using rule 49 (comparacion -> expr MEI expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 81
+
+    (50) comparacion -> expr MAQ expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    ENTONCES        reduce using rule 50 (comparacion -> expr MAQ expr .)
+    DPAREN          reduce using rule 50 (comparacion -> expr MAQ expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 82
+
+    (51) comparacion -> expr MAI expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    ENTONCES        reduce using rule 51 (comparacion -> expr MAI expr .)
+    DPAREN          reduce using rule 51 (comparacion -> expr MAI expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 83
+
+    (52) comparacion -> expr II expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    ENTONCES        reduce using rule 52 (comparacion -> expr II expr .)
+    DPAREN          reduce using rule 52 (comparacion -> expr II expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 84
+
+    (53) comparacion -> expr IGUAL expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    ENTONCES        reduce using rule 53 (comparacion -> expr IGUAL expr .)
+    DPAREN          reduce using rule 53 (comparacion -> expr IGUAL expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 85
+
+    (54) comparacion -> expr DIF expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    ENTONCES        reduce using rule 54 (comparacion -> expr DIF expr .)
+    DPAREN          reduce using rule 54 (comparacion -> expr DIF expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 86
+
+    (38) expr -> expr MAS expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    MEQ             reduce using rule 38 (expr -> expr MAS expr .)
+    MEI             reduce using rule 38 (expr -> expr MAS expr .)
+    MAQ             reduce using rule 38 (expr -> expr MAS expr .)
+    MAI             reduce using rule 38 (expr -> expr MAS expr .)
+    II              reduce using rule 38 (expr -> expr MAS expr .)
+    IGUAL           reduce using rule 38 (expr -> expr MAS expr .)
+    DIF             reduce using rule 38 (expr -> expr MAS expr .)
+    MAS             reduce using rule 38 (expr -> expr MAS expr .)
+    MENOS           reduce using rule 38 (expr -> expr MAS expr .)
+    DPAREN          reduce using rule 38 (expr -> expr MAS expr .)
+    COMA            reduce using rule 38 (expr -> expr MAS expr .)
+    LINEA           reduce using rule 38 (expr -> expr MAS expr .)
+    ENTONCES        reduce using rule 38 (expr -> expr MAS expr .)
+    A               reduce using rule 38 (expr -> expr MAS expr .)
+    error           reduce using rule 38 (expr -> expr MAS expr .)
+    ENTERO          reduce using rule 38 (expr -> expr MAS expr .)
+    FLOTANTE        reduce using rule 38 (expr -> expr MAS expr .)
+    IPAREN          reduce using rule 38 (expr -> expr MAS expr .)
+    PALABRA         reduce using rule 38 (expr -> expr MAS expr .)
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+  ! MULTIPLICACION  [ reduce using rule 38 (expr -> expr MAS expr .) ]
+  ! DIVISION        [ reduce using rule 38 (expr -> expr MAS expr .) ]
+  ! POTENCIA        [ reduce using rule 38 (expr -> expr MAS expr .) ]
+  ! MAS             [ shift and go to state 58 ]
+  ! MENOS           [ shift and go to state 59 ]
+
+
+state 87
+
+    (39) expr -> expr MENOS expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    MEQ             reduce using rule 39 (expr -> expr MENOS expr .)
+    MEI             reduce using rule 39 (expr -> expr MENOS expr .)
+    MAQ             reduce using rule 39 (expr -> expr MENOS expr .)
+    MAI             reduce using rule 39 (expr -> expr MENOS expr .)
+    II              reduce using rule 39 (expr -> expr MENOS expr .)
+    IGUAL           reduce using rule 39 (expr -> expr MENOS expr .)
+    DIF             reduce using rule 39 (expr -> expr MENOS expr .)
+    MAS             reduce using rule 39 (expr -> expr MENOS expr .)
+    MENOS           reduce using rule 39 (expr -> expr MENOS expr .)
+    DPAREN          reduce using rule 39 (expr -> expr MENOS expr .)
+    COMA            reduce using rule 39 (expr -> expr MENOS expr .)
+    LINEA           reduce using rule 39 (expr -> expr MENOS expr .)
+    ENTONCES        reduce using rule 39 (expr -> expr MENOS expr .)
+    A               reduce using rule 39 (expr -> expr MENOS expr .)
+    error           reduce using rule 39 (expr -> expr MENOS expr .)
+    ENTERO          reduce using rule 39 (expr -> expr MENOS expr .)
+    FLOTANTE        reduce using rule 39 (expr -> expr MENOS expr .)
+    IPAREN          reduce using rule 39 (expr -> expr MENOS expr .)
+    PALABRA         reduce using rule 39 (expr -> expr MENOS expr .)
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+  ! MULTIPLICACION  [ reduce using rule 39 (expr -> expr MENOS expr .) ]
+  ! DIVISION        [ reduce using rule 39 (expr -> expr MENOS expr .) ]
+  ! POTENCIA        [ reduce using rule 39 (expr -> expr MENOS expr .) ]
+  ! MAS             [ shift and go to state 58 ]
+  ! MENOS           [ shift and go to state 59 ]
+
+
+state 88
+
+    (40) expr -> expr MULTIPLICACION expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    MEQ             reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    MEI             reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    MAQ             reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    MAI             reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    II              reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    IGUAL           reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    DIF             reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    MAS             reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    MENOS           reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    MULTIPLICACION  reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    DIVISION        reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    DPAREN          reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    COMA            reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    LINEA           reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    ENTONCES        reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    A               reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    error           reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    ENTERO          reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    FLOTANTE        reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    IPAREN          reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    PALABRA         reduce using rule 40 (expr -> expr MULTIPLICACION expr .)
+    POTENCIA        shift and go to state 62
+
+  ! POTENCIA        [ reduce using rule 40 (expr -> expr MULTIPLICACION expr .) ]
+  ! MAS             [ shift and go to state 58 ]
+  ! MENOS           [ shift and go to state 59 ]
+  ! MULTIPLICACION  [ shift and go to state 60 ]
+  ! DIVISION        [ shift and go to state 61 ]
+
+
+state 89
+
+    (41) expr -> expr DIVISION expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    MEQ             reduce using rule 41 (expr -> expr DIVISION expr .)
+    MEI             reduce using rule 41 (expr -> expr DIVISION expr .)
+    MAQ             reduce using rule 41 (expr -> expr DIVISION expr .)
+    MAI             reduce using rule 41 (expr -> expr DIVISION expr .)
+    II              reduce using rule 41 (expr -> expr DIVISION expr .)
+    IGUAL           reduce using rule 41 (expr -> expr DIVISION expr .)
+    DIF             reduce using rule 41 (expr -> expr DIVISION expr .)
+    MAS             reduce using rule 41 (expr -> expr DIVISION expr .)
+    MENOS           reduce using rule 41 (expr -> expr DIVISION expr .)
+    MULTIPLICACION  reduce using rule 41 (expr -> expr DIVISION expr .)
+    DIVISION        reduce using rule 41 (expr -> expr DIVISION expr .)
+    DPAREN          reduce using rule 41 (expr -> expr DIVISION expr .)
+    COMA            reduce using rule 41 (expr -> expr DIVISION expr .)
+    LINEA           reduce using rule 41 (expr -> expr DIVISION expr .)
+    ENTONCES        reduce using rule 41 (expr -> expr DIVISION expr .)
+    A               reduce using rule 41 (expr -> expr DIVISION expr .)
+    error           reduce using rule 41 (expr -> expr DIVISION expr .)
+    ENTERO          reduce using rule 41 (expr -> expr DIVISION expr .)
+    FLOTANTE        reduce using rule 41 (expr -> expr DIVISION expr .)
+    IPAREN          reduce using rule 41 (expr -> expr DIVISION expr .)
+    PALABRA         reduce using rule 41 (expr -> expr DIVISION expr .)
+    POTENCIA        shift and go to state 62
+
+  ! POTENCIA        [ reduce using rule 41 (expr -> expr DIVISION expr .) ]
+  ! MAS             [ shift and go to state 58 ]
+  ! MENOS           [ shift and go to state 59 ]
+  ! MULTIPLICACION  [ shift and go to state 60 ]
+  ! DIVISION        [ shift and go to state 61 ]
+
+
+state 90
+
+    (42) expr -> expr POTENCIA expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    MEQ             reduce using rule 42 (expr -> expr POTENCIA expr .)
+    MEI             reduce using rule 42 (expr -> expr POTENCIA expr .)
+    MAQ             reduce using rule 42 (expr -> expr POTENCIA expr .)
+    MAI             reduce using rule 42 (expr -> expr POTENCIA expr .)
+    II              reduce using rule 42 (expr -> expr POTENCIA expr .)
+    IGUAL           reduce using rule 42 (expr -> expr POTENCIA expr .)
+    DIF             reduce using rule 42 (expr -> expr POTENCIA expr .)
+    MAS             reduce using rule 42 (expr -> expr POTENCIA expr .)
+    MENOS           reduce using rule 42 (expr -> expr POTENCIA expr .)
+    MULTIPLICACION  reduce using rule 42 (expr -> expr POTENCIA expr .)
+    DIVISION        reduce using rule 42 (expr -> expr POTENCIA expr .)
+    POTENCIA        reduce using rule 42 (expr -> expr POTENCIA expr .)
+    DPAREN          reduce using rule 42 (expr -> expr POTENCIA expr .)
+    COMA            reduce using rule 42 (expr -> expr POTENCIA expr .)
+    LINEA           reduce using rule 42 (expr -> expr POTENCIA expr .)
+    ENTONCES        reduce using rule 42 (expr -> expr POTENCIA expr .)
+    A               reduce using rule 42 (expr -> expr POTENCIA expr .)
+    error           reduce using rule 42 (expr -> expr POTENCIA expr .)
+    ENTERO          reduce using rule 42 (expr -> expr POTENCIA expr .)
+    FLOTANTE        reduce using rule 42 (expr -> expr POTENCIA expr .)
+    IPAREN          reduce using rule 42 (expr -> expr POTENCIA expr .)
+    PALABRA         reduce using rule 42 (expr -> expr POTENCIA expr .)
+
+  ! MAS             [ shift and go to state 58 ]
+  ! MENOS           [ shift and go to state 59 ]
+  ! MULTIPLICACION  [ shift and go to state 60 ]
+  ! DIVISION        [ shift and go to state 61 ]
+  ! POTENCIA        [ shift and go to state 62 ]
+
+
+state 91
+
+    (18) instruccion -> PARA PALABRA IGUAL expr . A expr optstep
+    (20) instruccion -> PARA PALABRA IGUAL expr . A error optstep
+    (21) instruccion -> PARA PALABRA IGUAL expr . A expr error
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    A               shift and go to state 103
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 92
+
+    (19) instruccion -> PARA PALABRA IGUAL error . A expr optstep
+
+    A               shift and go to state 104
+
+
+state 93
+
+    (28) instruccion -> FUNC PALABRA IPAREN PALABRA . DPAREN IGUAL expr
+    (29) instruccion -> FUNC PALABRA IPAREN PALABRA . DPAREN IGUAL error
+
+    DPAREN          shift and go to state 105
+
+
+state 94
+
+    (30) instruccion -> FUNC PALABRA IPAREN error . DPAREN IGUAL expr
+
+    DPAREN          shift and go to state 106
+
+
+state 95
+
+    (34) arreglolista -> arreglolista COMA elementoarreglo .
+
+    COMA            reduce using rule 34 (arreglolista -> arreglolista COMA elementoarreglo .)
+    LINEA           reduce using rule 34 (arreglolista -> arreglolista COMA elementoarreglo .)
+
+
+state 96
+
+    (36) elementoarreglo -> PALABRA IPAREN ENTERO . DPAREN
+    (37) elementoarreglo -> PALABRA IPAREN ENTERO . COMA ENTERO DPAREN
+
+    DPAREN          shift and go to state 107
+    COMA            shift and go to state 108
+
+
+state 97
+
+    (56) variable -> PALABRA IPAREN expr DPAREN .
+
+    IGUAL           reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    MEQ             reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    MEI             reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    MAQ             reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    MAI             reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    II              reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    DIF             reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    MAS             reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    MENOS           reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    MULTIPLICACION  reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    DIVISION        reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    POTENCIA        reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    DPAREN          reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    COMA            reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    LINEA           reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    ENTONCES        reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    A               reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    error           reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    ENTERO          reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    FLOTANTE        reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    IPAREN          reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+    PALABRA         reduce using rule 56 (variable -> PALABRA IPAREN expr DPAREN .)
+
+
+state 98
+
+    (57) variable -> PALABRA IPAREN expr COMA . expr DPAREN
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 109
+    variable                       shift and go to state 31
+
+state 99
+
+    (9) instruccion -> IMPRIMIR IPAREN plista DPAREN optend .
+
+    LINEA           reduce using rule 9 (instruccion -> IMPRIMIR IPAREN plista DPAREN optend .)
+
+
+state 100
+
+    (10) optend -> COMA .
+
+    LINEA           reduce using rule 10 (optend -> COMA .)
+
+
+state 101
+
+    (66) plista -> plista COMA pelemento .
+
+    DPAREN          reduce using rule 66 (plista -> plista COMA pelemento .)
+    COMA            reduce using rule 66 (plista -> plista COMA pelemento .)
+
+
+state 102
+
+    (14) instruccion -> SI IPAREN comparacion DPAREN ENTONCES . ENTERO
+    (15) instruccion -> SI IPAREN comparacion DPAREN ENTONCES . LINEA programa FINSI
+
+    ENTERO          shift and go to state 110
+    LINEA           shift and go to state 111
+
+
+state 103
+
+    (18) instruccion -> PARA PALABRA IGUAL expr A . expr optstep
+    (20) instruccion -> PARA PALABRA IGUAL expr A . error optstep
+    (21) instruccion -> PARA PALABRA IGUAL expr A . expr error
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    error           shift and go to state 113
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 112
+    variable                       shift and go to state 31
+
+state 104
+
+    (19) instruccion -> PARA PALABRA IGUAL error A . expr optstep
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 114
+    variable                       shift and go to state 31
+
+state 105
+
+    (28) instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN . IGUAL expr
+    (29) instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN . IGUAL error
+
+    IGUAL           shift and go to state 115
+
+
+state 106
+
+    (30) instruccion -> FUNC PALABRA IPAREN error DPAREN . IGUAL expr
+
+    IGUAL           shift and go to state 116
+
+
+state 107
+
+    (36) elementoarreglo -> PALABRA IPAREN ENTERO DPAREN .
+
+    COMA            reduce using rule 36 (elementoarreglo -> PALABRA IPAREN ENTERO DPAREN .)
+    LINEA           reduce using rule 36 (elementoarreglo -> PALABRA IPAREN ENTERO DPAREN .)
+
+
+state 108
+
+    (37) elementoarreglo -> PALABRA IPAREN ENTERO COMA . ENTERO DPAREN
+
+    ENTERO          shift and go to state 117
+
+
+state 109
+
+    (57) variable -> PALABRA IPAREN expr COMA expr . DPAREN
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    DPAREN          shift and go to state 118
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 110
+
+    (14) instruccion -> SI IPAREN comparacion DPAREN ENTONCES ENTERO .
+
+    LINEA           reduce using rule 14 (instruccion -> SI IPAREN comparacion DPAREN ENTONCES ENTERO .)
+
+
+state 111
+
+    (15) instruccion -> SI IPAREN comparacion DPAREN ENTONCES LINEA . programa FINSI
+    (1) programa -> . programa declaracion
+    (2) programa -> . declaracion
+    (3) programa -> . error
+    (4) declaracion -> . instruccion LINEA
+    (5) declaracion -> . LINEA
+    (6) declaracion -> . error LINEA
+    (7) instruccion -> . VAR variable IGUAL expr
+    (8) instruccion -> . VAR variable IGUAL error
+    (9) instruccion -> . IMPRIMIR IPAREN plista DPAREN optend
+    (12) instruccion -> . IMPRIMIR error
+    (13) instruccion -> . IMPRIMIR
+    (14) instruccion -> . SI IPAREN comparacion DPAREN ENTONCES ENTERO
+    (15) instruccion -> . SI IPAREN comparacion DPAREN ENTONCES LINEA programa FINSI
+    (16) instruccion -> . SI error ENTONCES ENTERO
+    (17) instruccion -> . SI comparacion ENTONCES error
+    (18) instruccion -> . PARA PALABRA IGUAL expr A expr optstep
+    (19) instruccion -> . PARA PALABRA IGUAL error A expr optstep
+    (20) instruccion -> . PARA PALABRA IGUAL expr A error optstep
+    (21) instruccion -> . PARA PALABRA IGUAL expr A expr error
+    (24) instruccion -> . SIG PALABRA
+    (25) instruccion -> . SIG error
+    (26) instruccion -> . FIN
+    (27) instruccion -> . COMENTARIO
+    (28) instruccion -> . FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr
+    (29) instruccion -> . FUNC PALABRA IPAREN PALABRA DPAREN IGUAL error
+    (30) instruccion -> . FUNC PALABRA IPAREN error DPAREN IGUAL expr
+    (31) instruccion -> . REGRESAR
+    (32) instruccion -> . ARREGLO arreglolista
+    (33) instruccion -> . ARREGLO error
+
+    error           shift and go to state 3
+    LINEA           shift and go to state 5
+    VAR             shift and go to state 6
+    IMPRIMIR        shift and go to state 7
+    SI              shift and go to state 8
+    PARA            shift and go to state 9
+    SIG             shift and go to state 10
+    FIN             shift and go to state 11
+    COMENTARIO      shift and go to state 12
+    FUNC            shift and go to state 13
+    REGRESAR        shift and go to state 14
+    ARREGLO         shift and go to state 15
+
+    programa                       shift and go to state 119
+    declaracion                    shift and go to state 2
+    instruccion                    shift and go to state 4
+
+state 112
+
+    (18) instruccion -> PARA PALABRA IGUAL expr A expr . optstep
+    (21) instruccion -> PARA PALABRA IGUAL expr A expr . error
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+    (22) optstep -> . expr
+    (23) optstep -> . vacio
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (71) vacio -> .
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    error           shift and go to state 122
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 123
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    LINEA           reduce using rule 71 (vacio -> .)
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 120
+    optstep                        shift and go to state 121
+    vacio                          shift and go to state 124
+    variable                       shift and go to state 31
+
+state 113
+
+    (20) instruccion -> PARA PALABRA IGUAL expr A error . optstep
+    (22) optstep -> . expr
+    (23) optstep -> . vacio
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (71) vacio -> .
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    LINEA           reduce using rule 71 (vacio -> .)
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 120
+    optstep                        shift and go to state 125
+    vacio                          shift and go to state 124
+    variable                       shift and go to state 31
+
+state 114
+
+    (19) instruccion -> PARA PALABRA IGUAL error A expr . optstep
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+    (22) optstep -> . expr
+    (23) optstep -> . vacio
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (71) vacio -> .
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 123
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    LINEA           reduce using rule 71 (vacio -> .)
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 120
+    optstep                        shift and go to state 126
+    vacio                          shift and go to state 124
+    variable                       shift and go to state 31
+
+state 115
+
+    (28) instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN IGUAL . expr
+    (29) instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN IGUAL . error
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    error           shift and go to state 128
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 127
+    variable                       shift and go to state 31
+
+state 116
+
+    (30) instruccion -> FUNC PALABRA IPAREN error DPAREN IGUAL . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 129
+    variable                       shift and go to state 31
+
+state 117
+
+    (37) elementoarreglo -> PALABRA IPAREN ENTERO COMA ENTERO . DPAREN
+
+    DPAREN          shift and go to state 130
+
+
+state 118
+
+    (57) variable -> PALABRA IPAREN expr COMA expr DPAREN .
+
+    IGUAL           reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    MEQ             reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    MEI             reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    MAQ             reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    MAI             reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    II              reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    DIF             reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    MAS             reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    MENOS           reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    MULTIPLICACION  reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    DIVISION        reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    POTENCIA        reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    DPAREN          reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    COMA            reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    LINEA           reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    ENTONCES        reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    A               reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    error           reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    ENTERO          reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    FLOTANTE        reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    IPAREN          reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+    PALABRA         reduce using rule 57 (variable -> PALABRA IPAREN expr COMA expr DPAREN .)
+
+
+state 119
+
+    (15) instruccion -> SI IPAREN comparacion DPAREN ENTONCES LINEA programa . FINSI
+    (1) programa -> programa . declaracion
+    (4) declaracion -> . instruccion LINEA
+    (5) declaracion -> . LINEA
+    (6) declaracion -> . error LINEA
+    (7) instruccion -> . VAR variable IGUAL expr
+    (8) instruccion -> . VAR variable IGUAL error
+    (9) instruccion -> . IMPRIMIR IPAREN plista DPAREN optend
+    (12) instruccion -> . IMPRIMIR error
+    (13) instruccion -> . IMPRIMIR
+    (14) instruccion -> . SI IPAREN comparacion DPAREN ENTONCES ENTERO
+    (15) instruccion -> . SI IPAREN comparacion DPAREN ENTONCES LINEA programa FINSI
+    (16) instruccion -> . SI error ENTONCES ENTERO
+    (17) instruccion -> . SI comparacion ENTONCES error
+    (18) instruccion -> . PARA PALABRA IGUAL expr A expr optstep
+    (19) instruccion -> . PARA PALABRA IGUAL error A expr optstep
+    (20) instruccion -> . PARA PALABRA IGUAL expr A error optstep
+    (21) instruccion -> . PARA PALABRA IGUAL expr A expr error
+    (24) instruccion -> . SIG PALABRA
+    (25) instruccion -> . SIG error
+    (26) instruccion -> . FIN
+    (27) instruccion -> . COMENTARIO
+    (28) instruccion -> . FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr
+    (29) instruccion -> . FUNC PALABRA IPAREN PALABRA DPAREN IGUAL error
+    (30) instruccion -> . FUNC PALABRA IPAREN error DPAREN IGUAL expr
+    (31) instruccion -> . REGRESAR
+    (32) instruccion -> . ARREGLO arreglolista
+    (33) instruccion -> . ARREGLO error
+
+    FINSI           shift and go to state 131
+    LINEA           shift and go to state 5
+    error           shift and go to state 17
+    VAR             shift and go to state 6
+    IMPRIMIR        shift and go to state 7
+    SI              shift and go to state 8
+    PARA            shift and go to state 9
+    SIG             shift and go to state 10
+    FIN             shift and go to state 11
+    COMENTARIO      shift and go to state 12
+    FUNC            shift and go to state 13
+    REGRESAR        shift and go to state 14
+    ARREGLO         shift and go to state 15
+
+    declaracion                    shift and go to state 16
+    instruccion                    shift and go to state 4
+
+state 120
+
+    (22) optstep -> expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    LINEA           reduce using rule 22 (optstep -> expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 121
+
+    (18) instruccion -> PARA PALABRA IGUAL expr A expr optstep .
+
+    LINEA           reduce using rule 18 (instruccion -> PARA PALABRA IGUAL expr A expr optstep .)
+
+
+state 122
+
+    (21) instruccion -> PARA PALABRA IGUAL expr A expr error .
+
+    LINEA           reduce using rule 21 (instruccion -> PARA PALABRA IGUAL expr A expr error .)
+
+
+state 123
+
+    (39) expr -> expr MENOS . expr
+    (47) expr -> MENOS . expr
+    (38) expr -> . expr MAS expr
+    (39) expr -> . expr MENOS expr
+    (40) expr -> . expr MULTIPLICACION expr
+    (41) expr -> . expr DIVISION expr
+    (42) expr -> . expr POTENCIA expr
+    (43) expr -> . ENTERO
+    (44) expr -> . FLOTANTE
+    (45) expr -> . variable
+    (46) expr -> . IPAREN expr DPAREN
+    (47) expr -> . MENOS expr
+    (55) variable -> . PALABRA
+    (56) variable -> . PALABRA IPAREN expr DPAREN
+    (57) variable -> . PALABRA IPAREN expr COMA expr DPAREN
+
+    ENTERO          shift and go to state 26
+    FLOTANTE        shift and go to state 30
+    IPAREN          shift and go to state 42
+    MENOS           shift and go to state 29
+    PALABRA         shift and go to state 21
+
+    expr                           shift and go to state 132
+    variable                       shift and go to state 31
+
+state 124
+
+    (23) optstep -> vacio .
+
+    LINEA           reduce using rule 23 (optstep -> vacio .)
+
+
+state 125
+
+    (20) instruccion -> PARA PALABRA IGUAL expr A error optstep .
+
+    LINEA           reduce using rule 20 (instruccion -> PARA PALABRA IGUAL expr A error optstep .)
+
+
+state 126
+
+    (19) instruccion -> PARA PALABRA IGUAL error A expr optstep .
+
+    LINEA           reduce using rule 19 (instruccion -> PARA PALABRA IGUAL error A expr optstep .)
+
+
+state 127
+
+    (28) instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    LINEA           reduce using rule 28 (instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 128
+
+    (29) instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN IGUAL error .
+
+    LINEA           reduce using rule 29 (instruccion -> FUNC PALABRA IPAREN PALABRA DPAREN IGUAL error .)
+
+
+state 129
+
+    (30) instruccion -> FUNC PALABRA IPAREN error DPAREN IGUAL expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+    LINEA           reduce using rule 30 (instruccion -> FUNC PALABRA IPAREN error DPAREN IGUAL expr .)
+    MAS             shift and go to state 58
+    MENOS           shift and go to state 59
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+
+state 130
+
+    (37) elementoarreglo -> PALABRA IPAREN ENTERO COMA ENTERO DPAREN .
+
+    COMA            reduce using rule 37 (elementoarreglo -> PALABRA IPAREN ENTERO COMA ENTERO DPAREN .)
+    LINEA           reduce using rule 37 (elementoarreglo -> PALABRA IPAREN ENTERO COMA ENTERO DPAREN .)
+
+
+state 131
+
+    (15) instruccion -> SI IPAREN comparacion DPAREN ENTONCES LINEA programa FINSI .
+
+    LINEA           reduce using rule 15 (instruccion -> SI IPAREN comparacion DPAREN ENTONCES LINEA programa FINSI .)
+
+
+state 132
+
+    (39) expr -> expr MENOS expr .
+    (47) expr -> MENOS expr .
+    (38) expr -> expr . MAS expr
+    (39) expr -> expr . MENOS expr
+    (40) expr -> expr . MULTIPLICACION expr
+    (41) expr -> expr . DIVISION expr
+    (42) expr -> expr . POTENCIA expr
+
+  ! reduce/reduce conflict for MAS resolved using rule 39 (expr -> expr MENOS expr .)
+  ! reduce/reduce conflict for MENOS resolved using rule 39 (expr -> expr MENOS expr .)
+  ! reduce/reduce conflict for MULTIPLICACION resolved using rule 39 (expr -> expr MENOS expr .)
+  ! reduce/reduce conflict for DIVISION resolved using rule 39 (expr -> expr MENOS expr .)
+  ! reduce/reduce conflict for POTENCIA resolved using rule 39 (expr -> expr MENOS expr .)
+  ! reduce/reduce conflict for LINEA resolved using rule 39 (expr -> expr MENOS expr .)
+    error           reduce using rule 39 (expr -> expr MENOS expr .)
+    MAS             reduce using rule 39 (expr -> expr MENOS expr .)
+    MENOS           reduce using rule 39 (expr -> expr MENOS expr .)
+    ENTERO          reduce using rule 39 (expr -> expr MENOS expr .)
+    FLOTANTE        reduce using rule 39 (expr -> expr MENOS expr .)
+    IPAREN          reduce using rule 39 (expr -> expr MENOS expr .)
+    PALABRA         reduce using rule 39 (expr -> expr MENOS expr .)
+    LINEA           reduce using rule 39 (expr -> expr MENOS expr .)
+    MULTIPLICACION  shift and go to state 60
+    DIVISION        shift and go to state 61
+    POTENCIA        shift and go to state 62
+
+  ! MULTIPLICACION  [ reduce using rule 39 (expr -> expr MENOS expr .) ]
+  ! DIVISION        [ reduce using rule 39 (expr -> expr MENOS expr .) ]
+  ! POTENCIA        [ reduce using rule 39 (expr -> expr MENOS expr .) ]
+  ! MAS             [ reduce using rule 47 (expr -> MENOS expr .) ]
+  ! MENOS           [ reduce using rule 47 (expr -> MENOS expr .) ]
+  ! MULTIPLICACION  [ reduce using rule 47 (expr -> MENOS expr .) ]
+  ! DIVISION        [ reduce using rule 47 (expr -> MENOS expr .) ]
+  ! POTENCIA        [ reduce using rule 47 (expr -> MENOS expr .) ]
+  ! LINEA           [ reduce using rule 47 (expr -> MENOS expr .) ]
+  ! MAS             [ shift and go to state 58 ]
+  ! MENOS           [ shift and go to state 59 ]
 
 WARNING: 
 WARNING: Conflicts:
 WARNING: 
-WARNING: shift/reduce conflict for - in state 3 resolved as shift
-WARNING: shift/reduce conflict for - in state 19 resolved as shift
-WARNING: shift/reduce conflict for - in state 44 resolved as shift
-WARNING: reduce/reduce conflict in state 43 resolved using rule (statement -> if_statement)
-WARNING: rejected rule (then_statement -> if_statement) in state 43
-WARNING: reduce/reduce conflict in state 44 resolved using rule (statement -> expression)
-WARNING: rejected rule (then_statement -> expression) in state 44
-WARNING: reduce/reduce conflict in state 45 resolved using rule (statements -> statement)
-WARNING: rejected rule (then_statement -> statement) in state 45
-WARNING: Rule (then_statement -> if_statement) is never reduced
-WARNING: Rule (then_statement -> expression) is never reduced
-WARNING: Rule (then_statement -> statement) is never reduced
+WARNING: shift/reduce conflict for LINEA in state 3 resolved as shift
+WARNING: shift/reduce conflict for IPAREN in state 21 resolved as shift
+WARNING: reduce/reduce conflict in state 132 resolved using rule (expr -> expr MENOS expr)
+WARNING: rejected rule (expr -> MENOS expr) in state 132
