@@ -10,7 +10,7 @@ from ply import *
 # Declaración de palabra clave
 palabras_clave = (
     'VAR', 'IMPRIMIR', 'SI', 'ENTONCES', 'PARA', 'SIG', 'A','II',
-    'FIN', 'FUNC', "FINSI",  'ARREGLO', 'COMENTARIO', 'REGRESAR', 'LIST', 'NEW',
+    'FIN', 'FUNC', "FINSI", "FINFUNC",  'ARREGLO', 'COMENTARIO', 'REGRESAR', 'LIST', 'NEW',
 )
 
 # Declaración de tokens
@@ -31,7 +31,7 @@ def t_COMENTARIO(t):
 
 # Definición de palabra
 def t_PALABRA(t):
-    r'[A-Z][A-Z0-9]*'
+    r'[a-zA-Z_][a-zA-Z_0-9]*'
     if t.value in palabras_clave:
         t.type = t.value
     return t

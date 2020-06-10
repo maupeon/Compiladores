@@ -17,10 +17,6 @@ class Interpreter:
         self.prog = prog
 
         self.funciones = {           # Tabla de funciones matemáticas
-            'SIN': lambda z: math.sin(self.eval(z)),
-            'COS': lambda z: math.cos(self.eval(z)),
-            'TAN': lambda z: math.tan(self.eval(z)),
-            'ATN': lambda z: math.atan(self.eval(z)),
             'EXP': lambda z: math.exp(self.eval(z)),
             'ABS': lambda z: abs(self.eval(z)),
             'LOG': lambda z: math.log(self.eval(z)),
@@ -168,27 +164,28 @@ class Interpreter:
     # Asignación de variables
     def asignacion(self, objetivo, valor):
         var, dim1, dim2 = objetivo
+        # Asingación de variable VAR X = 1
         if not dim1 and not dim2:
             self.vars[var] = self.eval(valor)
+        # Asignación de arreglo de 1 dimensión
         elif dim1 and not dim2:
             # Lista de asignaciones
             dim1val = self.eval(dim1)
             if not var in self.listas:
-                self.listas[var] = [0] * 10
+                print("ARREGLO NO DEFINIDO EN LINEA %s" % self.stat[self.contador])
+                raise RuntimeError
 
             if dim1val > len(self.listas[var]):
                 print ("DIMENSIÓN MUY LARGA EN LINEA %s" % self.stat[self.contador])
                 raise RuntimeError
             self.listas[var][dim1val - 1] = self.eval(valor)
+        # Asignación de arreglo de 2 dimensiones
         elif dim1 and dim2:
             dim1val = self.eval(dim1)
             dim2val = self.eval(dim2)
             if not var in self.tablas:
-                temp = [0] * 10
-                v = []
-                for i in range(10):
-                    v.append(temp[:])
-                self.tablas[var] = v
+                print("ARREGLO NO DEFINIDO EN LINEA %s" % self.stat[self.contador])
+                raise RuntimeError
             # Variable already exists
             if dim1val > len(self.tablas[var]) or dim2val > len(self.tablas[var][0]):
                 print("DIMENSIÓN MUY LARGA EN LINEA %s" % self.stat[self.contador])
@@ -203,7 +200,46 @@ class Interpreter:
             raise RuntimeError
         self.contador = self.stat.index(linenum)
 #########################################################################################
-    # ejecutar it
+    
+    # Ejecutar segmento de codigo dentro de FUNC y SI
+    def sub_ejecutar(self, codigo):
+        instrucciones = []
+        instrucciones = list(codigo)  # Ordered list of all line numbers
+        instrucciones.sort()
+        contador_aux = instrucciones[0]                 # Current program counter
+        while 1:
+            # END and STOP statements
+            if contador_aux == instrucciones[len(instrucciones)-1]+1:
+                break           # We're done
+            instr = codigo[contador_aux]
+            op = instr[0]
+
+            # PRINT statement
+            if op == 'IMPRIMIR':
+                plista = instr[1]
+                salida = ""
+                for etiqueta, val in plista:
+                    if salida:
+                        salida += ' ' * (15 - (len(salida) % 15))
+                    salida += etiqueta
+                    if val:
+                        if etiqueta:
+                            salida += " "
+                        eval = self.eval(val)
+                        salida += str(eval)
+                print(salida)
+                
+            # VAR statement
+            elif op == 'VAR':
+                objetivo = instr[1]
+                valor = instr[2]
+                self.asignacion(objetivo, valor)
+
+            contador_aux += 1
+
+        self.contador+=1
+    
+    # ejecutar el programa
     def ejecutar(self):
         self.vars = {}            # Todas las variables
         self.listas = {}            # Lista de variables
@@ -244,22 +280,13 @@ class Interpreter:
                 plista = instr[1]
                 salida = ""
                 for etiqueta, val in plista:
-                    if salida:
-                        salida += ' ' * (15 - (len(salida) % 15))
                     salida += etiqueta
                     if val:
                         if etiqueta:
                             salida += " "
                         eval = self.eval(val)
                         salida += str(eval)
-                sys.stdout.write(salida)
-                end = instr[2]
-                if not (end == ',' or end == ';'):
-                    sys.stdout.write("\n")
-                if end == ',':
-                    sys.stdout.write(" " * (15 - (len(salida) % 15)))
-                if end == ';':
-                    sys.stdout.write(" " * (3 - (len(salida) % 3)))
+                print(salida)
 
             # VAR statement
             elif op == 'VAR':
@@ -272,7 +299,6 @@ class Interpreter:
                 nueva_linea = instr[2]
                 if (self.comparacion(comp)):
                     if(type(nueva_linea) == dict):
-                        print("ENTREO")
                         stat_aux = []
                         stat_aux = list(nueva_linea)  # Ordered list of all line numbers
                         stat_aux.sort()
@@ -298,15 +324,8 @@ class Interpreter:
                                             salida += " "
                                         eval = self.eval(val)
                                         salida += str(eval)
-                                sys.stdout.write(salida)
-                                fin = instr[2]
-                                if not (fin == ',' or fin == ';'):
-                                    sys.stdout.write("\n")
-                                if fin == ',':
-                                    sys.stdout.write(" " * (15 - (len(salida) % 15)))
-                                if fin == ';':
-                                    sys.stdout.write(" " * (3 - (len(salida) % 3)))
-
+                                print(salida)
+                                
                             # VAR statement
                             elif op == 'VAR':
                                 objetivo = instr[1]
@@ -378,7 +397,7 @@ class Interpreter:
                 f_nombre = instr[1]
                 p_nombre = instr[2]
                 expr = instr[3]
-
+                print("FUNC. F_NOMBRE:", f_nombre, "PARAMETROS:", p_nombre, "EXPR:", expr)
                 def eval_func(pvalor, name=p_nombre, self=self, expr=expr):
                     self.asignacion((p_nombre, None, None), pvalor)
                     return self.eval(expr)
@@ -398,4 +417,7 @@ class Interpreter:
                         self.tablas[v_nombre] = v
 
             self.contador += 1
-        #print("VARIABLES USADAS:", self.vars)
+        print("VARIABLES USADAS:", self.vars)
+        print("PROG:",self.prog)
+        print("LISTAS:",self.listas)
+        print("TABLAS:",self.tablas)

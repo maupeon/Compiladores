@@ -78,16 +78,9 @@ def p_instruccion_mal_var(p):
 
 
 def p_instruccion_imprimir(p):
-    '''instruccion : IMPRIMIR IPAREN plista DPAREN optend'''
-    p[0] = ('IMPRIMIR', p[3], p[5])
+    '''instruccion : IMPRIMIR IPAREN plista DPAREN'''
+    p[0] = ('IMPRIMIR', p[3])
 
-def p_optend(p):
-    '''optend : COMA 
-              |'''
-    if len(p) == 2:
-        p[0] = p[1]
-    else:
-        p[0] = None
         
 def p_instruccion_imprimir_mal(p):
     '''instruccion : IMPRIMIR error'''
@@ -166,7 +159,8 @@ def p_instruccion_rem(p):
 
 
 def p_instruccion_def(p):
-    '''instruccion : FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr'''
+    '''instruccion : FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr
+                    | FUNC PALABRA IPAREN PALABRA DPAREN LINEA programa FINFUNC'''
     p[0] = ('FUNC', p[2], p[4], p[7])
 
 
@@ -260,25 +254,6 @@ def p_variable(p):
         p[0] = (p[1], p[3], None)
     else:
         p[0] = (p[1], p[3], p[5])
-
-def p_varlista(p):
-    '''varlista : varlista COMA variable
-               | variable'''
-    if len(p) > 2:
-        p[0] = p[1]
-        p[0].append(p[3])
-    else:
-        p[0] = [p[1]]
-
-def p_numlista(p):
-    '''numlista : numlista COMA numero
-               | numero'''
-
-    if len(p) > 2:
-        p[0] = p[1]
-        p[0].append(p[3])
-    else:
-        p[0] = [p[1]]
 
 def p_numero(p):
     '''numero  : ENTERO
