@@ -44,6 +44,20 @@ def p_programa_error(p):
     p[0] = None
     p.parser.error = 1
 
+def p_declaraciones(p):
+    '''declaraciones : declaraciones declaracion
+               | declaracion'''
+    global cont
+    
+    if len(p) == 2 and p[1]:
+        p[0] = {}
+        stat = p[1]
+        p[0][cont] = stat
+    elif len(p) == 3:
+        p[0] = p[1]
+        stat = p[2]
+        p[0][cont] = stat
+
 def p_declaracion(p):
     '''declaracion : instruccion LINEA'''
     global cont
@@ -148,7 +162,7 @@ def p_instruccion_sig_mal(p):
     p[0] = "MALPARAMED SIG"
 
 
-def p_instruccion_FIN(p):
+def p_instruccion_fin(p):
     '''instruccion : FIN'''
     p[0] = ('FIN',)
 
@@ -157,12 +171,24 @@ def p_instruccion_rem(p):
     '''instruccion : COMENTARIO'''
     p[0] = ('COMENTARIO', p[1])
 
-
-def p_instruccion_def(p):
-    '''instruccion : FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr
-                    | FUNC PALABRA IPAREN PALABRA DPAREN LINEA programa FINFUNC'''
+def p_instruccion_func_expr(p):
+    '''instruccion : FUNC PALABRA IPAREN PALABRA DPAREN IGUAL expr'''
     p[0] = ('FUNC', p[2], p[4], p[7])
 
+
+def p_instruccion_func(p):
+    '''instruccion : FUNC PALABRA IPAREN DPAREN'''
+    print("FUNCION",p[0:])
+    p[0] = ('FUNC', p[2], None, None)
+
+
+def p_instruccion_func_ir(p):
+    '''instruccion : PALABRA IPAREN DPAREN'''
+    p[0] = ('IRFUNC', p[1])
+
+def p_instruccion_func_fin(p):
+    '''instruccion : FINFUNC PALABRA'''
+    p[0] = ('FINFUNC', p[2])
 
 def p_instruccion_def_mal_rhs(p):
     '''instruccion : FUNC PALABRA IPAREN PALABRA DPAREN IGUAL error'''
@@ -173,9 +199,9 @@ def p_instruccion_def_mal_arg(p):
     '''instruccion : FUNC PALABRA IPAREN error DPAREN IGUAL expr'''
     p[0] = "mal ARGUMENT IN DEF declaracion"
 
-def p_instruccion_regresar(p):
-    '''instruccion : REGRESAR'''
-    p[0] = ('REGRESAR',)
+#def p_instruccion_regresar(p):
+#    '''instruccion : REGRESAR'''
+#    p[0] = ('REGRESAR',)
 
 def p_instruccion_arreglo(p):
     '''instruccion : ARREGLO arreglolista'''
@@ -225,7 +251,7 @@ def p_expr_variable(p):
     p[0] = ('VAR', p[1])
 
 
-def p_expr_groupo(p):
+def p_expr_grupo(p):
     '''expr : IPAREN expr DPAREN'''
     p[0] = ('GRUPO', p[2])
 
@@ -254,7 +280,7 @@ def p_variable(p):
         p[0] = (p[1], p[3], None)
     else:
         p[0] = (p[1], p[3], p[5])
-
+#NADIE LO USA
 def p_numero(p):
     '''numero  : ENTERO
                | FLOTANTE'''
@@ -294,7 +320,7 @@ def p_vacio(p):
     
 def p_error(p):
     if not p:
-        print("ERROR DE SINTAXIS")
+        print("ERROR DE SINTAXIS, LINEA ", cont)
 
 bparser = yacc.yacc()
 

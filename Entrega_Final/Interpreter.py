@@ -54,7 +54,26 @@ class Interpreter:
                         self.fin_ciclo[contador] = i
                         break
                 else:
-                    print("PARA sin SIG linea %s" % self.stat[contador])
+                    print("PARA sin SIG, en linea %s" % self.stat[contador])
+                    self.error = 1
+
+    # Checa la cantidad de funciones que hay en el programa
+    def checar_funciones(self):
+        for contador in range(len(self.stat)):
+            num_linea = self.stat[contador]
+            if self.prog[num_linea][0] == 'FUNC':
+                func_instr = self.prog[num_linea]
+                func_nombre_var = func_instr[1]
+                # Checar por FINFUNC instrucción desde donde se encontro+1 linea (contador+1) hasta el fin del codigo
+                for i in range(contador + 1, len(self.stat)):
+                    if self.prog[self.stat[i]][0] == 'FINFUNC':
+                        return_to_func = self.prog[self.stat[i]][1]
+                        if return_to_func != func_nombre_var:
+                            continue
+                        self.fin_funciones[contador] = i
+                        break
+                else:
+                    print("FUNC sin FINFUNC, en linea %s" % self.stat[contador])
                     self.error = 1
 
     # Función para evaluar expresiones
@@ -199,45 +218,16 @@ class Interpreter:
                   (linenum, self.stat[self.contador]))
             raise RuntimeError
         self.contador = self.stat.index(linenum)
+
+    def ir_func(self, nombre_func):
+        if nombre_func in self.funciones_ejecutarse:
+            num_linea = self.funciones_ejecutarse[nombre_func]
+            self.goto(num_linea)
+        else:
+            print("NO EXISTE LA FUNCION %s EN LA LINEA %d" % (nombre_func, self.contador))
+            raise RuntimeError
+
 #########################################################################################
-    
-    # Ejecutar segmento de codigo dentro de FUNC y SI
-    def sub_ejecutar(self, codigo):
-        instrucciones = []
-        instrucciones = list(codigo)  # Ordered list of all line numbers
-        instrucciones.sort()
-        contador_aux = instrucciones[0]                 # Current program counter
-        while 1:
-            # END and STOP statements
-            if contador_aux == instrucciones[len(instrucciones)-1]+1:
-                break           # We're done
-            instr = codigo[contador_aux]
-            op = instr[0]
-
-            # PRINT statement
-            if op == 'IMPRIMIR':
-                plista = instr[1]
-                salida = ""
-                for etiqueta, val in plista:
-                    if salida:
-                        salida += ' ' * (15 - (len(salida) % 15))
-                    salida += etiqueta
-                    if val:
-                        if etiqueta:
-                            salida += " "
-                        eval = self.eval(val)
-                        salida += str(eval)
-                print(salida)
-                
-            # VAR statement
-            elif op == 'VAR':
-                objetivo = instr[1]
-                valor = instr[2]
-                self.asignacion(objetivo, valor)
-
-            contador_aux += 1
-
-        self.contador+=1
     
     # ejecutar el programa
     def ejecutar(self):
@@ -248,14 +238,18 @@ class Interpreter:
         self.fin_ciclo = {}        # Definir en donde terminan los ciclos
         self.gosub = None           # Gosub return point (if any)
         self.error = 0              # Error en programa
+        self.funciones_ejecutarse = {}
+        self.fin_funciones ={}
+        
 
         self.stat = list(self.prog)  # Lista ordenada del programa
         self.stat.sort()
         self.contador = 0                  # Contador del programa
-
+        self.contador_auxiliar = []
         # Funciones de ayuda
-        self.checar_fin
+        self.checar_fin()
         self.checar_ciclos()
+        self.checar_funciones()
 
         if self.error:
             raise RuntimeError
@@ -345,7 +339,7 @@ class Interpreter:
                 valor_final = instr[3]
                 sig_val = instr[4]
 
-                # Checar si es un nuevo civlo
+                # Checar si es un nuevo ciclo
                 if not self.ciclos or self.ciclos[-1][0] != self.contador:
                     # Nuevo ciclo
                     nuevo_valor = valor_inicial
@@ -359,7 +353,6 @@ class Interpreter:
                     sig_val = ('NUM', self.ciclos[-1][1])
                     nuevo_valor = (
                         'BINOP', '+', ('VAR', (ciclo_var, None, None)), sig_val)
-
                 if self.ciclos[-1][1] < 0:
                     comp = '>='
                 else:
@@ -378,30 +371,45 @@ class Interpreter:
 
                 sig_var = instr[1]
                 self.contador = self.ciclos[-1][0]
+                #print("CONTADOR:", self.contador, "CICLOS",self.ciclos)
                 loopinst = self.prog[self.stat[self.contador]]
                 forvar = loopinst[1]
+                #print("loopinst:", loopinst, "forvar",forvar)
                 if sig_var != forvar:
                     print("SIG NO TIENE SU PARA CORRESPONDIENTE%s" % line)
                     return
                 continue
-            
-
-            elif op == 'REGRESAR':
-                if not self.gosub:
-                    print("REGRESAR sin a GOSUB en linea %s" % line)
-                    return
-                self.goto(self.gosub)
-                self.gosub = None
 
             elif op == 'FUNC':
                 f_nombre = instr[1]
                 p_nombre = instr[2]
                 expr = instr[3]
                 print("FUNC. F_NOMBRE:", f_nombre, "PARAMETROS:", p_nombre, "EXPR:", expr)
-                def eval_func(pvalor, name=p_nombre, self=self, expr=expr):
-                    self.asignacion((p_nombre, None, None), pvalor)
-                    return self.eval(expr)
-                self.funciones[f_nombre] = eval_func
+                if(p_nombre is None and expr is None):
+                    #self.sub_ejecutar(p_nombre)
+                    if not self.funciones_ejecutarse:
+                        # Nueva funcion
+                        self.funciones_ejecutarse[f_nombre] = self.contador+1
+                        self.contador = self.fin_funciones[self.contador]
+                    else:
+                        # Es una funcion ya conocida
+                        print("ES funciones_ejecutarse FUNCION YA CONOCIDA YA SE ROMPIO")
+                else:
+                    def eval_func(pvalor, name=p_nombre, self=self, expr=expr):
+                        self.asignacion((p_nombre, None, None), pvalor)
+                        return self.eval(expr)
+                    self.funciones[f_nombre] = eval_func
+                print("FUNCIONES:", self.funciones_ejecutarse)
+        
+            elif op == 'IRFUNC':
+                nombre_func = instr[1]
+                print("LLENDO A FUNC:", nombre_func)
+                self.contador_auxiliar.append(self.contador)
+                self.ir_func(nombre_func)
+
+            elif op == 'FINFUNC':
+                print("FIN FUNC: LINEA:", self.contador)
+                self.contador = self.contador_auxiliar.pop()
 
             elif op == 'ARREGLO':
                 for v_nombre, x, y in instr[1]:
@@ -419,5 +427,7 @@ class Interpreter:
             self.contador += 1
         print("VARIABLES USADAS:", self.vars)
         print("PROG:",self.prog)
+        print("STAT:",self.stat)
         print("LISTAS:",self.listas)
         print("TABLAS:",self.tablas)
+        print("CICLOS:", self.ciclos)
