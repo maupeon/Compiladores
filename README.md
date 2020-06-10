@@ -12,6 +12,9 @@ Orientaciones para correr ejercicios demostrativos de los algoritmos internos en
 ## 2. Correr Tarea 2
 * Moverse a la carpeta de "Tarea 2" `cd Tarea\ 2/`
 
-## 3. Eliminar proyecto.
+## 3. Correr Evaluación Final
+* Moverse a la carpeta de "Tarea 2" `cd Evaluacion_Final`
+
+## 4. Eliminar proyecto.
 Para dejar de usar el proyecto, solamente se rquiere eliminar el repositorio.
 `rm -rf Compiladores`
