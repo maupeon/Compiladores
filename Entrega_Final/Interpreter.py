@@ -258,7 +258,7 @@ class Interpreter:
             num_linea = self.funciones_ejecutarse[nombre_func]
             self.salto_linea(num_linea)
         else:
-            print("NO EXISTE LA FUNCION %s EN LA LINEA %d" % (nombre_func, self.contador))
+            print("NO EXISTE LA FUNCION %s EN LA LINEA %d" % (nombre_func, self.contador+1))
             raise RuntimeError
 
     
