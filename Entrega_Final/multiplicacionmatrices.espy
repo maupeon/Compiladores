@@ -1,0 +1,37 @@
+#EJEMPLO DE MULTIPLICACIÓN DE MATRICES:
+
+# SE MULTIPLICAN LAS MATRICES
+FUNC multiplicacionMatrices()
+PARA I = 1 A X
+PARA J = 1 A X
+PARA K = 1 A X
+VAR R = M1(I,K)*M2(K,J)
+VAR RES(I,J) = RES(I,J) + R
+SIG K
+SIG J
+SIG I
+FINFUNC multiplicacionMatrices
+
+VAR X = 5
+ARREGLO M1(5,5)
+ARREGLO M2(5,5)
+ARREGLO RES(5,5)
+
+# SE LLENAN LAS MATRICES
+PARA I = 1 A X
+PARA J = 1 A X
+VAR M1(I,J) = J
+VAR M2(I,J) = J
+SIG J
+SIG I
+
+multiplicacionMatrices()
+
+# SE IMPRIMEN LAS MATRICES
+PARA I = 1 A X
+PARA J = 1 A X
+IMPRIMIR("RES(",I,",",J,")= ", RES(I,J))
+SIG J
+SIG I
+
+FIN
