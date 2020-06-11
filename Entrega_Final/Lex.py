@@ -10,7 +10,7 @@ from ply import *
 # Declaración de palabra clave
 palabras_clave = (
     'VAR', 'IMPRIMIR', 'SI', 'ENTONCES', 'PARA', 'SIG', 'A','II',
-    'FIN', 'FUNC', "FINSI", "FINFUNC",  'ARREGLO', 'COMENTARIO', 'REGRESAR', 'LIST', 'NEW',
+    'FIN', 'FUNC', "FINSI", "FINFUNC",  'ARREGLO', 'COMENTARIO', 'SALTO'
 )
 
 # Declaración de tokens

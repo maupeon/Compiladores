@@ -44,25 +44,11 @@ def p_programa_error(p):
     p[0] = None
     p.parser.error = 1
 
-def p_declaraciones(p):
-    '''declaraciones : declaraciones declaracion
-               | declaracion'''
-    global cont
-    
-    if len(p) == 2 and p[1]:
-        p[0] = {}
-        stat = p[1]
-        p[0][cont] = stat
-    elif len(p) == 3:
-        p[0] = p[1]
-        stat = p[2]
-        p[0][cont] = stat
-
 def p_declaracion(p):
     '''declaracion : instruccion LINEA'''
     global cont
     if isinstance(p[1], str):
-        print("%s %s %s" % (p[1], "AT LINEA", cont))
+        print("%s %s %s" % (p[1], "EN LINEA", cont))
         p[0] = None
         p.parser.error = 1
     else:
@@ -75,20 +61,21 @@ def p_declaracion_blanca(p):
 
 
 def p_declaracion_mala(p):
-    '''declaracion : error LINEA'''
-    print("Declaracion errónea en linea %s" % p[1])
+    '''declaracion : error LINEA
+                    | error'''
+    global cont
+    print("Declaracion errónea en linea %d" % cont)
     p[0] = None
     p.parser.error = 1
 
+def p_instruccion_salto(p):
+    '''instruccion : SALTO ENTERO'''
+    p[0] = ('SALTO', p[2])
+    
 
 def p_instruccion_var(p):
     '''instruccion : VAR variable IGUAL expr'''
     p[0] = ('VAR', p[2], p[4])
-
-
-def p_instruccion_mal_var(p):
-    '''instruccion : VAR variable IGUAL error'''
-    p[0] = "EXPRESION INCORRECTA EN VAR"
 
 
 def p_instruccion_imprimir(p):
@@ -96,60 +83,27 @@ def p_instruccion_imprimir(p):
     p[0] = ('IMPRIMIR', p[3])
 
         
-def p_instruccion_imprimir_mal(p):
-    '''instruccion : IMPRIMIR error'''
-    p[0] = "MALPARAMED IMPRIMIR declaracion"
-
-
 def p_instruccion_imprimir_vacio(p):
     '''instruccion : IMPRIMIR'''
     p[0] = ('IMPRIMIR', [], None)
 
 
+def p_instruccion_finsi(p):
+    '''instruccion : FINSI'''
+    p[0] = ('FINSI', )
+
+
 def p_instruccion_si(p):
     '''instruccion : SI IPAREN comparacion DPAREN ENTONCES ENTERO
-                    | SI IPAREN comparacion DPAREN ENTONCES LINEA programa FINSI'''
+                    | SI IPAREN comparacion DPAREN ENTONCES'''
     if len(p) == 7:
         p[0] = ('SI', p[3], int(p[6]))
     else:
-        p[0] = ('SI', p[3], p[7])
-
-def p_instruccion_si_mal(p):
-    '''instruccion : SI error ENTONCES ENTERO'''
-    p[0] = "EXPRESION MAL RELACIONADA"
-
-
-def p_instruccion_si_mal2(p):
-    '''instruccion : SI comparacion ENTONCES error'''
-    p[0] = "ERROR EN LA LINEA POR EL NUMERO"
-
+        p[0] = ('SI', p[3], None)
 
 def p_instruccion_para(p):
-    '''instruccion : PARA PALABRA IGUAL expr A expr optstep'''
-    p[0] = ('PARA', p[2], p[4], p[6], p[7])
-
-
-def p_instruccion_para_mal_initial(p):
-    '''instruccion : PARA PALABRA IGUAL error A expr optstep'''
-    p[0] = "mal INITIAL VALUE IN PARA declaracion"
-
-
-def p_instruccion_para_mal_final(p):
-    '''instruccion : PARA PALABRA IGUAL expr A error optstep'''
-    p[0] = "mal FINAL VALUE IN PARA declaracion"
-
-
-def p_instruccion_para_mal_step(p):
-    '''instruccion : PARA PALABRA IGUAL expr A expr error'''
-    p[0] = "MALPARAMED STEP IN PARA declaracion"
-
-def p_optstep(p):
-    '''optstep : expr
-               | vacio'''
-    if len(p) == 3:
-        p[0] = p[2]
-    else:
-        p[0] = None
+    '''instruccion : PARA PALABRA IGUAL expr A expr'''
+    p[0] = ('PARA', p[2], p[4], p[6])
 
 def p_instruccion_sig(p):
     '''instruccion : SIG PALABRA'''
@@ -157,17 +111,12 @@ def p_instruccion_sig(p):
     p[0] = ('SIG', p[2])
 
 
-def p_instruccion_sig_mal(p):
-    '''instruccion : SIG error'''
-    p[0] = "MALPARAMED SIG"
-
-
 def p_instruccion_fin(p):
     '''instruccion : FIN'''
     p[0] = ('FIN',)
 
 
-def p_instruccion_rem(p):
+def p_instruccion_comentario(p):
     '''instruccion : COMENTARIO'''
     p[0] = ('COMENTARIO', p[1])
 
@@ -178,7 +127,6 @@ def p_instruccion_func_expr(p):
 
 def p_instruccion_func(p):
     '''instruccion : FUNC PALABRA IPAREN DPAREN'''
-    print("FUNCION",p[0:])
     p[0] = ('FUNC', p[2], None, None)
 
 
@@ -190,27 +138,11 @@ def p_instruccion_func_fin(p):
     '''instruccion : FINFUNC PALABRA'''
     p[0] = ('FINFUNC', p[2])
 
-def p_instruccion_def_mal_rhs(p):
-    '''instruccion : FUNC PALABRA IPAREN PALABRA DPAREN IGUAL error'''
-    p[0] = "mal EXPRESION IN DEF declaracion"
-
-
-def p_instruccion_def_mal_arg(p):
-    '''instruccion : FUNC PALABRA IPAREN error DPAREN IGUAL expr'''
-    p[0] = "mal ARGUMENT IN DEF declaracion"
-
-#def p_instruccion_regresar(p):
-#    '''instruccion : REGRESAR'''
-#    p[0] = ('REGRESAR',)
 
 def p_instruccion_arreglo(p):
     '''instruccion : ARREGLO arreglolista'''
     p[0] = ('ARREGLO', p[2])
 
-
-def p_instruccion_arreglo_mal(p):
-    '''instruccion : ARREGLO error'''
-    p[0] = "MALPARAMED VARIABLE LIST IN ARREGLO"
 
 def p_arreglolista(p):
     '''arreglolista : arreglolista COMA elementoarreglo
@@ -280,16 +212,6 @@ def p_variable(p):
         p[0] = (p[1], p[3], None)
     else:
         p[0] = (p[1], p[3], p[5])
-#NADIE LO USA
-def p_numero(p):
-    '''numero  : ENTERO
-               | FLOTANTE'''
-    p[0] = eval(p[1])
-
-def p_numero_signo(p):
-    '''numero  : MENOS ENTERO
-               | MENOS FLOTANTE'''
-    p[0] = eval("-" + p[2])
 
 def p_plista(p):
     '''plista   : plista COMA pelemento
@@ -326,7 +248,7 @@ bparser = yacc.yacc()
 
 def parse(data, debug=0):
     bparser.error = 0
-    p = bparser.parse(data, debug=debug)
+    p = bparser.parse(data)
     if bparser.error:
         return None
     return p
