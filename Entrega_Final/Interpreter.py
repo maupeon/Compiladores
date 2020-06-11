@@ -102,22 +102,35 @@ class Interpreter:
         tipo = expr[0]
         if tipo == 'NUM':
             return expr[1]
+        elif tipo == 'CADENA':
+            return expr[1]
         elif tipo == 'GRUPO':
             return self.eval(expr[1])
         elif tipo == 'UNARIO':
             if expr[1] == '-':
                 return -self.eval(expr[2])
         elif tipo == 'BINOP':
-            if expr[1] == '+':
-                return self.eval(expr[2]) + self.eval(expr[3])
-            elif expr[1] == '-':
-                return self.eval(expr[2]) - self.eval(expr[3])
-            elif expr[1] == '*':
-                return self.eval(expr[2]) * self.eval(expr[3])
-            elif expr[1] == '/':
-                return float(self.eval(expr[2])) / self.eval(expr[3])
-            elif expr[1] == '^':
-                return abs(self.eval(expr[2]))**self.eval(expr[3])
+            #print(type(self.eval(expr[2])), type(self.eval(expr[3])))
+            if type(self.eval(expr[2])) != str and type(self.eval(expr[3])) != str: 
+                if expr[1] == '+':
+                    return self.eval(expr[2]) + self.eval(expr[3])
+                elif expr[1] == '-':
+                    return self.eval(expr[2]) - self.eval(expr[3])
+                elif expr[1] == '*':
+                    return self.eval(expr[2]) * self.eval(expr[3])
+                elif expr[1] == '/':
+                    return float(self.eval(expr[2])) / self.eval(expr[3])
+                elif expr[1] == '^':
+                    return abs(self.eval(expr[2]))**self.eval(expr[3])
+            elif type(self.eval(expr[2])) == str and type(self.eval(expr[3])) == str:
+                if expr[1] == '+':
+                    return self.eval(expr[2]) + self.eval(expr[3])
+                else:
+                    print("NO PUEDES REALIZAR LA OPERACION",expr[1], "ENTRE CADENAS EN LA LINEA", self.contador+1)
+                    raise RuntimeError
+            else:
+                print("NO PUEDES REALIZAR LA OPERACION",expr[1], "ENTRE UNA CADENA Y UN NUMERO EN LA LINEA:", self.contador+1)
+                raise RuntimeError
         elif tipo == 'VAR':
             var, dim1, dim2 = expr[1]
             if not dim1 and not dim2:
@@ -231,8 +244,8 @@ class Interpreter:
                 print("DIMENSIÓN MUY LARGA EN LINEA %s" % self.stat[self.contador])
                 raise RuntimeError
             self.tablas[var][dim1val - 1][dim2val - 1] = self.eval(valor)
-#########################################################################################
-    # Change the current line number
+
+    # CAmbia el contador del programa, dando un salto de line a lo indicado
     def salto_linea(self, linenum):
         if not linenum in self.prog:
             print("NUMERO DE LINEA NO DEFINIDA %d EN LA LINEA %d" %
@@ -248,7 +261,6 @@ class Interpreter:
             print("NO EXISTE LA FUNCION %s EN LA LINEA %d" % (nombre_func, self.contador))
             raise RuntimeError
 
-#########################################################################################
     
     # ejecutar el programa
     def ejecutar(self):
@@ -289,7 +301,7 @@ class Interpreter:
 
             # DECLARACIÓN DE SALTO 
             elif op == 'SALTO':
-                print("DANDO UN SALTO")
+                #print("DANDO UN SALTO")
                 nueva_linea = instr[1]
                 self.salto_linea(int(nueva_linea))
                 continue
@@ -401,12 +413,12 @@ class Interpreter:
         
             elif op == 'IRFUNC':
                 nombre_func = instr[1]
-                print("LLENDO A FUNC:", nombre_func)
+                #print("LLENDO A FUNC:", nombre_func)
                 self.contador_auxiliar.append(self.contador)
                 self.ir_func(nombre_func)
 
             elif op == 'FINFUNC':
-                print("FIN FUNC: LINEA:", self.contador+1)
+                #print("FIN FUNC: LINEA:", self.contador+1)
                 self.contador = self.contador_auxiliar.pop()
 
             elif op == 'ARREGLO':

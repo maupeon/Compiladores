@@ -74,9 +74,13 @@ def p_instruccion_salto(p):
     
 
 def p_instruccion_var(p):
-    '''instruccion : VAR variable IGUAL expr'''
+    '''instruccion : VAR variable IGUAL expr
+                    | VAR variable IGUAL cadena'''
     p[0] = ('VAR', p[2], p[4])
 
+def p_cadena(p):
+    '''cadena : CADENA'''
+    p[0] = ('CADENA', p[1].replace("\"",""))
 
 def p_instruccion_imprimir(p):
     '''instruccion : IMPRIMIR IPAREN plista DPAREN'''
@@ -237,8 +241,6 @@ def p_elemento_expr(p):
     '''pelemento : expr'''
     p[0] = ("", p[1])
 
-def p_vacio(p):
-    '''vacio : '''
     
 def p_error(p):
     if not p:

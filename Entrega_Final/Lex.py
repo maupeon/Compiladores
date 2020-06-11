@@ -17,7 +17,7 @@ palabras_clave = (
 tokens = palabras_clave + (
     'IGUAL', 'MAS', 'MENOS', 'MULTIPLICACION', 'DIVISION', 'POTENCIA',
     'IPAREN', 'DPAREN', 'MEQ', 'MEI', 'MAQ', 'MAI', 'DIF',
-    'COMA', 'ENTERO', 'FLOTANTE', 'CADENA',
+    'COMA', 'ENTERO', 'FLOTANTE', 'CADENA', 'COMILLA',
     'PALABRA', 'LINEA'
 )
 
@@ -55,6 +55,7 @@ t_COMA = r'\,'
 t_ENTERO = r'\d+'
 t_FLOTANTE = r'((\d*\.\d+)(E[\+-]?\d+)?|([1-9]\d*E[\+-]?\d+))'
 t_CADENA = r'\".*?\"'
+t_COMILLA = r'\"'
 
 # Definición de salto de línea
 def t_LINEA(t):
