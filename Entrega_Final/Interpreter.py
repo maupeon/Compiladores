@@ -121,7 +121,7 @@ class Interpreter:
                 elif expr[1] == '/':
                     return float(self.eval(expr[2])) / self.eval(expr[3])
                 elif expr[1] == '^':
-                    return abs(self.eval(expr[2]))**self.eval(expr[3])
+                    return (self.eval(expr[2]))**self.eval(expr[3])
             elif type(self.eval(expr[2])) == str and type(self.eval(expr[3])) == str:
                 if expr[1] == '+':
                     return self.eval(expr[2]) + self.eval(expr[3])

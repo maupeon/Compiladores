@@ -1,0 +1,26 @@
+FUNC PI_DIGIT(X) = ((-1*(1/3))^(X))/((2*X)+1)
+
+#Numero inicial
+VAR NUM = 50
+VAR RES = 1
+
+SI (NUM<1) ENTONCES
+VAR NUM = 1
+FINSI
+
+#Calcular factorial
+PARA I = 1 A NUM
+VAR RES = RES*I
+SIG I
+
+VAR PI = 0
+
+#Calcular digitos de pi
+PARA I = 0 A NUM
+VAR PI = PI+PI_DIGIT(I)
+SIG I
+VAR PI = SQR(12)*PI
+
+IMPRIMIR("El factorial de NUM es:" RES)
+IMPRIMIR("El valor de Pi es:" PI)
+FIN
